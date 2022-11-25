@@ -1,0 +1,90 @@
+#######################################
+# Syntax Coloring Map For TFT_eSPI_Widgets
+#######################################
+# https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5:-Library-specification
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+# enums
+Event	KEYWORD1
+Type	KEYWORD1
+
+# typedef
+
+widget_cb_t
+event_handler_cb_t
+
+# classes
+Area	KEYWORD1
+Canvas	KEYWORD1
+Coordinates	KEYWORD1
+Dimensions	KEYWORD1
+GraphicalProperties	KEYWORD1
+Widget	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+contains	KEYWORD2
+draw	KEYWORD2
+eventHandler	KEYWORD2
+focus	KEYWORD2
+getBackgroundColor	KEYWORD2
+getBorderColor	KEYWORD2
+getBorderSize	KEYWORD2
+getDefaultGraphicalProperties	KEYWORD2
+getFocusedWidget	KEYWORD2
+getFocusGraphicalProperties	KEYWORD2
+getFontColor	KEYWORD2
+getFontSize	KEYWORD2
+getGraphicalProperties	KEYWORD2
+getParent	KEYWORD2
+getRoot	KEYWORD2
+getTFT	KEYWORD2
+getType	KEYWORD2
+getType	KEYWORD2
+getTypeString	KEYWORD2
+hasFocus	KEYWORD2
+init	KEYWORD2
+isEmpty	KEYWORD2
+loop	KEYWORD2
+onEvent	KEYWORD2
+onFocus	KEYWORD2
+onLoop	KEYWORD2
+onUnfocus	KEYWORD2
+overlap	KEYWORD2
+refresh	KEYWORD2
+removeChild	KEYWORD2
+setBackgroundColor	KEYWORD2
+setBorderColor	KEYWORD2
+setBorderSize	KEYWORD2
+setDefaultGraphicalProperties	KEYWORD2
+setFocusGraphicalProperties	KEYWORD2
+setFontColor	KEYWORD2
+setFontSize	KEYWORD2
+touch	KEYWORD2
+unfocus	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+reference_value	LITERAL1
+origin	LITERAL1
+empty	LITERAL1
+default_values	LITERAL1
+
+CANVAS	LITERAL1
+GENERIC	LITERAL1
+CUSTOM	LITERAL1
+
+SIMPLE_LEFT_CLICK	LITERAL1
+DOUBLE_LEFT_CLICK	LITERAL1
+TRIPLE_LEFT_CLICK	LITERAL1
+LONG_LEFT_CLICK	LITERAL1
+SIMPLE_RIGHT_CLICK	LITERAL1
+DOUBLE_RIGHT_CLICK	LITERAL1
+TRIPLE_RIGHT_CLICK	LITERAL1
+LONG_RIGHT_CLICK	LITERAL1

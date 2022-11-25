@@ -1,0 +1,26 @@
+{
+  "name": "TFT_eSPI_Widgets",
+  "version": "0.0.1",
+  "keywords": "Arduino, tft, display, widgets",
+  "description": "Widget API to enhance the TFT_eSPI library.",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://gite.lirmm.fr/doccy/TFT_eSPI_Widgets"
+  },
+  "authors":
+  [
+    {
+        "name": "Alban Mancheron",
+        "email": "alban.mancheron@lirmm.fr",
+        "maintainer": true
+    }
+  ],
+  "exclude": [
+    ".git",
+    "docs"
+  ],
+  "frameworks": "arduino",
+  "platforms": "rp2040, espressif8266, espressif32, ststm32",
+  "headers": "TFT_eSPI_Widgets.h"
+}
