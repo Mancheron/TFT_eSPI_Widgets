@@ -81,17 +81,10 @@
  *                                                                             *
  ******************************************************************************/
 
-#ifndef __TFT_ESPI_WIDGETS_H__
-#define __TFT_ESPI_WIDGETS_H__
+#include "generic_widget.h"
 
-#include <TFT_eSPI.h>
+using namespace TFT_eSPI_Widgets;
 
-#include "src/area.h"
-#include "src/canvas.h"
-#include "src/coordinates.h"
-#include "src/dimensions.h"
-#include "src/generic_widget.h"
-#include "src/graphical_properties.h"
-#include "src/widget.h"
-
-#endif
+GenericWidget::GenericWidget(Widget &parent, const Area &area):
+  Widget(parent, area)
+{}

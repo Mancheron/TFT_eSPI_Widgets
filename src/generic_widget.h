@@ -81,17 +81,56 @@
  *                                                                             *
  ******************************************************************************/
 
-#ifndef __TFT_ESPI_WIDGETS_H__
-#define __TFT_ESPI_WIDGETS_H__
+#ifndef __GENERIC_WIDGET_H__
+#define __GENERIC_WIDGET_H__
 
-#include <TFT_eSPI.h>
+#include "widget.h"
 
-#include "src/area.h"
-#include "src/canvas.h"
-#include "src/coordinates.h"
-#include "src/dimensions.h"
-#include "src/generic_widget.h"
-#include "src/graphical_properties.h"
-#include "src/widget.h"
+namespace TFT_eSPI_Widgets {
+
+  /**
+   * The generic widget is mostly like a canvas except that it has a
+   * parent.
+   */
+  class GenericWidget: public Widget {
+
+  public:
+    /**
+     * Creates a generic widget (rectangular area) attached to the
+     * given Widget.
+     *
+     * The widget graphical properties (background color, line
+     * color, line width, font color, font size) are inherited from
+     * the parent widget.
+     *
+     * \param parent The parent widget of the current one. Be aware
+     * that if this parent already has a child widget, then this child
+     * is automatically destroyed.
+     *
+     * \param area The area used by the widget. If the area dimension
+     * is empty, then use the area of its parent minus its maximal
+     * border size according to its focus state. The top left anchor
+     * of the area is relative to the top left corner of its parent.
+     *
+     * \remark There is no verification about the area to fit into the
+     * parent area.
+     */
+    GenericWidget(Widget &parent, const Area &area = Area::reference_value);
+
+    /**
+     * Return the widget type.
+     *
+     * \return This method returns the GENERIC widget type.
+     */
+    inline virtual Type getType() const {
+      return GENERIC;
+    }
+
+  };
+
+}
 
 #endif
+// Local Variables:
+// mode: c++
+// End:
