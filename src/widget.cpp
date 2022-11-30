@@ -91,6 +91,7 @@ const char *Widget::getTypeString(Type t) {
   switch (t) {
     TYPE2CSTR_CASE(CANVAS);
     TYPE2CSTR_CASE(GENERIC);
+    TYPE2CSTR_CASE(MESSAGE);
     TYPE2CSTR_CASE(CUSTOM);
   }
 }

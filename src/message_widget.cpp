@@ -81,18 +81,136 @@
  *                                                                             *
  ******************************************************************************/
 
-#ifndef __TFT_ESPI_WIDGETS_H__
-#define __TFT_ESPI_WIDGETS_H__
+#include "message_widget.h"
 
-#include <TFT_eSPI.h>
+using namespace TFT_eSPI_Widgets;
 
-#include "src/area.h"
-#include "src/canvas.h"
-#include "src/coordinates.h"
-#include "src/dimensions.h"
-#include "src/generic_widget.h"
-#include "src/graphical_properties.h"
-#include "src/message_widget.h"
-#include "src/widget.h"
+MessageWidget::MessageWidget(Widget &parent,
+                             const String &message,
+                             bool wrap,
+                             uint64_t animation_delay,
+                             uint64_t stick_delay,
+                             uint16_t step,
+                             const Area &area):
+  Widget(parent, area),
+  _orig_message(message),
+  _message(),
+  _number_of_lines(0),
+  _offset(Coordinates::origin),
+  _wrap(wrap),
+  _last_update(0),
+  _animation_delay(animation_delay),
+  _stick_delay(stick_delay),
+  _step(step)
+{
+  updateMessage();
+}
 
-#endif
+void MessageWidget::_draw() {
+  TFT_eSPI &tft = getTFT();
+  // Wrap on x axis
+  tft.setTextWrap(_wrap, false);
+  tft.setCursor(_offset.x, _offset.y);
+  tft.print(_message);
+  _last_update = millis();
+}
+
+void MessageWidget::updateMessage() {
+  _offset = Coordinates::origin;
+  _message = _orig_message;
+  _number_of_lines = _message.length() > 0;
+  _last_update = millis();
+
+  if (!_wrap) return;
+
+  TFT_eSPI &tft = getTFT();
+  int16_t max_chars_per_line = max(_area.width / tft.textWidth("A"), 1);
+
+  size_t last_space = 0, cur_line_width = 0;
+  for (size_t i = 0; i < _message.length(); ++i) {
+    switch (_message[i]) {
+    case '\n':
+      last_space = 0;
+      cur_line_width = 0;
+      ++_number_of_lines;
+      break;
+    case ' ':
+      last_space = i;
+    default:
+      ++cur_line_width;
+    }
+    if (cur_line_width >= max_chars_per_line) {
+      if (last_space) {
+        // Force wrapping on the last space
+        _message[last_space] = '\n';
+        cur_line_width = i - last_space;
+        last_space = 0;
+      } else {
+        // No space in the current line to properly wrap the message.
+        // Wrapping will occur now!
+        cur_line_width = 0;
+      }
+      ++_number_of_lines;
+    }
+  }
+  _last_update = millis();
+}
+
+void MessageWidget::_loop() {
+  unsigned long ellapsed_time = millis() - _last_update;
+  TFT_eSPI &tft = getTFT();
+  // Compute the width of each character (mono font).
+  int16_t c_w = tft.textWidth("A");
+  uint8_t b = getGraphicalProperties().getBorderSize();
+  if (_wrap) {
+    // The text is wrapped
+    // then by computing the minimal number of lines required to display all characters.
+    int16_t h = tft.fontHeight() * _number_of_lines + 2 * b;
+    if (h > _area.height) {
+      // The text height is greater than the widget inner height.
+      if (h + _offset.y > _area.height) {
+        // The end of the text is outside the widget inner area.
+        if (((_offset.y < 0) and (ellapsed_time > _animation_delay)) or
+            ((_offset.y == 0) and (ellapsed_time > _stick_delay))) {
+          // The text is animated and the animation delay is passed or
+          // the text isn't yet animated but the stock delay is
+          // passed.
+          _offset.y -= _step;
+          touch();
+        }
+      } else {
+        // The end of the text is visible.
+        if (ellapsed_time > _stick_delay) {
+          // Reset y offset after the stick delay is passed.
+          _offset.y = 0;
+          touch();
+        }
+      }
+    }
+  } else {
+    // The text is not wrapped
+    // Compute the width of the unwrapped message.
+    int16_t w = c_w * _message.length() + 2 * b;
+    if (w > _area.width) {
+      // The text width is greater than the widget width.
+      if (w + _offset.x > _area.width) {
+        // The end of the text is outside the widget area.
+        if (((_offset.x < 0) and (ellapsed_time > _animation_delay)) or
+            ((_offset.x == 0) and (ellapsed_time > _stick_delay))) {
+          // The text is animated and the animation delay is passed or
+          // the text isn't yet animated but the stock delay is
+          // passed.
+          _offset.x -= _step;
+          touch();
+        }
+      } else {
+        // The end of the text is visible.
+        if (ellapsed_time > _stick_delay) {
+          // Reset y offset after the stick delay is passed.
+          _offset.x = 0;
+          touch();
+        }
+      }
+    }
+  }
+}

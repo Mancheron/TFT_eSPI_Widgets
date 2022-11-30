@@ -97,6 +97,7 @@ namespace TFT_eSPI_Widgets {
   enum Type {
              CANVAS,        /**< Canvas widget. */
              GENERIC,       /**< Generic widget. */
+             MESSAGE,       /**< Simple message widget. */
              CUSTOM,        /**< Custom widget. */
   };
 
@@ -329,6 +330,14 @@ namespace TFT_eSPI_Widgets {
      * By default, the return type is Widget reference, but one can
      * specify the real type of the widget (no verification is done)
      * in order to use the specific subtype methods.
+     *
+     * \see It is safer to use the hasChild() method to ensure for the
+     * child existence before using this. It is also a good idea to
+     * ensure the correct widget type is used (may be using
+     * getType()).
+     *
+     * \return Return a reference on the current widget child (be
+     * aware that this child must exist).
      */
     template <typename T = Widget>
     T &getChild() const {
