@@ -179,59 +179,210 @@ namespace TFT_eSPI_Widgets {
 
   protected:
 
+    /**
+     * The root of the widget tree.
+     */
     Widget &_root;
+
+    /**
+     * The parent of the current widget in the widget tree
+     */
     Widget &_parent;
+
+    /**
+     * The address of the child widget (if any).
+     */
     Widget *_child;
+
+    /**
+     * The area used by the widget.
+     *
+     * The top left anchor of the area is the absolute position from
+     * the top left corner of the TFT screen.
+     */
     Area _area;
+
+    /**
+     * The graphical properties to use to draw the widget when it
+     * hasn't got the focus.
+     */
     GraphicalProperties _default_graph_props;
+
+    /**
+     * The graphical properties to use to draw the widget when it has
+     * got the focus.
+     */
     GraphicalProperties _focus_graph_props;
+
+    /**
+     * The widget drawing status.
+     *
+     * This is true if the widget needs to be (re)drawn.
+     */
     bool _need_update;
+
+    /**
+     * A custom callback function to call when some event is passed to
+     * the current widget.
+     */
     event_handler_cb_t _event_handler_cb;
+
+    /**
+     * A custom callback function to call when the loop() method is
+     * called on the current widget.
+     */
     widget_cb_t _loop_cb;
+
+    /**
+     * A custom callback function to call when the current widget get
+     * the focus.
+     */
     widget_cb_t _focus_cb;
+    /**
+     * A custom callback function to call when the current widget
+     * loose the focus.
+     */
     widget_cb_t _unfocus_cb;
 
-    // Must be overridden by the class that define root Widgets but
-    // shouldn't be overridden by other derived class.
-    inline virtual TFT_eSPI &_getTFT() const {
-      return _root._getTFT();
-    }
+    /**
+     * Get the TFT screen attached to current widget by asking the
+     * root of the widget tree.
+     *
+     * \remark This method **must** be overridden by any class that
+     * define root Widgets but **shouldn't** be overridden by other
+     * derived class.
+     *
+     * \return This method returns the TFT screen object.
+     */
+    inline virtual TFT_eSPI &_getTFT() const { return _root._getTFT(); }
 
-    // Must be overridden by the class that define root Widgets but
-    // shouldn't be overridden by other derived class.
+    /**
+     * Get the focus status of the given widget by asking the root of
+     * the widget tree.
+     *
+     * \remark This method **must** be overridden by any class that
+     * define root Widgets but **shouldn't** be overridden by other
+     * derived class.
+     *
+     * \param w The widget for which we want to know if it is focused.
+     *
+     * \return This method returns true if the given widgets has the
+     * focus.
+     */
     inline virtual bool _hasFocus(const Widget &w) const {
       return _root._hasFocus(w);
     }
 
-    // Must be overridden by the class that define root Widgets but
-    // shouldn't be overridden by other derived class.
+    /**
+     * Set the focus on the given widget by asking the root of the
+     * widget tree to give the focus.
+     *
+     * \remark This method **must** be overridden by any class that
+     * define root Widgets but **shouldn't** be overridden by other
+     * derived class.
+     *
+     * \param w The widget for which we want to give the focus.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
     inline virtual void _setFocus(const Widget &w) {
       _root._setFocus(w);
     }
 
-    // Must be overridden by the class that define root Widgets but
-    // shouldn't be overridden by other derived class.
+    /**
+     * Loose the focus from the given widget by asking the root of the
+     * widget tree to remove the focus.
+     *
+     * \remark This method **must** be overridden by any class that
+     * define root Widgets but **shouldn't** be overridden by other
+     * derived class.
+     *
+     * \param w The widget for which we want to remove the focus.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
     inline virtual void _unsetFocus(const Widget &w) {
       _root._unsetFocus(w);
     }
 
-    // Do nothing by default on focus
+    /**
+     * Action to perform when the current widget get the focus.
+     *
+     * Does nothing by default.
+     *
+     * \remark This method might be overridden by any derived class
+     * that needs to perform specific actions when current widget has
+     * the focus.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
     inline virtual void _onFocus() {}
 
-    // Do nothing by default on unfocus
+    /**
+     * Action to perform when the current widget loose the focus.
+     *
+     * Does nothing by default.
+     *
+     * \remark This method might be overridden by any derived class
+     * that needs to perform specific actions when current widget
+     * loose the focus.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
     inline virtual void _onUnfocus() {}
 
-    // Do nothing by default on event
+    /**
+     * Action to perform when the current widget is passed some event.
+     *
+     * Does nothing by default.
+     *
+     * \remark This method might be overridden by any derived class
+     * that needs to perform specific actions when current widget is
+     * passed some event.
+     *
+     * \param event The event to handle.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
     inline virtual void _eventHandler(Event event) {}
 
-    // Do nothing by default on loop
+    /**
+     * Action to perform when the loop method is called on the current
+     * widget.
+     *
+     * Does nothing by default.
+     *
+     * \remark This method might be overridden by any derived class
+     * that needs to perform specific actions when loop() method is
+     * called on the current widget.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
     inline virtual void _loop() {}
 
-    // Drawing commands to run after the viewport is set and drawn
-    // according to the graphical properties and before child is
-    // printed (if any).
-    //
-    // Does nothing else by default.
+    /**
+     * Action to perform when the draw() method is called on the
+     * current widget.
+     *
+     * This method is called after the viewport is set and drawn
+     * according to the graphical properties and before child is
+     * printed (if any).
+     *
+     * Does nothing by default.
+     *
+     * \remark This method should be overridden by any derived class
+     * that needs to perform specific actions when loop() method is
+     * called on the current widget.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
     inline virtual void _draw() {}
 
   public:

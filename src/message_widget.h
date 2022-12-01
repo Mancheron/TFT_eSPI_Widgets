@@ -95,17 +95,70 @@ namespace TFT_eSPI_Widgets {
 
   protected:
 
+    /**
+     * The raw message to display.
+     */
     String _orig_message;
+
+    /**
+     * The processed message that is displayed.
+     */
     String _message;
+
+    /**
+     * The number of lines required to display the message.
+     */
     int16_t _number_of_lines;
+
+    /**
+     * The current offset of the displayed message (relative to the
+     * top left corner of the inner area).
+     */
     Coordinates _offset;
+
+    /**
+     * The wrap status of the message (true if the message is tio be
+     * wrapped and false otherwise).
+     */
     bool _wrap;
+
+    /**
+     * The last time the message has been drawn.
+     */
     uint64_t _last_update;
+
+    /**
+     * The delay between two frame animation when the message is not
+     * sticked to one border.
+     */
     uint64_t _animation_delay;
+
+    /**
+     * The delay before animation starts when the message is sticked
+     * to one border.
+     */
     uint64_t _stick_delay;
+
+    /**
+     * The offset step to animate the message.
+     */
     uint16_t _step;
 
+    /**
+     * The specific drawing code for message widgets.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
     virtual void _draw();
+
+    /**
+     * The specific loop code for message widgets (computation for any
+     * animation).
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
     virtual void _loop();
 
   public:

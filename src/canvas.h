@@ -97,35 +97,72 @@ namespace TFT_eSPI_Widgets {
 
   protected:
 
+    /**
+     * The address of the TFT attached to this widget.
+     *
+     * It must be set using the init() method (or the non default
+     * Canvas() constructor).
+     */
     TFT_eSPI *_tft;
+
+    /**
+     * The address of the focused widget (if any).
+     */
     const Widget *_focus_widget;
 
-    // Throws an exception if the current canvas is not initalized.
+    /**
+     * Throws an exception if the current canvas is not initalized.
+     */
     inline void _ensure_initialized() const {
       if (!_tft) {
         throw std::runtime_error("You must initialize the canvas first before calling any other method on it!");
       }
     }
 
-    // Override of default widget method.
+    /**
+     * Get the TFT screen attached to current widget.
+     *
+     * \return This method returns the TFT screen object.
+     */
     inline virtual TFT_eSPI &_getTFT() const {
       _ensure_initialized();
       return *_tft;
     }
 
-    // Override of default widget method.
+    /**
+     * Get the focus status of the given widget.
+     *
+     * \param w The widget for which we want to know if it is focused.
+     *
+     * \return This method returns true if the given widgets has the
+     * focus.
+     */
     inline virtual bool _hasFocus(const Widget &w) const {
       _ensure_initialized();
       return _focus_widget == &w;
     }
 
-    // Override of default widget method.
+    /**
+     * Set the focus on the given widget.
+     *
+     * \param w The widget for which we want to give the focus.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
     inline virtual void _setFocus(const Widget &w) {
       _ensure_initialized();
       _focus_widget = &w;
     }
 
-    // Override of default widget method.
+    /**
+     * Loose the focus from the given widget.
+     *
+     * \param w The widget for which we want to remove the focus.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
     inline virtual void _unsetFocus(const Widget &w) {
       _ensure_initialized();
       _focus_widget = (&w == this) ? NULL : &(w.getParent());
