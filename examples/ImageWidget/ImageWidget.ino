@@ -81,186 +81,112 @@
  *                                                                             *
  ******************************************************************************/
 
-#include "widget.h"
+#include <TFT_eSPI_Widgets.h>
 
 using namespace TFT_eSPI_Widgets;
 
-#define TYPE2CSTR_CASE(t) case t: return #t
+TFT_eSPI tft;
+Canvas canvas;
 
-const char *Widget::getTypeString(Type t) {
-  switch (t) {
-    TYPE2CSTR_CASE(CANVAS);
-    TYPE2CSTR_CASE(GENERIC);
-    TYPE2CSTR_CASE(IMAGE);
-    TYPE2CSTR_CASE(MESSAGE);
-    TYPE2CSTR_CASE(CUSTOM);
+#include "Gnu-Tux-160x80.h"
+#include "Gnu-Tux-320x160.h"
+
+unsigned long start_cycle;
+
+void setup(void) {
+  Serial.begin(115200);
+  while (!Serial) {
+    delay(100);
   }
+  Serial.println("Starting TFT_eSPI Widget library Message demo...");
+  tft.init();
+  tft.setRotation(1);
+  canvas.init(tft,
+              GraphicalProperties(TFT_DARKGREY /* background color */,
+                                  TFT_RED /* border color */,
+                                  TFT_WHITE /* font color */,
+                                  2 /* border size */)
+              );
+
+  // It is REQUIRED to create any child widget using the "new"
+  // keyword.
+  new ImageWidget(canvas,
+                  Gnu_Tux_160x80_data,
+                  Dimensions(Gnu_Tux_160x80_width, Gnu_Tux_160x80_height),
+                  Coordinates::origin,
+                  Area(160, 80, // Set the image area to 160x80
+                       // centered on the canvas (which is expected to be
+                       // larger than 160x80)
+                       (canvas.getArea().width - 160) / 2,
+                       (canvas.getArea().height - 80) / 2));
+
+  // Force redraw on next loop.
+  canvas.touch();
+
+  Serial.print("- root widget type is: ");
+  Serial.println(canvas.getTypeString());
+  Serial.print("- child widget type is: ");
+  Serial.println(canvas.getChild().getTypeString());
+
+  Serial.println("[End of demo setup]");
+  Serial.println("Images will be displayed for 2 seconds.");
+  Serial.println("==========");
+  start_cycle = millis();
 }
 
-Widget::Widget():
-  _root(*this),
-  _parent(*this),
-  _child(NULL),
-  _area(),
-  _default_graph_props(),
-  _focus_graph_props(),
-  _need_update(false),
-  _event_handler_cb(NULL),
-  _loop_cb(NULL),
-  _focus_cb(NULL),
-  _unfocus_cb(NULL)
-{}
+void loop(void) {
+  // Calling the loop() method will call the loop of any descendant
+  // widget from the current canvas in the widget tree.
+  canvas.loop();
+  canvas.refresh();
 
-Widget::Widget(Widget &parent, const Area &area):
-  _root(parent._root),
-  _parent(parent),
-  _child(NULL),
-  _area(),
-  _default_graph_props(parent._default_graph_props),
-  _focus_graph_props(parent._focus_graph_props),
-  _need_update(false),
-  _event_handler_cb(NULL),
-  _loop_cb(NULL),
-  _focus_cb(NULL),
-  _unfocus_cb(NULL)
-{
-  setArea(area);
-  _parent.removeChild();
-  _parent._child = this;
-}
+  unsigned long ellapsed_time = millis() - start_cycle;
 
-Widget::~Widget() {
-  removeChild();
-  if (!isRoot()) {
-    _parent._child = NULL;
-    yield();
-  }
-}
+  // By default, getChild() will return a Widget (the base class of
+  // any widget), but it is possible to specify the subclass of widget
+  // in order to use specific methods (be aware that no control is
+  // done, so any mistake on the subclass will be fatal).
+  ImageWidget &w = canvas.getChild<ImageWidget>();
 
-void Widget::removeChild() {
-  if (_child) {
-    delete _child;
-    _child = NULL;
-    yield();
-  }
-}
-
-Area Widget::getArea() const {
-  Area area = _area;
-  if (!isRoot()) {
-    area.x -= _parent._area.x;
-    area.y -= _parent._area.y;
-  }
-  return area;
-}
-
-void Widget::setArea(const Area &area) {
-  if (isRoot()) {
-    if (area.isEmpty()) {
-      TFT_eSPI &tft = getTFT();
-      _area.width = tft.width();
-      _area.height = tft.height();
-      _area.x = 0;
-      _area.y = 0;
+  if (ellapsed_time > 2000) {
+    if (w.getData() == Gnu_Tux_160x80_data) {
+      w.setData(Gnu_Tux_320x160_data,
+                Dimensions(Gnu_Tux_320x160_width, Gnu_Tux_320x160_height));
+      Serial.printf("Setting a %usx%us image [should be cropped]\n",
+                    Gnu_Tux_320x160_width, Gnu_Tux_320x160_height);
     } else {
-      _area = area;
-    }
-  } else {
-    if (area.isEmpty()) {
-      uint8_t b = max(_default_graph_props.getBorderSize(), _focus_graph_props.getBorderSize());
-      _area = _parent._area;
-      if (_area.width > 2 * b) {
-        _area.width -= 2 * b;
+      Coordinates offset = w.getOffset();
+      if (offset.x == 0) {
+        if (offset.y == 0) {
+          offset.y = -w.getDimensions().height / 2;
+          Serial.println("Moving the image to the bottom.");
+        } else {
+          offset.x = -w.getDimensions().width / 2;
+          Serial.println("Moving the image to the right.");
+        }
       } else {
-        _area.width = 0;
+        if (offset.y == 0) {
+          offset.x = 0;
+          Serial.println("Reset image offset.");
+        } else {
+          offset.y = 0;
+          Serial.println("Moving the image to the top.");
+        }
       }
-      if (_area.height > 2 * b) {
-        _area.height -= 2 * b;
-      } else {
-        _area.height = 0;
-      }
-      _area.x += b;
-      _area.y += b;
-    } else {
-      _area = area;
-      _area.x += _parent._area.x;
-      _area.y += _parent._area.y;
-    }
-  }
-}
-
-void Widget::focus() {
-  if (_focus_cb) {
-    _focus_cb(*this);
-  }
-  _setFocus(*this);
-  touch();
-}
-
-void Widget::unfocus() {
-  if (_unfocus_cb) {
-    _unfocus_cb(*this);
-  }
-  _unsetFocus(*this);
-  touch();
-}
-
-void Widget::eventHandler(Event event) {
-  if (hasFocus()) {
-    bool raise_event = (!_event_handler_cb or _event_handler_cb(*this, event));
-    if (event == LONG_RIGHT_CLICK) {
-      unfocus();
-    } else {
-      if (raise_event) {
-        _eventHandler(event);
+      w.setOffset(offset);
+      if (w.getOffset() == Coordinates::origin) {
+        w.setData(Gnu_Tux_160x80_data,
+                  Dimensions(Gnu_Tux_160x80_width, Gnu_Tux_160x80_height));
+        Serial.printf("Setting a %usx%us image\n",
+                      Gnu_Tux_160x80_width, Gnu_Tux_160x80_height);
       }
     }
+    w.touch();
+    start_cycle = millis();
   }
+
 }
 
-void Widget::draw() {
-  if (!_need_update) return;
-  const GraphicalProperties &props = getGraphicalProperties();
-  TFT_eSPI &tft = getTFT();
-  tft.setViewport(_area.x, _area.y, _area.width, _area.height);
-  tft.fillScreen(props.getBackgroundColor());
-  uint8_t border_size = props.getBorderSize();
-  if (border_size) {
-    tft.frameViewport(props.getBorderColor(), props.getBorderSize());
-    tft.setViewport(_area.x + border_size,
-                    _area.y + border_size,
-                    _area.width - 2 * border_size,
-                    _area.height - 2 * border_size);
-  }
-  tft.setTextSize(props.getFontSize());
-  tft.setTextColor(props.getFontColor());
-  yield();
-  _draw();
-  yield();
-  tft.resetViewport();
-  if (_child) {
-    _child->touch();
-  }
-  _need_update = false;
-  yield();
-}
-
-void Widget::refresh() {
-  draw();
-  if (_child) {
-    _child->refresh();
-  }
-  yield();
-}
-
-void Widget::loop(bool recurse) {
-  if (_loop_cb) {
-    _loop_cb(*this);
-    yield();
-  }
-  _loop();
-  yield();
-  if (recurse and _child) {
-    _child->loop(recurse);
-  }
-}
+// Local Variables:
+// mode: c++
+// End:

@@ -5,26 +5,31 @@
   "keywords": "Arduino, tft, display, widgets",
   "description": "Widget API to enhance the TFT_eSPI library.",
   "dependencies": {
-    "TFT_eSPI": ">=2.3.4"
+    "TFT_eSPI": ">=2.3.4",
+    "TJpg_Decoder": ">=1.0.8",
+    "PNGdec": ">=1.0.1",
   },
   "repository":
   {
     "type": "git",
-    "url": "https://gite.lirmm.fr/doccy/TFT_eSPI_Widgets"
+    "url": "https://gite.lirmm.fr/doccy/TFT_eSPI_Widgets",
   },
   "authors":
   [
     {
-        "name": "Alban Mancheron",
-        "email": "alban.mancheron@lirmm.fr",
-        "maintainer": true
+      "name": "Alban Mancheron",
+      "email": "alban.mancheron@lirmm.fr",
+      "maintainer": true,
     }
   ],
   "exclude": [
     ".git",
-    "docs"
+    "docs",
   ],
   "frameworks": "arduino",
   "platforms": "rp2040, espressif8266, espressif32, ststm32",
-  "headers": "TFT_eSPI_Widgets.h"
+  "headers": "TFT_eSPI_Widgets.h",
 }
+/// Local variables:
+/// js-indent-level: 2
+/// End:

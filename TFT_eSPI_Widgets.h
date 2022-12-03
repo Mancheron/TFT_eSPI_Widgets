@@ -92,6 +92,7 @@
 #include "src/dimensions.h"
 #include "src/generic_widget.h"
 #include "src/graphical_properties.h"
+#include "src/image_widget.h"
 #include "src/message_widget.h"
 #include "src/widget.h"
 

@@ -97,6 +97,7 @@ namespace TFT_eSPI_Widgets {
   enum Type {
              CANVAS,        /**< Canvas widget. */
              GENERIC,       /**< Generic widget. */
+             IMAGE,         /**< Image widget. */
              MESSAGE,       /**< Simple message widget. */
              CUSTOM,        /**< Custom widget. */
   };
