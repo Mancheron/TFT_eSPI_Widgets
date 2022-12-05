@@ -108,7 +108,13 @@ namespace TFT_eSPI_Widgets {
     /**
      * The address of the focused widget (if any).
      */
-    const Widget *_focus_widget;
+    Widget *_focus_widget;
+
+    /**
+     * Whether or not transmit the focus on the parent of the
+     * unfocused widget.
+     */
+    bool _transmit_focus;
 
     /**
      * Throws an exception if the current canvas is not initalized.
@@ -150,8 +156,13 @@ namespace TFT_eSPI_Widgets {
      * \return Returns nothing but doxygen is buggy with inline
      * virtual void signature.
      */
-    inline virtual void _setFocus(const Widget &w) {
+    inline virtual void _setFocus(Widget &w) {
       _ensure_initialized();
+      if (_focus_widget) {
+        _transmit_focus = false;
+        _focus_widget->unfocus();
+        _transmit_focus = true;
+      }
       _focus_widget = &w;
     }
 
@@ -163,9 +174,36 @@ namespace TFT_eSPI_Widgets {
      * \return Returns nothing but doxygen is buggy with inline
      * virtual void signature.
      */
-    inline virtual void _unsetFocus(const Widget &w) {
+    inline virtual void _unsetFocus(Widget &w) {
       _ensure_initialized();
-      _focus_widget = (&w == this) ? NULL : &(w.getParent());
+      if (_focus_widget == &w) {
+        _focus_widget = NULL;
+        if (_transmit_focus and (&w != this)) {
+          w.getParent().focus();
+        }
+      }
+    }
+
+    /**
+     * Action to perform when the current widget is passed some event.
+     *
+     * Send the event to the focused widget (if any).
+     *
+     * \param event The event to handle.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
+    inline virtual void _handleEvent(Event event) {
+      if (_focus_widget and (_focus_widget != this)) {
+        _focus_widget->handleEvent(event);
+      } else {
+        if (event == TRIPLE_LEFT_CLICK) {
+          if (!_focus_widget) {
+            focus();
+          }
+        }
+      }
     }
 
   public:

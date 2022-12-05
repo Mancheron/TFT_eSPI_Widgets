@@ -122,14 +122,14 @@ namespace TFT_eSPI_Widgets {
    * button should apply the unfocus() method on it.
    */
   enum Event {
-              SIMPLE_LEFT_CLICK,  /**< Simple left click event */
+              SINGLE_LEFT_CLICK,  /**< Single left click event */
               DOUBLE_LEFT_CLICK,  /**< Double left click event */
               TRIPLE_LEFT_CLICK,  /**< Triple left click event */
-              LONG_LEFT_CLICK,    /**< Long left click event */
-              SIMPLE_RIGHT_CLICK, /**< Simple right click event */
+              LONG_LEFT_PRESS,    /**< Long left pressed event */
+              SINGLE_RIGHT_CLICK, /**< Single right click event */
               DOUBLE_RIGHT_CLICK, /**< Double right click event */
               TRIPLE_RIGHT_CLICK, /**< Triple right click event */
-              LONG_RIGHT_CLICK,   /**< Long right click event */
+              LONG_RIGHT_PRESS,   /**< Long right pressed event */
   };
 
   /**
@@ -149,7 +149,7 @@ namespace TFT_eSPI_Widgets {
    * protected methods should be overridden:
    *  - _onFocus(),
    *  - _onUnfocus(),
-   *  - _eventHandler(),
+   *  - _handleEvent(),
    *  - _loop(),
    *  - _draw().
    *
@@ -171,7 +171,7 @@ namespace TFT_eSPI_Widgets {
 
     /**
      * The type of callback function that can be applyed to add some
-     * hooks on widget eventHandler() method.
+     * hooks on widget handleEvent() method.
      *
      * If the function returns false, then the event will not be
      * further processed by the default event handler of the widget.
@@ -287,7 +287,7 @@ namespace TFT_eSPI_Widgets {
      * \return Returns nothing but doxygen is buggy with inline
      * virtual void signature.
      */
-    inline virtual void _setFocus(const Widget &w) {
+    inline virtual void _setFocus(Widget &w) {
       _root._setFocus(w);
     }
 
@@ -304,7 +304,7 @@ namespace TFT_eSPI_Widgets {
      * \return Returns nothing but doxygen is buggy with inline
      * virtual void signature.
      */
-    inline virtual void _unsetFocus(const Widget &w) {
+    inline virtual void _unsetFocus(Widget &w) {
       _root._unsetFocus(w);
     }
 
@@ -350,7 +350,7 @@ namespace TFT_eSPI_Widgets {
      * \return Returns nothing but doxygen is buggy with inline
      * virtual void signature.
      */
-    inline virtual void _eventHandler(Event event) {}
+    inline virtual void _handleEvent(Event event) {}
 
     /**
      * Action to perform when the loop method is called on the current
@@ -636,7 +636,7 @@ namespace TFT_eSPI_Widgets {
     /**
      * Any extra action that must operate during event handling.
      *
-     * \param cb The callback function to call when the eventHandler()
+     * \param cb The callback function to call when the handleEvent()
      * method is called on the widget.
      */
     inline void onEvent(const event_handler_cb_t &cb) {
@@ -712,13 +712,22 @@ namespace TFT_eSPI_Widgets {
     /**
      * Any action that must operate on event.
      *
+     * For any widget, when a triple left click event is passed and
+     * the current widget has the focus, then the focus is given to
+     * its child (if any). If no widget has the focus, then the root
+     * widget get it.
+     *
+     * For any widget, when a triple right click event is passed and
+     * the current widget has the focus, then it is unfocused and the
+     * focus is given to its parent (if any).
+     *
      * If current widget hasn't got the focus, then does nothing.
      *
      * \see A callback function can be set using onEvent() method.
      *
      * \param event The event to handle.
      */
-    void eventHandler(Event event);
+    void handleEvent(Event event);
 
     /**
      * Draw or redraw the widget if necessary (if current widget has

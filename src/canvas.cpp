@@ -87,7 +87,9 @@ using namespace TFT_eSPI_Widgets;
 
 Canvas::Canvas():
   Widget(),
-  _focus_widget(NULL)
+  _tft(NULL),
+  _focus_widget(NULL),
+  _transmit_focus(true)
 {}
 
 Canvas::Canvas(TFT_eSPI &tft,

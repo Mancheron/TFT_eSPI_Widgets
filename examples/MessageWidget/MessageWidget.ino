@@ -160,7 +160,7 @@ void setup(void) {
   Serial.println(canvas.getChild().getTypeString());
   Serial.print("- grandchild widget type is: ");
   Serial.println(canvas.getChild().getChild().getTypeString());
-  
+
   Serial.println("[End of demo setup]");
   Serial.println("The first message will be prompted for only 5 seconds.");
   Serial.println("==========");

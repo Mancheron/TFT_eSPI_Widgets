@@ -205,15 +205,26 @@ void Widget::unfocus() {
   touch();
 }
 
-void Widget::eventHandler(Event event) {
+void Widget::handleEvent(Event event) {
   if (hasFocus()) {
     bool raise_event = (!_event_handler_cb or _event_handler_cb(*this, event));
-    if (event == LONG_RIGHT_CLICK) {
-      unfocus();
-    } else {
-      if (raise_event) {
-        _eventHandler(event);
+    switch (event) {
+    case TRIPLE_LEFT_CLICK:
+      if (_child) {
+        _child->focus();
       }
+      break;
+    case TRIPLE_RIGHT_CLICK:
+      unfocus();
+      break;
+    default:
+      if (raise_event) {
+        _handleEvent(event);
+      }
+    }
+  } else {
+    if (isRoot()) {
+      _handleEvent(event);
     }
   }
 }
