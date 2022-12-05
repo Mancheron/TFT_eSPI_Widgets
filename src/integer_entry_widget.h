@@ -231,7 +231,7 @@ namespace TFT_eSPI_Widgets {
      */
     inline void setMinimalValue(int32_t v) {
       _minimal_value = v;
-      _value = constrain(v, _minimal_value, _maximal_value);
+      setValue(_value);
     }
 
     /**
@@ -252,21 +252,21 @@ namespace TFT_eSPI_Widgets {
      */
     inline void setMaximalValue(int32_t v) {
       _maximal_value = v;
-      _value = constrain(v, _minimal_value, _maximal_value);
+      setValue(_value);
     }
 
     /**
      * Increment the current value (up to the upper bound).
      */
     inline void incrValue() {
-      if (_value++ >= _maximal_value) _value = _maximal_value;
+      setValue(++_value);
     }
 
     /**
      * Decrement the current value (down to the lower bound).
      */
     inline void decrValue() {
-      if (_value-- <= _minimal_value) _value = _minimal_value;
+      setValue(--_value);
     }
 
   };
