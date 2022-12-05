@@ -230,6 +230,8 @@ void setup(void) {
   props.setBackgroundColor(color16);
   canvas.getChild().setFocusGraphicalProperties(props);
 
+  // Give focus on the integer entry widget
+  canvas.getChild().focus();
   // Force redraw on next loop.
   canvas.touch();
 
