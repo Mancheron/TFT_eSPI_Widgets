@@ -81,21 +81,114 @@
  *                                                                             *
  ******************************************************************************/
 
-#ifndef __TFT_ESPI_WIDGETS_H__
-#define __TFT_ESPI_WIDGETS_H__
+#include "button_handler.h"
 
-#include <TFT_eSPI.h>
+using namespace TFT_eSPI_Widgets;
 
-#include "src/area.h"
-#include "src/button_handler.h"
-#include "src/canvas.h"
-#include "src/coordinates.h"
-#include "src/dimensions.h"
-#include "src/generic_widget.h"
-#include "src/graphical_properties.h"
-#include "src/image_widget.h"
-#include "src/message_widget.h"
-#include "src/physical_button_handler.h"
-#include "src/widget.h"
+ButtonHandler::ButtonHandler(unsigned long short_click_max_delay,
+                             unsigned long debounce_delay):
+  _first_pressed(0),
+  _second_pressed(0),
+  _third_pressed(0),
+  _last_released(0),
+  _current_status(RELEASED),
+  _short_click_max_delay(short_click_max_delay),
+  _debounce_delay(debounce_delay)
+{}
 
-#endif
+void ButtonHandler::reset() {
+  _first_pressed = 0;
+  _second_pressed = 0;
+  _third_pressed = 0;
+  _last_released = 0;
+  _current_status = RELEASED;
+}
+
+ButtonHandler::Event ButtonHandler::getEvent() {
+  Event event = NONE;
+  unsigned long now = millis();
+  Status status = getStatus();
+  if (status == _current_status) {
+    // Same status
+    if (status == RELEASED) {
+      // Button is still released.
+      if (_last_released and (now - _last_released > _debounce_delay)) {
+        // Time to process pending clicks
+        if (_second_pressed) {
+          event = DOUBLE_CLICK;
+        } else if (_first_pressed) {
+          event = SINGLE_CLICK;
+        } else {
+          if (Serial) {
+            Serial.printf("%s:%s:%:This is a bug. "
+                          "Please contact the authors of this library.\n",
+                          __FILE__, __FUNCTION__, __LINE__);
+          }
+        }
+        reset();
+      }
+    } else {
+      // Button is still pressed.
+      if (_third_pressed) {
+        // There already was a double click.
+        if (now - _third_pressed > _short_click_max_delay) {
+          // This is a long press that follows a double click.
+          event = DOUBLE_CLICK;
+          reset();
+          _first_pressed = now;
+        }
+      } else if (_second_pressed) {
+        // There already was a single click.
+        if (now - _second_pressed > _short_click_max_delay) {
+          // This is a long press that follows a single click.
+          event = SINGLE_CLICK;
+          reset();
+          _first_pressed = now;
+        }
+      } else {
+        if (now - _first_pressed > _short_click_max_delay) {
+          event = LONG_PRESS;
+        }
+      }
+    }
+  } else {
+    // Changing state
+    if (status == RELEASED) {
+      // Button is just released.
+      if (_third_pressed) {
+        // This is the end of the third click.
+        event = TRIPLE_CLICK;
+        reset();
+      } else {
+        // This is the end of the first or second click.
+        _last_released = now;
+        if (!_second_pressed) {
+          // This is the first click, which may be a long one...
+          if (now - _first_pressed > _short_click_max_delay) {
+            reset();
+          }
+        }
+      }
+    } else {
+      // Button is just pressed.
+      if (!_first_pressed) {
+        // Starting first click, then do nothing for now.
+        _first_pressed = now;
+      } else if (!_second_pressed) {
+        // Starting second click, then do nothing for now.
+        _second_pressed = now;
+      } else if (!_third_pressed) {
+        // Starting third click, then do nothing for now.
+        _third_pressed = now;
+      } else {
+        if (Serial) {
+          Serial.printf("%s:%s:%:This is a bug. "
+                        "Please contact the authors of this library.\n",
+                        __FILE__, __FUNCTION__, __LINE__);
+        }
+      }
+    }
+  }
+  _current_status = status;
+  return event;
+}

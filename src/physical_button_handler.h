@@ -81,21 +81,78 @@
  *                                                                             *
  ******************************************************************************/
 
-#ifndef __TFT_ESPI_WIDGETS_H__
-#define __TFT_ESPI_WIDGETS_H__
+#ifndef __PHYSICAL_BUTTON_HANDLER_H__
+#define __PHYSICAL_BUTTON_HANDLER_H__
 
-#include <TFT_eSPI.h>
+#include <Arduino.h>
+#include "button_handler.h"
 
-#include "src/area.h"
-#include "src/button_handler.h"
-#include "src/canvas.h"
-#include "src/coordinates.h"
-#include "src/dimensions.h"
-#include "src/generic_widget.h"
-#include "src/graphical_properties.h"
-#include "src/image_widget.h"
-#include "src/message_widget.h"
-#include "src/physical_button_handler.h"
-#include "src/widget.h"
+namespace TFT_eSPI_Widgets {
+
+  /**
+   * The ButtonHandler for physical buttons (associated to some pin).
+   */
+  class PhysicalButtonHandler: public ButtonHandler {
+
+  protected:
+
+    /**
+     * The pin attached to the physical switch button.
+     */
+    const int _pin;
+
+    /**
+     * The default pin level when the physical button is released.
+     */
+    const int _released_level;
+
+  public:
+
+    /**
+     * Associate a handler to some physical button.
+     *
+     * \param pin Pin attached to the physical switch button.
+     *
+     * \param released_level Default pin level when the physical
+     * button is released. Acceptable values are either LOW (default)
+     * or HIGH.
+     *
+     * \param short_click_max_delay Time (in milliseconds) under which
+     * a click is considered as short. That means that above this
+     * delay, a click is considered as long by default. By default,
+     * this parameter is set to SHORT_CLICK_MAX_DELAY.
+     *
+     * \param debounce_delay Time (in milliseconds) between two clicks
+     * to consider them as consecutive (for double clicks or triple
+     * clicks). By default, this parameter is set to DEBOUNCE_DELAY.
+     */
+    PhysicalButtonHandler(int pin,
+                          int released_level = LOW,
+                          unsigned long short_click_max_delay = SHORT_CLICK_MAX_DELAY,
+                          unsigned long debounce_delay = DEBOUNCE_DELAY);
+
+    /**
+     * Initialize the button in read mode (should be called during
+     * setup).
+     */
+    inline void init() const {
+      pinMode(_pin, INPUT);
+    }
+
+    /**
+     * Get the current button status.
+     *
+     * \return This method retrieve the current button status.
+     */
+    inline virtual Status getStatus() const {
+      return (digitalRead(_pin) == _released_level) ? RELEASED : PRESSED;
+    }
+
+  };
+
+}
 
 #endif
+// Local Variables:
+// mode: c++
+// End:

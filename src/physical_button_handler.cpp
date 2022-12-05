@@ -81,21 +81,15 @@
  *                                                                             *
  ******************************************************************************/
 
-#ifndef __TFT_ESPI_WIDGETS_H__
-#define __TFT_ESPI_WIDGETS_H__
+#include "physical_button_handler.h"
 
-#include <TFT_eSPI.h>
+using namespace TFT_eSPI_Widgets;
 
-#include "src/area.h"
-#include "src/button_handler.h"
-#include "src/canvas.h"
-#include "src/coordinates.h"
-#include "src/dimensions.h"
-#include "src/generic_widget.h"
-#include "src/graphical_properties.h"
-#include "src/image_widget.h"
-#include "src/message_widget.h"
-#include "src/physical_button_handler.h"
-#include "src/widget.h"
-
-#endif
+PhysicalButtonHandler::PhysicalButtonHandler(int pin,
+                                             int released_level,
+                                             unsigned long short_click_max_delay,
+                                             unsigned long debounce_delay):
+  ButtonHandler(short_click_max_delay, debounce_delay),
+  _pin(pin),
+  _released_level(released_level)
+{}

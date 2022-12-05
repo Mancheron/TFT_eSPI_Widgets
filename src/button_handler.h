@@ -81,21 +81,149 @@
  *                                                                             *
  ******************************************************************************/
 
-#ifndef __TFT_ESPI_WIDGETS_H__
-#define __TFT_ESPI_WIDGETS_H__
+#ifndef __BUTTON_HANDLER_H__
+#define __BUTTON_HANDLER_H__
 
-#include <TFT_eSPI.h>
+#include <Arduino.h>
 
-#include "src/area.h"
-#include "src/button_handler.h"
-#include "src/canvas.h"
-#include "src/coordinates.h"
-#include "src/dimensions.h"
-#include "src/generic_widget.h"
-#include "src/graphical_properties.h"
-#include "src/image_widget.h"
-#include "src/message_widget.h"
-#include "src/physical_button_handler.h"
-#include "src/widget.h"
+namespace TFT_eSPI_Widgets {
+
+  /**
+   * A simple button handler.
+   *
+   * This is a basic class interface to capture button events in order
+   * to provide the minimal functionnalities to work with widgets.
+   *
+   * It is suggested to use instead a more advanced library such as
+   * `Button2` which is available at
+   * https://github.com/LennartHennigs/Button2 (see
+   * https://www.arduino.cc/reference/en/libraries/button2/).
+   */
+  class ButtonHandler {
+
+  public:
+
+    /**
+     * Button status type.
+     */
+    enum Status {
+                 PRESSED, /**< The button is pressed. */
+                 RELEASED /**< The button is released. */
+    };
+
+    /**
+     * Detected event type.
+     */
+    enum Event {
+                NONE,         /**< No event. */
+                SINGLE_CLICK, /**< Single click event. */
+                DOUBLE_CLICK, /**< Double click event. */
+                TRIPLE_CLICK, /**< Triple click event. */
+                LONG_PRESS,   /**< Long pressed event. */
+    };
+
+    /**
+     * The default time (in milliseconds) under which a click is
+     * considered as short. That means that above this delay, a click
+     * is considered as long by default.
+     */
+    static const unsigned long SHORT_CLICK_MAX_DELAY = 200;
+
+    /**
+     * The default time (in milliseconds) between two clicks to
+     * consider them as consecutive (for double clicks or triple
+     * clicks).
+     */
+    static const unsigned long DEBOUNCE_DELAY = 100;
+
+  protected:
+
+    /**
+     * The starting time (in milliseconds) of the first click (from a
+     * potential serie of clicks).
+     */
+    unsigned long _first_pressed;
+
+    /**
+     * The starting time (in milliseconds) of the second click (from a
+     * potential serie of clicks). A non zero value means that there
+     * was already a first short click.
+     */
+    unsigned long _second_pressed;
+
+    /**
+     * The starting time (in milliseconds) of the third click (from a
+     * potential serie of clicks). A non zero value means that there
+     * was already a first and a second short clicks.
+     */
+    unsigned long _third_pressed;
+    /**
+     * The last time (in milliseconds) the button was released. This
+     * parameter is used to check the time spent from the last click
+     * in order to check if there is a serie of clicks.
+     */
+    unsigned long _last_released;
+
+    /**
+     * The status of the button on the last time it was observed.
+     */
+    Status _current_status;
+
+    /**
+     * The time (in milliseconds) under which a click is considered as
+     * short. That means that above this delay, a click is considered
+     * as long by default.
+     */
+    const unsigned long _short_click_max_delay;
+
+    /**
+     * The time (in milliseconds) between two clicks to consider them
+     * as consecutive (for double clicks or triple clicks).
+     */
+    const unsigned long _debounce_delay;
+
+  public:
+
+    /**
+     * Creates a new button handler.
+     *
+     * \param short_click_max_delay Time (in milliseconds) under which
+     * a click is considered as short. That means that above this
+     * delay, a click is considered as long by default.
+     *
+     * \param debounce_delay Time (in milliseconds) between two clicks
+     * to consider them as consecutive (for double clicks or triple
+     * clicks).
+     */
+    ButtonHandler(unsigned long short_click_max_delay,
+                  unsigned long debounce_delay);
+
+    /**
+     * Reset any click information and set button status to RELEASE.
+     */
+    void reset();
+
+    /**
+     * Get the current button status.
+     *
+     * Any derived class must override this method.
+     *
+     * \return This method retrieve the current button status.
+     */
+    virtual Status getStatus() const = 0;
+
+    /**
+     * Get the current detected event.
+     *
+     * \return This method detects and return the button event.
+     */
+    Event getEvent();
+
+  };
+
+}
 
 #endif
+// Local Variables:
+// mode: c++
+// End:
