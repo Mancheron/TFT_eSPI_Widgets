@@ -98,6 +98,7 @@ namespace TFT_eSPI_Widgets {
              CANVAS,        /**< Canvas widget. */
              GENERIC,       /**< Generic widget. */
              IMAGE,         /**< Image widget. */
+             INT_ENTRY,     /**< Integer entry widget. */
              MESSAGE,       /**< Simple message widget. */
              CUSTOM,        /**< Custom widget. */
   };

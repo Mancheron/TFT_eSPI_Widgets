@@ -81,198 +81,199 @@
  *                                                                             *
  ******************************************************************************/
 
+#ifndef __INTEGER_ENTRY_WIDGET_H__
+#define __INTEGER_ENTRY_WIDGET_H__
+
+#include <Arduino.h>
+#include <limits>
 #include "widget.h"
 
-using namespace TFT_eSPI_Widgets;
+namespace TFT_eSPI_Widgets {
 
-#define TYPE2CSTR_CASE(t) case t: return #t
+  /**
+   * An integer entry widget.
+   */
+  class IntegerEntryWidget: public Widget {
 
-const char *Widget::getTypeString(Type t) {
-  switch (t) {
-    TYPE2CSTR_CASE(CANVAS);
-    TYPE2CSTR_CASE(GENERIC);
-    TYPE2CSTR_CASE(IMAGE);
-    TYPE2CSTR_CASE(INT_ENTRY);
-    TYPE2CSTR_CASE(MESSAGE);
-    TYPE2CSTR_CASE(CUSTOM);
-  }
-}
+  protected:
 
-Widget::Widget():
-  _root(*this),
-  _parent(*this),
-  _child(NULL),
-  _area(),
-  _default_graph_props(),
-  _focus_graph_props(),
-  _need_update(false),
-  _event_handler_cb(NULL),
-  _loop_cb(NULL),
-  _focus_cb(NULL),
-  _unfocus_cb(NULL)
-{}
+    /**
+     * The current value of the widget.
+     */
+    int32_t _value;
 
-Widget::Widget(Widget &parent, const Area &area):
-  _root(parent._root),
-  _parent(parent),
-  _child(NULL),
-  _area(),
-  _default_graph_props(parent._default_graph_props),
-  _focus_graph_props(parent._focus_graph_props),
-  _need_update(false),
-  _event_handler_cb(NULL),
-  _loop_cb(NULL),
-  _focus_cb(NULL),
-  _unfocus_cb(NULL)
-{
-  setArea(area);
-  _parent.removeChild();
-  _parent._child = this;
-}
+    /**
+     * The minimal allowed value for the widget.
+     */
+    int32_t _minimal_value;
 
-Widget::~Widget() {
-  removeChild();
-  if (!isRoot()) {
-    _parent._child = NULL;
-    yield();
-  }
-}
+    /**
+     * The maximal allowed value for the widget.
+     */
+    int32_t _maximal_value;
 
-void Widget::removeChild() {
-  if (_child) {
-    delete _child;
-    _child = NULL;
-    yield();
-  }
-}
+    /**
+     * Action to perform when the current widget is passed some event.
+     *
+     * Specific events this widget can handle are:
+     *   - Simple left click => increase the value
+     *   - Long left click => fast increase the value
+     *   - Simple right click => decrease the value
+     *   - Long right click => fast decrease the value
+     *
+     * \param event The event to handle.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
+    virtual void _handleEvent(Event event);
 
-Area Widget::getArea() const {
-  Area area = _area;
-  if (!isRoot()) {
-    area.x -= _parent._area.x;
-    area.y -= _parent._area.y;
-  }
-  return area;
-}
 
-void Widget::setArea(const Area &area) {
-  if (isRoot()) {
-    if (area.isEmpty()) {
-      TFT_eSPI &tft = getTFT();
-      _area.width = tft.width();
-      _area.height = tft.height();
-      _area.x = 0;
-      _area.y = 0;
-    } else {
-      _area = area;
+    /**
+     * The specific drawing code for integer entry widgets.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
+    virtual void _draw();
+
+  public:
+
+    /**
+     * Creates an integer entry widget attached to the given Widget.
+     *
+     * The widget graphical properties (background color, line
+     * color, line width, font color, font size) are inherited from
+     * the parent widget.
+     *
+     * The widget initial value is 0 by default, but must belong to
+     * the interval defined by the minimal_value and maximal_value
+     * parameters. So if the initial value is lower than the minimal
+     * value, then it is set to the minimal value and if the initial
+     * value is greater than the maximal value, then it is set to the
+     * maximal value.
+     *
+     * \param parent The parent widget of the current one. Be aware
+     * that if this parent already has a child widget, then this child
+     * is automatically destroyed.
+     *
+     * \param initial_value The initial value of the widget.
+     *
+     * \param minimal_value The minimal value of the widget. If the
+     * initial value is lower than this minimal value, then the
+     * initial value is set to this minimal value.
+     *
+     * \param maximal_value The maximal value of the widget. If the
+     * initial value is greater than this maximal value, then the
+     * initial value is set to this maximal value.
+     *
+     * \param area The area used by the widget. If the area dimension
+     * is empty, then use the area of its parent minus its maximal
+     * border size according to its focus state. The top left anchor
+     * of the area is relative to the top left corner of its parent.
+     *
+     * \remark There is no verification about the area to fit into the
+     * parent area.
+     */
+    IntegerEntryWidget(Widget &parent,
+                       int32_t initial_value = 0,
+                       int32_t minimal_value = INT_MIN,
+                       int32_t maximal_value = INT_MAX,
+                       const Area &area = Area::reference_value);
+
+    /**
+     * Return the widget type.
+     *
+     * \return This method returns the INT_ENTRY widget type.
+     */
+    inline virtual Type getType() const {
+      return INT_ENTRY;
     }
-  } else {
-    if (area.isEmpty()) {
-      uint8_t b = max(_default_graph_props.getBorderSize(), _focus_graph_props.getBorderSize());
-      _area = _parent._area;
-      if (_area.width > 2 * b) {
-        _area.width -= 2 * b;
-      } else {
-        _area.width = 0;
-      }
-      if (_area.height > 2 * b) {
-        _area.height -= 2 * b;
-      } else {
-        _area.height = 0;
-      }
-      _area.x += b;
-      _area.y += b;
-    } else {
-      _area = area;
-      _area.x += _parent._area.x;
-      _area.y += _parent._area.y;
+
+    /**
+     * Get the current widget value.
+     *
+     * \return This method returns the current value of the widget.
+     */
+    inline int32_t getValue() const {
+      return _value;
     }
-  }
-}
 
-void Widget::focus() {
-  if (_focus_cb) {
-    _focus_cb(*this);
-  }
-  _setFocus(*this);
-  touch();
-}
-
-void Widget::unfocus() {
-  if (_unfocus_cb) {
-    _unfocus_cb(*this);
-  }
-  _unsetFocus(*this);
-  touch();
-}
-
-void Widget::handleEvent(Event event) {
-  if (hasFocus()) {
-    bool raise_event = (!_event_handler_cb or _event_handler_cb(*this, event));
-    switch (event) {
-    case TRIPLE_LEFT_CLICK:
-      if (_child) {
-        _child->focus();
-      }
-      break;
-    case TRIPLE_RIGHT_CLICK:
-      unfocus();
-      break;
-    default:
-      if (raise_event) {
-        _handleEvent(event);
-      }
+    /**
+     * Set the widget value.
+     *
+     * \param v The value to set to the current widget.
+     *
+     * If the given value is lower than the minimal widget value, then
+     * the current value is set to the minimal value. If the given
+     * value is greater than the maximal widget value, then the
+     * current value is set to the maximal value.
+     */
+    inline void setValue(int32_t v) {
+      _value = constrain(v, _minimal_value, _maximal_value);
     }
-  } else {
-    if (isRoot()) {
-      _handleEvent(event);
+
+    /**
+     * Get the minimal widget value.
+     *
+     * \return This method returns the minimal value of the widget.
+     */
+    inline int32_t getMinimalValue() const {
+      return _minimal_value;
     }
-  }
+
+    /**
+     * Set the widget minimal value.
+     *
+     * \param v The minimal value of the widget. If the initial value
+     * is lower than this minimal value, then the initial value is set
+     * to this minimal value.
+     */
+    inline void setMinimalValue(int32_t v) {
+      _minimal_value = v;
+      _value = constrain(v, _minimal_value, _maximal_value);
+    }
+
+    /**
+     * Get the maximal widget value.
+     *
+     * \return This method returns the maximal value of the widget.
+     */
+    inline int32_t getMaximalValue() const {
+      return _maximal_value;
+    }
+
+    /**
+     * Set the widget maximal value.
+     *
+     * \param v The maximal value of the widget. If the initial value
+     * is greater than this maximal value, then the initial value is
+     * set to this maximal value.
+     */
+    inline void setMaximalValue(int32_t v) {
+      _maximal_value = v;
+      _value = constrain(v, _minimal_value, _maximal_value);
+    }
+
+    /**
+     * Increment the current value (up to the upper bound).
+     */
+    inline void incrValue() {
+      if (_value++ >= _maximal_value) _value = _maximal_value;
+    }
+
+    /**
+     * Decrement the current value (down to the lower bound).
+     */
+    inline void decrValue() {
+      if (_value-- <= _minimal_value) _value = _minimal_value;
+    }
+
+  };
+
 }
 
-void Widget::draw() {
-  if (!_need_update) return;
-  const GraphicalProperties &props = getGraphicalProperties();
-  TFT_eSPI &tft = getTFT();
-  tft.setViewport(_area.x, _area.y, _area.width, _area.height);
-  tft.fillScreen(props.getBackgroundColor());
-  uint8_t border_size = props.getBorderSize();
-  if (border_size) {
-    tft.frameViewport(props.getBorderColor(), props.getBorderSize());
-    tft.setViewport(_area.x + border_size,
-                    _area.y + border_size,
-                    _area.width - 2 * border_size,
-                    _area.height - 2 * border_size);
-  }
-  tft.setTextSize(props.getFontSize());
-  tft.setTextColor(props.getFontColor());
-  yield();
-  _draw();
-  yield();
-  tft.resetViewport();
-  if (_child) {
-    _child->touch();
-  }
-  _need_update = false;
-  yield();
-}
-
-void Widget::refresh() {
-  draw();
-  if (_child) {
-    _child->refresh();
-  }
-  yield();
-}
-
-void Widget::loop(bool recurse) {
-  if (_loop_cb) {
-    _loop_cb(*this);
-    yield();
-  }
-  _loop();
-  yield();
-  if (recurse and _child) {
-    _child->loop(recurse);
-  }
-}
+#endif
+// Local Variables:
+// mode: c++
+// End:

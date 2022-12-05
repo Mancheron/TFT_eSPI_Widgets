@@ -81,198 +81,200 @@
  *                                                                             *
  ******************************************************************************/
 
-#include "widget.h"
+#include <TFT_eSPI_Widgets.h>
 
 using namespace TFT_eSPI_Widgets;
 
-#define TYPE2CSTR_CASE(t) case t: return #t
+TFT_eSPI tft;
+Canvas canvas;
 
-const char *Widget::getTypeString(Type t) {
-  switch (t) {
-    TYPE2CSTR_CASE(CANVAS);
-    TYPE2CSTR_CASE(GENERIC);
-    TYPE2CSTR_CASE(IMAGE);
-    TYPE2CSTR_CASE(INT_ENTRY);
-    TYPE2CSTR_CASE(MESSAGE);
-    TYPE2CSTR_CASE(CUSTOM);
+// On a TTGO T-Display, there is two builtin buttons, one is attached
+// to the GPIO 35 pin and the other is attached to the GPIO 0 pin.
+// Both those pins are HIGH when buttons are released.
+PhysicalButtonHandler left_btn(35, HIGH);
+PhysicalButtonHandler right_btn(0, HIGH);
+
+// This callback function will be called when a double click (from
+// either the right or the left button) occurs on an
+// IntegerEntryWidget.
+//
+// When the double click comes from the left button, the integer entry
+// value is incremented by 10 whereas when the double click comes from
+// the right button, the integer entry value is decremented by 10.
+bool onDoubleClickCb(Widget &w, Event e) {
+  IntegerEntryWidget &ww = *static_cast<IntegerEntryWidget *>(&w);
+  if (e == DOUBLE_LEFT_CLICK) {
+    ww.setValue(ww.getValue()+10);
+  } else if (e == DOUBLE_RIGHT_CLICK) {
+    ww.setValue(ww.getValue()-10);
+  }
+  return true;
+}
+
+// Capture left and right buttons' events and pass them to the canvas
+// (root of the widget tree).
+void processButtonEvents() {
+  ButtonHandler::Event left_event = left_btn.getEvent();
+  ButtonHandler::Event right_event = right_btn.getEvent();
+
+  switch (left_event) {
+  case ButtonHandler::SINGLE_CLICK:
+    canvas.handleEvent(SINGLE_LEFT_CLICK);
+    break;
+  case ButtonHandler::DOUBLE_CLICK:
+    canvas.handleEvent(DOUBLE_LEFT_CLICK);
+    break;
+  case ButtonHandler::TRIPLE_CLICK:
+    canvas.handleEvent(TRIPLE_LEFT_CLICK);
+    break;
+  case ButtonHandler::LONG_PRESS:
+    canvas.handleEvent(LONG_LEFT_PRESS);
+    break;
+  }
+  switch (right_event) {
+  case ButtonHandler::SINGLE_CLICK:
+    canvas.handleEvent(SINGLE_RIGHT_CLICK);
+    break;
+  case ButtonHandler::DOUBLE_CLICK:
+    canvas.handleEvent(DOUBLE_RIGHT_CLICK);
+    break;
+  case ButtonHandler::TRIPLE_CLICK:
+    canvas.handleEvent(TRIPLE_RIGHT_CLICK);
+    break;
+  case ButtonHandler::LONG_PRESS:
+    canvas.handleEvent(LONG_RIGHT_PRESS);
+    break;
   }
 }
 
-Widget::Widget():
-  _root(*this),
-  _parent(*this),
-  _child(NULL),
-  _area(),
-  _default_graph_props(),
-  _focus_graph_props(),
-  _need_update(false),
-  _event_handler_cb(NULL),
-  _loop_cb(NULL),
-  _focus_cb(NULL),
-  _unfocus_cb(NULL)
-{}
 
-Widget::Widget(Widget &parent, const Area &area):
-  _root(parent._root),
-  _parent(parent),
-  _child(NULL),
-  _area(),
-  _default_graph_props(parent._default_graph_props),
-  _focus_graph_props(parent._focus_graph_props),
-  _need_update(false),
-  _event_handler_cb(NULL),
-  _loop_cb(NULL),
-  _focus_cb(NULL),
-  _unfocus_cb(NULL)
-{
-  setArea(area);
-  _parent.removeChild();
-  _parent._child = this;
-}
-
-Widget::~Widget() {
-  removeChild();
-  if (!isRoot()) {
-    _parent._child = NULL;
-    yield();
-  }
-}
-
-void Widget::removeChild() {
-  if (_child) {
-    delete _child;
-    _child = NULL;
-    yield();
-  }
-}
-
-Area Widget::getArea() const {
-  Area area = _area;
-  if (!isRoot()) {
-    area.x -= _parent._area.x;
-    area.y -= _parent._area.y;
-  }
-  return area;
-}
-
-void Widget::setArea(const Area &area) {
-  if (isRoot()) {
-    if (area.isEmpty()) {
-      TFT_eSPI &tft = getTFT();
-      _area.width = tft.width();
-      _area.height = tft.height();
-      _area.x = 0;
-      _area.y = 0;
-    } else {
-      _area = area;
-    }
+// Compute the color corresponding to the float value in the gradient
+// color starting to color from to color to using the given middle
+// color
+uint32_t getGradientColor(float x, uint32_t from = 0x0000ff, uint32_t middle = 0xffff00, uint32_t to = 0xff0000) {
+  uint32_t color;
+  uint8_t lower_red, lower_green, lower_blue, upper_red, upper_green, upper_blue, red, green, blue;
+  if (x < 0.5) {
+    lower_red = (from >> 16) & 0xff;
+    lower_green = (from >> 8) & 0xff;
+    lower_blue = from & 0xff;
+    upper_red = (middle >> 16) & 0xff;
+    upper_green = (middle >> 8) & 0xff;
+    upper_blue = middle & 0xff;
+    x *= 2;
   } else {
-    if (area.isEmpty()) {
-      uint8_t b = max(_default_graph_props.getBorderSize(), _focus_graph_props.getBorderSize());
-      _area = _parent._area;
-      if (_area.width > 2 * b) {
-        _area.width -= 2 * b;
-      } else {
-        _area.width = 0;
-      }
-      if (_area.height > 2 * b) {
-        _area.height -= 2 * b;
-      } else {
-        _area.height = 0;
-      }
-      _area.x += b;
-      _area.y += b;
-    } else {
-      _area = area;
-      _area.x += _parent._area.x;
-      _area.y += _parent._area.y;
+    lower_red = (middle >> 16) & 0xff;
+    lower_green = (middle >> 8) & 0xff;
+    lower_blue = middle & 0xff;
+    upper_red = (to >> 16) & 0xff;
+    upper_green = (to >> 8) & 0xff;
+    upper_blue = to & 0xff;
+    x = 2 * (x - 0.5);
+  }
+  red = x * (upper_red - lower_red) + lower_red;
+  green = x * (upper_green - lower_green) + lower_green;
+  blue = x * (upper_blue - lower_blue) + lower_blue;
+  color = (red << 16) | (green << 8) | blue;
+  return color;
+}
+
+// Compute the position ratio of the current value in the given range.
+float getProportion(int32_t v, int32_t lower, int32_t upper) {
+  return ((upper > lower)
+          ? float(v - lower) / (upper - lower)
+          : ((upper == lower)
+             ? 0.5
+             : getProportion(v, upper, lower)));
+}
+
+void setup(void) {
+  Serial.begin(115200);
+  while (!Serial) {
+    delay(100);
+  }
+  Serial.println("Starting TFT_eSPI Widget library Integer Entry demo...");
+  tft.init();
+  tft.setRotation(2);
+  left_btn.init();
+  right_btn.init();
+
+  canvas.init(tft,
+              GraphicalProperties(TFT_DARKGREY /* background color */,
+                                  TFT_RED /* border color */,
+                                  TFT_WHITE /* font color */,
+                                  2 /* border size */),
+              GraphicalProperties(TFT_DARKGREY /* background color */,
+                                  TFT_BLUE /* border color */,
+                                  TFT_WHITE /* font color */,
+                                  4 /* border size */)
+              );
+
+  // Add a generic widget to the canvas such that this widget area
+  // fits 50% of the full screen and is centered on it.
+  Area area = canvas.getArea();
+  area.x += 0.25 * area.width;
+  area.y += 0.25 * area.height;
+  area *= 0.5;
+
+  // It is REQUIRED to create any child widget using the "new"
+  // keyword.
+  new IntegerEntryWidget(canvas, 42, -30, 120, area);
+
+  // Associated the onDoubleClickCb function to the integer entry
+  // widget.
+  canvas.getChild().onEvent(onDoubleClickCb);
+  float x = getProportion(42, -30, 120);
+  uint32_t color24 = getGradientColor(x);
+  uint16_t color16 = tft.color24to16(color24);
+  GraphicalProperties props = canvas.getFocusGraphicalProperties();
+  props.setBackgroundColor(color16);
+  canvas.getChild().setFocusGraphicalProperties(props);
+
+  // Force redraw on next loop.
+  canvas.touch();
+
+  Serial.print("- root widget type is: ");
+  Serial.println(canvas.getTypeString());
+  Serial.print("- child widget type is: ");
+  Serial.println(canvas.getChild().getTypeString());
+
+  Serial.println("[End of demo setup]");
+  Serial.println("The value is set to 42 and is constrained into the range [-30, 120].");
+  Serial.println("It is required to have two 'buttons' that can send events.");
+  Serial.println("==========");
+  Serial.println("To give the focus to the canvas, use a triple left click. Do it again to give the focus to the integer entry.");
+  Serial.println("To unfocus the integer entry, use a triple right click. Do it again to unfocus the canvas.");
+}
+
+void loop(void) {
+  // Calling the loop() method will call the loop of any descendant
+  // widget from the current canvas in the widget tree.
+  canvas.loop();
+  canvas.refresh();
+
+  // Retrieving the current value of the widget
+  IntegerEntryWidget &w = canvas.getChild<IntegerEntryWidget>();
+  int v = w.getValue();
+
+  // Catch button events.
+  processButtonEvents();
+
+  // If the integer entry value has changed after processing the
+  // button events, we change the integer entry widget background
+  // according to the current value (from blue to red).
+  if (v != w.getValue()) {
+    GraphicalProperties props = w.getFocusGraphicalProperties();
+    if (w.getMaximalValue() != w.getMinimalValue()) {
+      float x = getProportion(w.getValue(), w.getMinimalValue(), w.getMaximalValue());
+      uint32_t color24 = getGradientColor(x);
+      uint16_t color16 = tft.color24to16(color24);
+      props.setBackgroundColor(color16);
+      w.setFocusGraphicalProperties(props);
     }
   }
+
 }
 
-void Widget::focus() {
-  if (_focus_cb) {
-    _focus_cb(*this);
-  }
-  _setFocus(*this);
-  touch();
-}
-
-void Widget::unfocus() {
-  if (_unfocus_cb) {
-    _unfocus_cb(*this);
-  }
-  _unsetFocus(*this);
-  touch();
-}
-
-void Widget::handleEvent(Event event) {
-  if (hasFocus()) {
-    bool raise_event = (!_event_handler_cb or _event_handler_cb(*this, event));
-    switch (event) {
-    case TRIPLE_LEFT_CLICK:
-      if (_child) {
-        _child->focus();
-      }
-      break;
-    case TRIPLE_RIGHT_CLICK:
-      unfocus();
-      break;
-    default:
-      if (raise_event) {
-        _handleEvent(event);
-      }
-    }
-  } else {
-    if (isRoot()) {
-      _handleEvent(event);
-    }
-  }
-}
-
-void Widget::draw() {
-  if (!_need_update) return;
-  const GraphicalProperties &props = getGraphicalProperties();
-  TFT_eSPI &tft = getTFT();
-  tft.setViewport(_area.x, _area.y, _area.width, _area.height);
-  tft.fillScreen(props.getBackgroundColor());
-  uint8_t border_size = props.getBorderSize();
-  if (border_size) {
-    tft.frameViewport(props.getBorderColor(), props.getBorderSize());
-    tft.setViewport(_area.x + border_size,
-                    _area.y + border_size,
-                    _area.width - 2 * border_size,
-                    _area.height - 2 * border_size);
-  }
-  tft.setTextSize(props.getFontSize());
-  tft.setTextColor(props.getFontColor());
-  yield();
-  _draw();
-  yield();
-  tft.resetViewport();
-  if (_child) {
-    _child->touch();
-  }
-  _need_update = false;
-  yield();
-}
-
-void Widget::refresh() {
-  draw();
-  if (_child) {
-    _child->refresh();
-  }
-  yield();
-}
-
-void Widget::loop(bool recurse) {
-  if (_loop_cb) {
-    _loop_cb(*this);
-    yield();
-  }
-  _loop();
-  yield();
-  if (recurse and _child) {
-    _child->loop(recurse);
-  }
-}
+// Local Variables:
+// mode: c++
+// End:

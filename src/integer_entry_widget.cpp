@@ -81,198 +81,37 @@
  *                                                                             *
  ******************************************************************************/
 
-#include "widget.h"
+#include "integer_entry_widget.h"
 
 using namespace TFT_eSPI_Widgets;
 
-#define TYPE2CSTR_CASE(t) case t: return #t
-
-const char *Widget::getTypeString(Type t) {
-  switch (t) {
-    TYPE2CSTR_CASE(CANVAS);
-    TYPE2CSTR_CASE(GENERIC);
-    TYPE2CSTR_CASE(IMAGE);
-    TYPE2CSTR_CASE(INT_ENTRY);
-    TYPE2CSTR_CASE(MESSAGE);
-    TYPE2CSTR_CASE(CUSTOM);
-  }
-}
-
-Widget::Widget():
-  _root(*this),
-  _parent(*this),
-  _child(NULL),
-  _area(),
-  _default_graph_props(),
-  _focus_graph_props(),
-  _need_update(false),
-  _event_handler_cb(NULL),
-  _loop_cb(NULL),
-  _focus_cb(NULL),
-  _unfocus_cb(NULL)
+IntegerEntryWidget::IntegerEntryWidget(Widget &parent,
+                                       int32_t initial_value,
+                                       int32_t minimal_value,
+                                       int32_t maximal_value,
+                                       const Area &area):
+  Widget(parent, area),
+  _value(constrain(initial_value, minimal_value, maximal_value)),
+  _minimal_value(minimal_value),
+  _maximal_value(maximal_value)
 {}
 
-Widget::Widget(Widget &parent, const Area &area):
-  _root(parent._root),
-  _parent(parent),
-  _child(NULL),
-  _area(),
-  _default_graph_props(parent._default_graph_props),
-  _focus_graph_props(parent._focus_graph_props),
-  _need_update(false),
-  _event_handler_cb(NULL),
-  _loop_cb(NULL),
-  _focus_cb(NULL),
-  _unfocus_cb(NULL)
-{
-  setArea(area);
-  _parent.removeChild();
-  _parent._child = this;
-}
-
-Widget::~Widget() {
-  removeChild();
-  if (!isRoot()) {
-    _parent._child = NULL;
-    yield();
+void IntegerEntryWidget::_handleEvent(Event event) {
+  switch (event) {
+  case SINGLE_LEFT_CLICK:
+  case LONG_LEFT_PRESS:
+    incrValue();
+    break;
+  case SINGLE_RIGHT_CLICK:
+  case LONG_RIGHT_PRESS:
+    decrValue();
+    break;
   }
-}
-
-void Widget::removeChild() {
-  if (_child) {
-    delete _child;
-    _child = NULL;
-    yield();
-  }
-}
-
-Area Widget::getArea() const {
-  Area area = _area;
-  if (!isRoot()) {
-    area.x -= _parent._area.x;
-    area.y -= _parent._area.y;
-  }
-  return area;
-}
-
-void Widget::setArea(const Area &area) {
-  if (isRoot()) {
-    if (area.isEmpty()) {
-      TFT_eSPI &tft = getTFT();
-      _area.width = tft.width();
-      _area.height = tft.height();
-      _area.x = 0;
-      _area.y = 0;
-    } else {
-      _area = area;
-    }
-  } else {
-    if (area.isEmpty()) {
-      uint8_t b = max(_default_graph_props.getBorderSize(), _focus_graph_props.getBorderSize());
-      _area = _parent._area;
-      if (_area.width > 2 * b) {
-        _area.width -= 2 * b;
-      } else {
-        _area.width = 0;
-      }
-      if (_area.height > 2 * b) {
-        _area.height -= 2 * b;
-      } else {
-        _area.height = 0;
-      }
-      _area.x += b;
-      _area.y += b;
-    } else {
-      _area = area;
-      _area.x += _parent._area.x;
-      _area.y += _parent._area.y;
-    }
-  }
-}
-
-void Widget::focus() {
-  if (_focus_cb) {
-    _focus_cb(*this);
-  }
-  _setFocus(*this);
   touch();
 }
 
-void Widget::unfocus() {
-  if (_unfocus_cb) {
-    _unfocus_cb(*this);
-  }
-  _unsetFocus(*this);
-  touch();
-}
-
-void Widget::handleEvent(Event event) {
-  if (hasFocus()) {
-    bool raise_event = (!_event_handler_cb or _event_handler_cb(*this, event));
-    switch (event) {
-    case TRIPLE_LEFT_CLICK:
-      if (_child) {
-        _child->focus();
-      }
-      break;
-    case TRIPLE_RIGHT_CLICK:
-      unfocus();
-      break;
-    default:
-      if (raise_event) {
-        _handleEvent(event);
-      }
-    }
-  } else {
-    if (isRoot()) {
-      _handleEvent(event);
-    }
-  }
-}
-
-void Widget::draw() {
-  if (!_need_update) return;
-  const GraphicalProperties &props = getGraphicalProperties();
+void IntegerEntryWidget::_draw() {
   TFT_eSPI &tft = getTFT();
-  tft.setViewport(_area.x, _area.y, _area.width, _area.height);
-  tft.fillScreen(props.getBackgroundColor());
-  uint8_t border_size = props.getBorderSize();
-  if (border_size) {
-    tft.frameViewport(props.getBorderColor(), props.getBorderSize());
-    tft.setViewport(_area.x + border_size,
-                    _area.y + border_size,
-                    _area.width - 2 * border_size,
-                    _area.height - 2 * border_size);
-  }
-  tft.setTextSize(props.getFontSize());
-  tft.setTextColor(props.getFontColor());
-  yield();
-  _draw();
-  yield();
-  tft.resetViewport();
-  if (_child) {
-    _child->touch();
-  }
-  _need_update = false;
-  yield();
-}
-
-void Widget::refresh() {
-  draw();
-  if (_child) {
-    _child->refresh();
-  }
-  yield();
-}
-
-void Widget::loop(bool recurse) {
-  if (_loop_cb) {
-    _loop_cb(*this);
-    yield();
-  }
-  _loop();
-  yield();
-  if (recurse and _child) {
-    _child->loop(recurse);
-  }
+  tft.setTextDatum(MC_DATUM);
+  tft.drawNumber(_value, _area.width / 2, _area.height / 2);
 }
