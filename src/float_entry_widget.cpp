@@ -81,23 +81,125 @@
  *                                                                             *
  ******************************************************************************/
 
-#ifndef __TFT_ESPI_WIDGETS_H__
-#define __TFT_ESPI_WIDGETS_H__
+#include "float_entry_widget.h"
 
-#include <TFT_eSPI.h>
+using namespace TFT_eSPI_Widgets;
 
-#include "src/area.h"
-#include "src/button_handler.h"
-#include "src/canvas.h"
-#include "src/coordinates.h"
-#include "src/dimensions.h"
-#include "src/float_entry_widget.h"
-#include "src/generic_widget.h"
-#include "src/graphical_properties.h"
-#include "src/image_widget.h"
-#include "src/integer_entry_widget.h"
-#include "src/message_widget.h"
-#include "src/physical_button_handler.h"
-#include "src/widget.h"
+FloatEntryWidget::FloatEntryWidget(Widget &parent,
+                                   float initial_value,
+                                   float minimal_value,
+                                   float maximal_value,
+                                   uint8_t precision,
+                                   const Area &area):
+  Widget(parent, area),
+  _value(initial_value), // reset by setValue() in constructor body
+  _precision(precision), // reset by setPrecision() in constructor body
+  _minimal_value(minimal_value),
+  _maximal_value(maximal_value)
+{
+  setPrecision(precision); // This is to ensure constraints on precision are respected
+  setValue(initial_value); // This is to ensure constraints on value are respected
+}
 
-#endif
+void FloatEntryWidget::_handleEvent(Event event) {
+  switch (event) {
+  case SINGLE_LEFT_CLICK:
+  case LONG_LEFT_PRESS:
+    incrValue();
+    break;
+  case SINGLE_RIGHT_CLICK:
+  case LONG_RIGHT_PRESS:
+    decrValue();
+    break;
+  }
+  touch();
+}
+
+void FloatEntryWidget::_draw() {
+  TFT_eSPI &tft = getTFT();
+
+  // The string representation of _value uses at most _precision + 8
+  // characters:
+  // - the minus sign if _value is negative [0 or 1]
+  // - the most significative digit         [1]
+  // - the decimal separator                [1]
+  // - the decimal part                     [_precision]
+  // - the exponent string 'x10'            [3]
+  //   (the exponent will be printed later)
+  // - the ending null character            [1]
+  //
+  // The _precision is bounded to 99 and if _value can be print in the
+  // usual real number representation, then it uses less characters.
+  // Thus, the maximum number of characters is at most 107.
+  static char buffer[107]; // Making it static for performance.
+  int8_t exponent = trunc(log10(max<float>(1, abs(_value))));
+  uint8_t font_size = getGraphicalProperties().getFontSize();
+  // The number of characters to print is at least...
+  int16_t w = 0; // the final float representation width
+  int16_t c_w = tft.textWidth("0");
+  size_t n = (_value < 0) + 2 + _precision;
+  float v = _value;
+  if (exponent) {
+    n += 3;
+    v /= powf(10, exponent);
+    size_t nb_exponent_digits = 1;
+    if (exponent >= 10) ++nb_exponent_digits;
+    // A floating point number exponent is bounded to 38, thus the
+    // number of digits is either one or two.
+    w += nb_exponent_digits * c_w;
+    if (font_size > 1) {
+      // The font size of the exponent will be half the widget font
+      // size.
+      w /= 2;
+    }
+  }
+  snprintf(buffer, 107, "%.*f", _precision, v);
+  w += n * c_w; // This is the full length of the text to print.
+  tft.setCursor((_area.width - w) / 2, (_area.height - tft.fontHeight()) / 2);
+  tft.print(buffer);
+  if (exponent) {
+    tft.print("x10");
+    tft.setTextSize(max(1, getGraphicalProperties().getFontSize() / 2));
+    tft.print(exponent);
+  }
+}
+
+void FloatEntryWidget::incrValue() {
+  float delta = getDelta();
+  float step = powf(10, -_precision);
+  if ((delta / step) == -_value) {
+    delta /= 10;
+    if (delta < step) {
+      delta = step;
+    }
+  }
+  // The following code doesn't behave as calling directly
+  // setValue(_value + _delta) since the rounding is operated
+  // accroding to the current widget value and when next expected
+  // value is one level of exponent less, the result of
+  // setValue(_value + delta) doesn't change the current wigdet
+  // value since the delta is 10 times smalled than the rounding
+  // threshold.
+  _value = constrain(_value + delta, _minimal_value, _maximal_value);
+  setValue(_value);
+}
+
+void FloatEntryWidget::decrValue() {
+  float delta = getDelta();
+  float step = powf(10, -_precision);
+  if ((delta / step) == _value) {
+    delta /= 10;
+    if (delta < step) {
+      delta = step;
+    }
+  }
+  // The following code doesn't behave as calling directly
+  // setValue(_value - _delta) since the rounding is operated
+  // accroding to the current widget value and when next expected
+  // value is one level of exponent less, the result of
+  // setValue(_value - delta) doesn't change the current wigdet
+  // value since the delta is 10 times smalled than the rounding
+  // threshold.
+  _value = constrain(_value - delta, _minimal_value, _maximal_value);
+  setValue(_value);
+}

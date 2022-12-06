@@ -81,23 +81,138 @@
  *                                                                             *
  ******************************************************************************/
 
-#ifndef __TFT_ESPI_WIDGETS_H__
-#define __TFT_ESPI_WIDGETS_H__
+#include <TFT_eSPI_Widgets.h>
 
-#include <TFT_eSPI.h>
+using namespace TFT_eSPI_Widgets;
 
-#include "src/area.h"
-#include "src/button_handler.h"
-#include "src/canvas.h"
-#include "src/coordinates.h"
-#include "src/dimensions.h"
-#include "src/float_entry_widget.h"
-#include "src/generic_widget.h"
-#include "src/graphical_properties.h"
-#include "src/image_widget.h"
-#include "src/integer_entry_widget.h"
-#include "src/message_widget.h"
-#include "src/physical_button_handler.h"
-#include "src/widget.h"
+TFT_eSPI tft;
+Canvas canvas;
 
-#endif
+// On a TTGO T-Display, there is two builtin buttons, one is attached
+// to the GPIO 35 pin and the other is attached to the GPIO 0 pin.
+// Both those pins are HIGH when buttons are released.
+PhysicalButtonHandler left_btn(35, HIGH);
+PhysicalButtonHandler right_btn(0, HIGH);
+
+// This callback function will be called when a double click (from
+// either the right or the left button) occurs on an FloatEntryWidget.
+//
+// When the double click comes from the left button, the float entry
+// value is incremented 10 times whereas when the double click comes
+// from the right button, the float entry value is decremented 10
+// times.
+bool onDoubleClickCb(Widget &w, Event e) {
+  FloatEntryWidget &ww = *static_cast<FloatEntryWidget *>(&w);
+  if (e == DOUBLE_LEFT_CLICK) {
+    ww.setValue(ww.getValue() + 10 * ww.getDelta());
+  } else if (e == DOUBLE_RIGHT_CLICK) {
+    ww.setValue(ww.getValue() - 10 * ww.getDelta());
+  }
+  return true;
+}
+
+// Capture left and right buttons' events and pass them to the canvas
+// (root of the widget tree).
+void processButtonEvents() {
+  ButtonHandler::Event left_event = left_btn.getEvent();
+  ButtonHandler::Event right_event = right_btn.getEvent();
+
+  switch (left_event) {
+  case ButtonHandler::SINGLE_CLICK:
+    canvas.handleEvent(SINGLE_LEFT_CLICK);
+    break;
+  case ButtonHandler::DOUBLE_CLICK:
+    canvas.handleEvent(DOUBLE_LEFT_CLICK);
+    break;
+  case ButtonHandler::TRIPLE_CLICK:
+    canvas.handleEvent(TRIPLE_LEFT_CLICK);
+    break;
+  case ButtonHandler::LONG_PRESS:
+    canvas.handleEvent(LONG_LEFT_PRESS);
+    break;
+  }
+  switch (right_event) {
+  case ButtonHandler::SINGLE_CLICK:
+    canvas.handleEvent(SINGLE_RIGHT_CLICK);
+    break;
+  case ButtonHandler::DOUBLE_CLICK:
+    canvas.handleEvent(DOUBLE_RIGHT_CLICK);
+    break;
+  case ButtonHandler::TRIPLE_CLICK:
+    canvas.handleEvent(TRIPLE_RIGHT_CLICK);
+    break;
+  case ButtonHandler::LONG_PRESS:
+    canvas.handleEvent(LONG_RIGHT_PRESS);
+    break;
+  }
+}
+
+void setup(void) {
+  Serial.begin(115200);
+  while (!Serial) {
+    delay(100);
+  }
+  Serial.println("Starting TFT_eSPI Widget library Float Entry demo...");
+  tft.init();
+  tft.setRotation(1);
+  left_btn.init();
+  right_btn.init();
+
+  canvas.init(tft,
+              GraphicalProperties(TFT_DARKGREY /* background color */,
+                                  TFT_RED /* border color */,
+                                  TFT_WHITE /* font color */,
+                                  2 /* border size */),
+              GraphicalProperties(TFT_DARKGREY /* background color */,
+                                  TFT_BLUE /* border color */,
+                                  TFT_WHITE /* font color */,
+                                  4 /* border size */)
+              );
+
+  // Add a generic widget to the canvas such that this widget area
+  // fits 50% of the full screen and is centered on it.
+  Area area = canvas.getArea();
+  area.x += 0.25 * area.width;
+  area.y += 0.25 * area.height;
+  area *= 0.5;
+
+  // It is REQUIRED to create any child widget using the "new"
+  // keyword.
+  new FloatEntryWidget(canvas);
+  canvas.getChild().setArea(area);
+
+  // Associated the onDoubleClickCb function to the float entry
+  // widget.
+  canvas.getChild().onEvent(onDoubleClickCb);
+
+  // Give focus on the integer entry widget
+  canvas.getChild().focus();
+  // Force redraw on next loop.
+  canvas.touch();
+
+  Serial.print("- root widget type is: ");
+  Serial.println(canvas.getTypeString());
+  Serial.print("- child widget type is: ");
+  Serial.println(canvas.getChild().getTypeString());
+
+  Serial.println("[End of demo setup]");
+  Serial.println("It is required to have two 'buttons' that can send events.");
+  Serial.println("==========");
+  Serial.println("To give the focus to the canvas, use a triple left click. Do it again to give the focus to the float entry.");
+  Serial.println("To unfocus the float entry, use a triple right click. Do it again to unfocus the canvas.");
+}
+
+void loop(void) {
+  // Calling the loop() method will call the loop of any descendant
+  // widget from the current canvas in the widget tree.
+  canvas.loop();
+  canvas.refresh();
+
+  // Catch button events.
+  processButtonEvents();
+
+}
+
+// Local Variables:
+// mode: c++
+// End:

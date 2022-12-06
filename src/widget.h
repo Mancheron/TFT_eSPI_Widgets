@@ -99,6 +99,7 @@ namespace TFT_eSPI_Widgets {
              GENERIC,       /**< Generic widget. */
              IMAGE,         /**< Image widget. */
              INT_ENTRY,     /**< Integer entry widget. */
+             FLOAT_ENTRY,   /**< Float entry widget. */
              MESSAGE,       /**< Simple message widget. */
              CUSTOM,        /**< Custom widget. */
   };
