@@ -370,7 +370,10 @@ bool ImageWidget::_drawJpgImage() {
     Serial.printf("[Success]\nImage size is %ux%u\n", _dimensions.width, _dimensions.height);
     xSemaphoreTake(_mutex, portMAX_DELAY);
     if (_current_image_widget) {
-      Serial.println("Bug, _current_image_widget internal variable must be NULL");
+      Serial.printf("%s:%s:%:This is a bug. "
+                    "Please contact the authors of this library.\n",
+                    __FILE__, __FUNCTION__, __LINE__);
+      // _current_image_widget internal variable must be NULL
       exit(1);
     }
     _current_image_widget = this;
