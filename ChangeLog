@@ -1,5 +1,20 @@
 2022-12-07  DoccY <alban.mancheron@lirmm.fr>
 
+	* TFT_eSPI_Widgets.h,
+	examples/StringEntryWidget/StringEntryWidget.ino,
+	src/string_entry_widget.cpp, src/string_entry_widget.h,
+	src/widget.cpp, src/widget.h:
+	Add a string entry widget (which allow to set/update a string value using button clicks).
+	
+	
+2022-12-07  DoccY <alban.mancheron@lirmm.fr>
+
+	* src/image_widget.cpp:
+	Fix bug message.
+	
+	
+2022-12-07  DoccY <alban.mancheron@lirmm.fr>
+
 	* examples/FloatEntryWidget/FloatEntryWidget.ino,
 	examples/ImageWidget/ImageWidget-using-files.ino,
 	examples/ImageWidget/ImageWidget.ino,

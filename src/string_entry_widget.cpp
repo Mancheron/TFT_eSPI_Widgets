@@ -81,24 +81,135 @@
  *                                                                             *
  ******************************************************************************/
 
-#ifndef __TFT_ESPI_WIDGETS_H__
-#define __TFT_ESPI_WIDGETS_H__
+#include "string_entry_widget.h"
 
-#include <TFT_eSPI.h>
+using namespace TFT_eSPI_Widgets;
 
-#include "src/area.h"
-#include "src/button_handler.h"
-#include "src/canvas.h"
-#include "src/coordinates.h"
-#include "src/dimensions.h"
-#include "src/float_entry_widget.h"
-#include "src/generic_widget.h"
-#include "src/graphical_properties.h"
-#include "src/image_widget.h"
-#include "src/integer_entry_widget.h"
-#include "src/message_widget.h"
-#include "src/physical_button_handler.h"
-#include "src/string_entry_widget.h"
-#include "src/widget.h"
+StringEntryWidget::StringEntryWidget(Widget &parent,
+                                     uint8_t entry_length,
+                                     const String &initial_value,
+                                     uint8_t initial_pos,
+                                     const Area &area):
+  Widget(parent, area),
+  _value(), // Reset by setValue() in the constructor body
+  _pos(0), // Reset by the setCursorPos() in the constructor body
+  _last_update(millis()),
+  _offset()
+{
+  _value.reserve(entry_length);
+  for (size_t i = 0; i < entry_length; ++i) {
+    _value += ' ';
+  }
+  setValue(initial_value);
+  setCursorPos(initial_pos);
+}
 
-#endif
+void StringEntryWidget::setValue(const String &v) {
+  size_t n = v.length();
+  size_t l = _value.length();
+  for (size_t i = 0; i < l; ++i) {
+    char c = ' ';
+    if (i < n) {
+      c = v[i];
+      if ((c < 32) || (c > 126)) {
+        c = '?';
+      }
+    }
+    _value[i] = c;
+  }
+}
+
+void StringEntryWidget::setCursorPos(uint8_t p) {
+  if (p < _value.length()) {
+    _pos = p;
+  } else {
+    uint8_t last_space = _value.length();
+    while (last_space-- and (_value[last_space] == ' '));
+    if (_value[++last_space] == ' ') {
+      _pos = last_space;
+    } else {
+      _pos = _value.length() - 1;
+    }
+  }
+}
+
+void StringEntryWidget::_handleEvent(Event event) {
+  switch (event) {
+  case SINGLE_LEFT_CLICK:
+  case LONG_LEFT_PRESS:
+    previousLetterAtCursorPos();
+    break;
+  case DOUBLE_LEFT_CLICK:
+    previousCursorPos();
+    break;
+  case SINGLE_RIGHT_CLICK:
+  case LONG_RIGHT_PRESS:
+    nextLetterAtCursorPos();
+    break;
+  case DOUBLE_RIGHT_CLICK:
+    nextCursorPos();
+    break;
+  }
+  touch();
+}
+
+void StringEntryWidget::_draw() {
+  TFT_eSPI &tft = getTFT();
+  GraphicalProperties props =  getFocusGraphicalProperties();
+  GraphicalProperties props2 =  getDefaultGraphicalProperties();
+  uint8_t border_size = max<uint8_t>(1, props.getBorderSize());
+  Area inner_area(_area.width - 2 * border_size, _area.height - 2 * border_size, 0, 0);
+  int16_t c_w = tft.textWidth(" ");
+  int16_t c_h = tft.fontHeight();
+  int16_t lg = c_w * _value.length();
+  int16_t m = inner_area.width - lg;
+  _offset.y = inner_area.y + (inner_area.height - c_h) / 2;
+  if (m < 0) {
+    Area cursor(c_w, c_h, _offset.x + c_w * _pos, _offset.y);
+    if (!inner_area.contains(cursor)) {
+      if (cursor.x + cursor.width > inner_area.x + inner_area.width) {
+        // Cursor position is out of bound on the right side of the widget area
+        _offset.x -= (cursor.x + cursor.width) - (inner_area.x + inner_area.width);
+      } else if (cursor.x < inner_area.x) {
+        // Cursor position is out of bound on the left side of the widget area
+        _offset.x += inner_area.x - cursor.x + 1;
+      } else {
+        Serial.printf("%s:%s:%:This is a bug. "
+                      "Please contact the authors of this library.\n",
+                      __FILE__, __FUNCTION__, __LINE__);
+        // The cursor is supposed to be outside the inner area, but is
+        // not outside the left border neither the right border.
+      }
+    }
+  } else {
+    _offset.x = inner_area.x + m / 2;
+  }
+  tft.setCursor(_offset.x, _offset.y);
+  tft.setTextDatum(TL_DATUM);
+  tft.drawString(_value, _offset.x, _offset.y);
+  tft.drawFastHLine(_offset.x, _offset.y + c_h + 1, lg, props.getFontColor());
+  bool inversion = _last_update & 1lu; // Using the _last_update millisecond as color inversion status
+  _last_update = millis();
+  if (inversion) {
+    // draw current position with inverted colors
+    tft.fillRect(_offset.x + _pos * c_w - 1, _offset.y - 1, c_w, c_h, props.getFontColor());
+    tft.setTextColor(props.getBackgroundColor());
+    tft.drawString(String(_value[_pos]), _offset.x + _pos * c_w, _offset.y);
+    // remove inversion status for next drawing
+    _last_update &= ~1;
+  } else {
+    // set inversion status for next drawing
+    _last_update |= 1;
+  }
+  // Since if the next _loop() call is done in less than 1
+  // millisecond, it will cause an overflow.
+  _last_update -= 2;
+}
+
+void StringEntryWidget::_loop() {
+  // Nothing for the moment.
+  unsigned long now = millis();
+  if (now - _last_update > 500) {
+    touch();
+  }
+}
