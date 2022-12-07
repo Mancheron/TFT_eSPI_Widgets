@@ -244,11 +244,12 @@ void setup(void) {
   Serial.println("The value is set to 42 and is constrained into the range [-30, 120].");
   Serial.println("It is required to have two 'buttons' that can send events.");
   Serial.println("==========");
-  Serial.println("To give the focus to the canvas, use a triple left click. Do it again to give the focus to the integer entry.");
-  Serial.println("To unfocus the integer entry, use a triple right click. Do it again to unfocus the canvas.");
+  Serial.println("To give the focus to the canvas, use a triple right click. Do it again to give the focus to the integer entry.");
+  Serial.println("To unfocus the integer entry, use a triple left click. Do it again to unfocus the canvas.");
 }
 
 void loop(void) {
+
   // Calling the loop() method will call the loop of any descendant
   // widget from the current canvas in the widget tree.
   canvas.loop();

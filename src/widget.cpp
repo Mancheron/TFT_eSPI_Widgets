@@ -211,12 +211,12 @@ void Widget::handleEvent(Event event) {
   if (hasFocus()) {
     bool raise_event = (!_event_handler_cb or _event_handler_cb(*this, event));
     switch (event) {
-    case TRIPLE_LEFT_CLICK:
+    case TRIPLE_RIGHT_CLICK:
       if (_child) {
         _child->focus();
       }
       break;
-    case TRIPLE_RIGHT_CLICK:
+    case TRIPLE_LEFT_CLICK:
       unfocus();
       break;
     default:

@@ -144,6 +144,7 @@ void setup(void) {
 }
 
 void loop(void) {
+
   // Calling the loop() method will call the loop of any descendant
   // widget from the current canvas in the widget tree.
   canvas.loop();

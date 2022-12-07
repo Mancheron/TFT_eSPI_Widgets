@@ -115,13 +115,15 @@ namespace TFT_eSPI_Widgets {
    * in a short period of time.
    *
    * Both buttons are also supposed to be clickable for a long period
-   * of time (but not together).
+   * of time.
    *
    * All this situations are represented by the emission of
    * different signal events (one for each situation).
    *
-   * Whatever the widget having the focus, a long click on the right
-   * button should apply the unfocus() method on it.
+   * Whatever the widget having the focus, a triple click on the left
+   * button should apply the unfocus() method on it whereas a triple
+   * click on the right button should apply the focus() method on its
+   * child.
    */
   enum Event {
               SINGLE_LEFT_CLICK,  /**< Single left click event */
@@ -715,13 +717,13 @@ namespace TFT_eSPI_Widgets {
      * Any action that must operate on event.
      *
      * For any widget, when a triple left click event is passed and
+     * the current widget has the focus, then it is unfocused and the
+     * focus is given to its parent (if any).
+     *
+     * For any widget, when a triple right click event is passed and
      * the current widget has the focus, then the focus is given to
      * its child (if any). If no widget has the focus, then the root
      * widget get it.
-     *
-     * For any widget, when a triple right click event is passed and
-     * the current widget has the focus, then it is unfocused and the
-     * focus is given to its parent (if any).
      *
      * If current widget hasn't got the focus, then does nothing.
      *

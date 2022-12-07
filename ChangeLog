@@ -1,0 +1,120 @@
+2022-12-07  DoccY <alban.mancheron@lirmm.fr>
+
+	* examples/FloatEntryWidget/FloatEntryWidget.ino,
+	examples/ImageWidget/ImageWidget-using-files.ino,
+	examples/ImageWidget/ImageWidget.ino,
+	examples/IntegerEntryWidget/IntegerEntryWidget.ino,
+	examples/MessageWidget/MessageWidget.ino,
+	examples/TFT_CanvasWidget/TFT_CanvasWidget.ino, src/widget.cpp,
+	src/widget.h:
+	Change the triple click behaviors (inversion of left and right actions).
+	Now a triple click on the right button is supposed to give the focus to the
+	child of the currently focused widget (or to give the focus to the root widget
+	if no widget has the focus) whereas a triple click on the left button is now
+	supposed to unfocus the current widget and give the focus to irs parent (if
+	any).
+	
+	
+2022-12-06  DoccY <alban.mancheron@lirmm.fr>
+
+	* TFT_eSPI_Widgets.h,
+	examples/FloatEntryWidget/FloatEntryWidget.ino,
+	src/float_entry_widget.cpp, src/float_entry_widget.h,
+	src/widget.cpp, src/widget.h:
+	Add a float entry widget (which allow to set/update a floatting point number value using button clicks).
+	
+	
+2022-12-05  DoccY <alban.mancheron@lirmm.fr>
+
+	* examples/IntegerEntryWidget/IntegerEntryWidget.ino:
+	Give the focus on the integer entry widget on startup.
+	
+	
+2022-12-05  DoccY <alban.mancheron@lirmm.fr>
+
+	* src/integer_entry_widget.h:
+	Update integer entry widget inner code.
+	
+	
+2022-12-05  DoccY <alban.mancheron@lirmm.fr>
+
+	* TFT_eSPI_Widgets.h,
+	examples/IntegerEntryWidget/IntegerEntryWidget.ino,
+	src/integer_entry_widget.cpp, src/integer_entry_widget.h,
+	src/widget.cpp, src/widget.h:
+	Add an integer entry widget (which allow to set/update an integer value using button clicks).
+	
+	
+2022-12-05  DoccY <alban.mancheron@lirmm.fr>
+
+	* TFT_eSPI_Widgets.h, src/button_handler.cpp, src/button_handler.h,
+	src/physical_button_handler.cpp, src/physical_button_handler.h:
+	Add a simple button event handler in order to interact with widgets.
+	It is recommanded to use a more sophisticated library (such as button2) instead of these handlers.
+	The main idea behind these handlers definitions is to limit the dependencies on external libraries.
+	
+	
+2022-12-05  DoccY <alban.mancheron@lirmm.fr>
+
+	* examples/MessageWidget/MessageWidget.ino, src/canvas.cpp,
+	src/canvas.h, src/widget.cpp, src/widget.h:
+	Update event handling names.
+	Fix focus/unfocus handling.
+	
+	
+2022-12-03  DoccY <alban.mancheron@lirmm.fr>
+
+	* Doxyfile, TFT_eSPI_Widgets.h,
+	examples/ImageWidget/Gnu-Tux-160x80.h,
+	examples/ImageWidget/Gnu-Tux-320x160.h,
+	examples/ImageWidget/ImageWidget-using-files.ino,
+	examples/ImageWidget/ImageWidget.ino, library.json,
+	library.properties, src/image_widget.cpp, src/image_widget.h,
+	src/widget.cpp, src/widget.h:
+	Add the image widget.
+	
+	This widget allows to display images either from row data (2D array using 16bits per pixel) or from file (requires a storage) in various formats: bmp, jpg, png.
+	
+	
+2022-12-01  DoccY <alban.mancheron@lirmm.fr>
+
+	* Doxyfile, src/canvas.h, src/message_widget.h, src/widget.h:
+	Update documentation.
+	
+	
+2022-11-30  DoccY <alban.mancheron@lirmm.fr>
+
+	* TFT_eSPI_Widgets.h, examples/MessageWidget/MessageWidget.ino,
+	src/message_widget.cpp, src/message_widget.h, src/widget.cpp,
+	src/widget.h:
+	Add the "message widget" type which makes easy to print and animate messages if necessary.
+	Fix the documentation of some methods.
+	Add an example to show how tu use message widgets (and generic widgets).
+	
+	
+2022-11-30  DoccY <alban.mancheron@lirmm.fr>
+
+	* TFT_eSPI_Widgets.h, src/generic_widget.cpp, src/generic_widget.h:
+	Add the "generic widget" class which is mostly a rectangluar area with graphical properties.
+	
+	
+2022-11-30  DoccY <alban.mancheron@lirmm.fr>
+
+	* TFT_eSPI_Widgets.h,
+	examples/TFT_CanvasWidget/TFT_CanvasWidget.ino, library.json,
+	library.properties, src/area.cpp, src/area.h, src/canvas.cpp,
+	src/canvas.h, src/coordinates.cpp, src/coordinates.h,
+	src/dimensions.cpp, src/dimensions.h, src/graphical_properties.cpp,
+	src/graphical_properties.h, src/widget.cpp, src/widget.h:
+	Add missing copyright notices.
+	Fix some bugs in widget viewports.
+	Add some new methods to widgets.
+	
+	
+2022-11-25  DoccY <alban.mancheron@lirmm.fr>
+
+	* Initial commit of the TFT_eSPI_Widgets library.  In this
+	(poor/starting) version, the widget structuration is done, with a
+	single operational widget : the Canvas.  More widgets are to be
+	defined.
+

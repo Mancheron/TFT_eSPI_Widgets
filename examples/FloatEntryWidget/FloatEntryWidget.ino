@@ -198,11 +198,12 @@ void setup(void) {
   Serial.println("[End of demo setup]");
   Serial.println("It is required to have two 'buttons' that can send events.");
   Serial.println("==========");
-  Serial.println("To give the focus to the canvas, use a triple left click. Do it again to give the focus to the float entry.");
-  Serial.println("To unfocus the float entry, use a triple right click. Do it again to unfocus the canvas.");
+  Serial.println("To give the focus to the canvas, use a triple right click. Do it again to give the focus to the float entry.");
+  Serial.println("To unfocus the float entry, use a triple left click. Do it again to unfocus the canvas.");
 }
 
 void loop(void) {
+
   // Calling the loop() method will call the loop of any descendant
   // widget from the current canvas in the widget tree.
   canvas.loop();

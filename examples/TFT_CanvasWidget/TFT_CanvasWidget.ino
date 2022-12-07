@@ -165,6 +165,7 @@ void setup(void) {
 }
 
 void loop(void) {
+
   Serial.println("[Entering loop]");
   // Calling the loop() method will call the loop callback function
   // defined during setup.
