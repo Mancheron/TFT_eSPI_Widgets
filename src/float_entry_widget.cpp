@@ -115,6 +115,52 @@ void FloatEntryWidget::_handleEvent(Event event) {
   touch();
 }
 
+// This is a hidden function that computes the width of the printed
+// float value.
+//
+// The computated value depends on the given precision (prec), the
+// current character width (c_w) and the given font size (f_s).
+//
+// The computed exponent is stored in the last parameter.
+static int16_t _computeValueStringLength(float v,
+                                         uint8_t prec, int16_t c_w, uint8_t f_s,
+                                         int8_t &exponent) {
+  exponent = trunc(log10(max<float>(1, abs(v))));
+  int16_t w = 0; // the final float representation width
+  size_t n = (v < 0) + 2 + prec;
+  if (exponent) {
+    n += 3;
+    size_t nb_exponent_digits = 1;
+    if (exponent >= 10) ++nb_exponent_digits;
+    // A floating point number exponent is bounded to 38, thus the
+    // number of digits is either one or two.
+    w = nb_exponent_digits * c_w;
+    if (f_s > 1) {
+      // The font size of the exponent will be half the widget font
+      // size.
+      w /= 2;
+    }
+  }
+  w += n * c_w; // This is the full length of the text to print.
+  return w;
+}
+
+void FloatEntryWidget::_shrink() {
+  TFT_eSPI &tft = getTFT();
+  uint8_t f_s = getGraphicalProperties().getFontSize();
+  int16_t c_w = tft.textWidth("0");
+  int16_t c_h = tft.fontHeight();
+  int8_t exponent;
+  // the final float representation width
+  int16_t w = _computeValueStringLength(_value, _precision, c_w, f_s, exponent);
+  if (w > _area.width) {
+    _area.width = w;
+  }
+  if (c_h > _area.height) {
+    _area.height = c_h;
+  }
+}
+
 void FloatEntryWidget::_draw() {
   TFT_eSPI &tft = getTFT();
 
@@ -132,34 +178,26 @@ void FloatEntryWidget::_draw() {
   // usual real number representation, then it uses less characters.
   // Thus, the maximum number of characters is at most 107.
   static char buffer[107]; // Making it static for performance.
-  int8_t exponent = trunc(log10(max<float>(1, abs(_value))));
-  uint8_t font_size = getGraphicalProperties().getFontSize();
-  // The number of characters to print is at least...
-  int16_t w = 0; // the final float representation width
+
+  uint8_t f_s = getGraphicalProperties().getFontSize();
   int16_t c_w = tft.textWidth("0");
-  size_t n = (_value < 0) + 2 + _precision;
+
   float v = _value;
+  int8_t exponent;
+
+  // the final float representation width
+  int16_t w = _computeValueStringLength(_value, _precision, c_w, f_s, exponent);
   if (exponent) {
-    n += 3;
     v /= powf(10, exponent);
-    size_t nb_exponent_digits = 1;
-    if (exponent >= 10) ++nb_exponent_digits;
-    // A floating point number exponent is bounded to 38, thus the
-    // number of digits is either one or two.
-    w += nb_exponent_digits * c_w;
-    if (font_size > 1) {
-      // The font size of the exponent will be half the widget font
-      // size.
-      w /= 2;
-    }
   }
   snprintf(buffer, 107, "%.*f", _precision, v);
-  w += n * c_w; // This is the full length of the text to print.
-  tft.setCursor((_area.width - w) / 2, (_area.height - tft.fontHeight()) / 2);
+  tft.setTextDatum(TL_DATUM);
+  Area inner_area = getInnerArea();
+  tft.setCursor((inner_area.width - w) / 2, (inner_area.height - tft.fontHeight()) / 2);
   tft.print(buffer);
   if (exponent) {
     tft.print("x10");
-    tft.setTextSize(max(1, getGraphicalProperties().getFontSize() / 2));
+    tft.setTextSize(max(1, f_s / 2));
     tft.print(exponent);
   }
 }

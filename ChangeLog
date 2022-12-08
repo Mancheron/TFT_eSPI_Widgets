@@ -1,3 +1,21 @@
+2022-12-08  DoccY <alban.mancheron@lirmm.fr>
+
+	* examples/ChangeLog,
+	examples/FloatEntryWidget/FloatEntryWidget.ino,
+	examples/ImageWidget/ImageWidget-using-files.ino,
+	examples/ImageWidget/ImageWidget.ino,
+	examples/IntegerEntryWidget/IntegerEntryWidget.ino,
+	examples/MessageWidget/MessageWidget.ino,
+	examples/StringEntryWidget/StringEntryWidget.ino, src/area.h,
+	src/coordinates.h, src/dimensions.h, src/float_entry_widget.cpp,
+	src/float_entry_widget.h, src/image_widget.cpp, src/image_widget.h,
+	src/integer_entry_widget.cpp, src/integer_entry_widget.h,
+	src/message_widget.cpp, src/message_widget.h,
+	src/string_entry_widget.cpp, src/string_entry_widget.h,
+	src/widget.cpp, src/widget.h:
+	Add shrinking/fitting/positionning facilities to widgets and adapt examples to reflect the changes.
+	
+	
 2022-12-07  DoccY <alban.mancheron@lirmm.fr>
 
 	* TFT_eSPI_Widgets.h,

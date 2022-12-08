@@ -203,6 +203,16 @@ namespace TFT_eSPI_Widgets {
      */
     Coordinates operator-(const Coordinates &coords) const;
 
+    /**
+     * Get a string representation of current coordinates.
+     *
+     * \return This method returns a string representation of the
+     * current coordinates.
+     */
+    inline String toString() const {
+      return String("(") + x + "," + y + ")";
+    }
+
   };
 
 }

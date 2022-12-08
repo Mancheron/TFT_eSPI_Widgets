@@ -210,15 +210,16 @@ void setup(void) {
               );
 
   // Add a generic widget to the canvas such that this widget area
-  // fits 50% of the full screen and is centered on it.
+  // fits 50% of the full screen.
   Area area = canvas.getArea();
-  area.x += 0.25 * area.width;
-  area.y += 0.25 * area.height;
   area *= 0.5;
 
   // It is REQUIRED to create any child widget using the "new"
   // keyword.
   new IntegerEntryWidget(canvas, 42, -30, 120, area);
+
+  // Centering horizontally and vertically the integer entry widget
+  canvas.getChild().setPosition(50, 50);
 
   // Associated the onDoubleClickCb function to the integer entry
   // widget.

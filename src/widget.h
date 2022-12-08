@@ -244,6 +244,7 @@ namespace TFT_eSPI_Widgets {
      * the focus.
      */
     widget_cb_t _focus_cb;
+
     /**
      * A custom callback function to call when the current widget
      * loose the focus.
@@ -261,6 +262,18 @@ namespace TFT_eSPI_Widgets {
      * \return This method returns the TFT screen object.
      */
     inline virtual TFT_eSPI &_getTFT() const { return _root._getTFT(); }
+
+    /**
+     * Shrink the current widget area to the smallest dimension that
+     * allows to see its content.
+     *
+     * \remark This method might be overridden by any derived class
+     * that have some minimal size content.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
+    inline virtual void _shrink() {}
 
     /**
      * Get the focus status of the given widget by asking the root of
@@ -470,7 +483,6 @@ namespace TFT_eSPI_Widgets {
       return _parent;
     }
 
-
     /**
      * Interrogate about some child existence for current widget.
      *
@@ -559,30 +571,149 @@ namespace TFT_eSPI_Widgets {
     /**
      * Get the widget area.
      *
-     * \return Return the widget area. If current widget is the root
-     * of the widget tree, then the top left anchor of the area is
-     * absolute position from the top left corner of the TFT screen ;
-     * otherwise the top left anchor of the is relative to the top
-     * left corner of its parent.
+     * \param absolute If true, then define the anchor position of the
+     * area absolute from the top left corner of the screen. If false
+     * (default), then define the anchor position of the area relative
+     * to the top left corner of its parent if current widget is not
+     * the root of the widget tree.
+     *
+     * \return Return the widget area.
      */
-    Area getArea() const;
+    Area getArea(bool absolute = false) const;
+
+    /**
+     * Get the widget inner area.
+     *
+     * \param absolute If false (default), then define the anchor
+     * position of the area absolute from the top left corner of the
+     * screen. If true, then define the anchor position of the area
+     * relative to the top left corner of the widget area.
+     *
+     * \return Return the widget inner area. It is the widget area
+     * reduced by the maximal border width.
+     */
+    Area getInnerArea(bool absolute = false) const;
+
+    /**
+     * Get the screen area.
+     *
+     * \return Return the TFT screen area.
+     */
+    inline Area getScreenArea() const {
+      TFT_eSPI &tft = getTFT();
+      return Area(tft.width(), tft.height(), 0, 0);
+    }
 
     /**
      * Set the widget area.
      *
      * \param area The area used by the widget. Except for root
-     * widget, the top left anchor of the area is relative to the top
-     * left corner of its parent and if the area dimension is empty,
-     * then use the area of its parent minus its maximal border size
-     * according to its focus state. For the root widget, the area
-     * anchor is the absolute position according to the main TFT
-     * screen top left corner and if the area dimension is empty, then
-     * uses the TFT screen dimensions.
+     * widget, if the area dimension is empty, then fit to the parent
+     * inner area. For the root widget, if the area dimension is
+     * empty, then uses the TFT screen dimensions.
+     *
+     * \param absolute If false (default), then the anchor position of
+     * the given area is absolute from the top left corner of the
+     * screen. If true, then the anchor position of the given area is
+     * relative to the top left corner of its parent if current widget
+     * is not the root of the widget tree.
+     *
+     * \param check_for_update When this parameter is true, then
+     * automatically call the touchOnAreaChanges() method after
+     * setting the area, else does nothing more.
      *
      * \remark There is no verification about the area to fit into the
      * TFT screen or even the parent area.
      */
-    void setArea(const Area &area);
+    void setArea(const Area &area, bool absolute = false, bool check_for_update = true);
+
+    /**
+     * Fit the current widget area to the inner area of its parent.
+     *
+     * \param recurse If the widget has a child and if recurse is
+     * true, then the fit() method is applied on the child and all its
+     * descendants (false by default).
+     *
+     * \param check_for_update When this parameter is true (default),
+     * then automatically call the touchOnAreaChanges() method after
+     * setting the area, else does nothing more.
+     */
+    void fit(bool recurse = false, bool check_for_update = true);
+
+    /**
+     * Shrink the current widget area to the smallest dimension that
+     * allows to see its content.
+     *
+     * \see This method will internally call setPosition().
+     *
+     * \param horizontal The horizontal anchor placement of this
+     * widget expressed as a percentage. Setting 0% means align on the
+     * left of the parent inner area, whereas 100% means align on the
+     * right of the parent inner area. The special '-1' value means
+     * (which is equalt to 255 as unsigned 8 bits integer) won't
+     * change the horizontal position. Default is centering.
+     *
+     * \param vertical The vertical anchor placement of this widget
+     * after being shrinked expressed as a percentage. Setting 0%
+     * means align on the top of the parent inner area, whereas 100%
+     * means align on the bottom of the parent inner area. The special
+     * '-1' value means (which is equalt to 255 as unsigned 8 bits
+     * integer) won't change the vertical position. Default is
+     * centering.
+     *
+     * \param recurse If the widget has a child and if recurse is
+     * true, then the shrink() method is applied on the child and its
+     * descendants (starting from the deeper descendants widgets)
+     * before shrinking current widget (false by default).
+     *
+     * \param check_for_update When this parameter is true (default),
+     * then automatically call the touchOnAreaChanges() method after
+     * setting the area, else does nothing more.
+     */
+    void shrink(uint8_t horizontal = 50,
+                uint8_t vertical = 50,
+                bool recurse = false,
+                bool check_for_update = true);
+
+    /**
+     * Position the current widget relative to its parents for non
+     * root widgets or to the screen otherwise.
+     *
+     * \param horizontal The horizontal anchor placement of this
+     * widget expressed as a percentage. Setting 0% means align on the
+     * left of the parent inner area, whereas 100% means align on the
+     * right of the parent inner area. The special '-1' value means
+     * (which is equalt to 255 as unsigned 8 bits integer) won't
+     * change the horizontal position (this is the default).
+     *
+     * \param vertical The vertical anchor placement of this widget
+     * expressed as a percentage. Setting 0% means align on the top of
+     * the parent inner area, whereas 100% means align on the bottom
+     * of the parent inner area. The special '-1' value means (which
+     * is equalt to 255 as unsigned 8 bits integer) won't change the
+     * vertical position (this is the default).
+     *
+     * \param check_for_update When this parameter is true (default),
+     * then automatically call the touchOnAreaChanges() method after
+     * setting the area, else does nothing more.
+     */
+    void setPosition(uint8_t horizontal = -1,
+                     uint8_t vertical = -1,
+                     bool check_for_update = true);
+
+    /**
+     * Touch the current widget if the area differs from the given
+     * one. Additionally, touch the parent widget (if any) if the
+     * current area doesn't completely includes the given one.
+     *
+     * This is typically needed to call this method after calling
+     * setArea(), setPosition(), fit() or shrink() on the current
+     * widget.
+     *
+     * \param orig_area The area to compare with the current widget
+     * area (typically a backup of the area before some modification).
+     */
+    void touchOnAreaChanges(const Area &orig_area);
 
     /**
      * Get the current graphical properties (according to the focus
@@ -787,7 +918,8 @@ namespace TFT_eSPI_Widgets {
      * \see A callback function can be set using onLoop() method.
      *
      * \param recurse If the widget has a child and if recurse is
-     * true, then the loop() method is applied on the child.
+     * true, then the loop() method is applied on the child (true by
+     * default).
      */
     void loop(bool recurse = true);
 

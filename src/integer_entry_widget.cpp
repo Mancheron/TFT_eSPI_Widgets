@@ -110,8 +110,23 @@ void IntegerEntryWidget::_handleEvent(Event event) {
   touch();
 }
 
+void IntegerEntryWidget::_shrink() {
+  TFT_eSPI &tft = getTFT();
+  int16_t c_w = tft.textWidth("0");
+  int16_t c_h = tft.fontHeight();
+  int8_t exponent = ceil(log10(max<int32_t>(1, abs(_value))));
+  uint16_t w = exponent * c_w;
+  if (w > _area.width) {
+    _area.width = w;
+  }
+  if (c_h > _area.height) {
+    _area.height = c_h;
+  }
+}
+
 void IntegerEntryWidget::_draw() {
   TFT_eSPI &tft = getTFT();
   tft.setTextDatum(MC_DATUM);
-  tft.drawNumber(_value, _area.width / 2, _area.height / 2);
+  Area inner_area = getInnerArea();
+  tft.drawNumber(_value, inner_area.width / 2, inner_area.height / 2);
 }

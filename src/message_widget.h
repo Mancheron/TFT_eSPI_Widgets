@@ -145,6 +145,15 @@ namespace TFT_eSPI_Widgets {
     uint16_t _step;
 
     /**
+     * Shrink the current widget area to the smallest dimension that
+     * allows to see its content.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
+    virtual void _shrink();
+
+    /**
      * The specific drawing code for message widgets.
      *
      * \return Returns nothing but doxygen is buggy with inline

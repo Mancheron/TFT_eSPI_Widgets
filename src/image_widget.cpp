@@ -197,6 +197,7 @@ ImageWidget::ImageWidget(Widget &parent,
     _mutex = xSemaphoreCreateBinaryStatic(&_mutex_buffer);
     xSemaphoreGive(_mutex);
   }
+  _updateDimensions();
 }
 
 ImageWidget::ImageWidget(Widget &parent,
@@ -211,6 +212,81 @@ ImageWidget::ImageWidget(Widget &parent,
   _dimensions(dimensions),
   _offset(offset)
 {}
+
+void ImageWidget::_shrink() {
+  _area.width = _dimensions.width;
+  _area.height = _dimensions.height;
+}
+
+bool ImageWidget::_updateDimensions() {
+  if (_data) return true;
+
+  if (_format == NOT_SET) {
+    if (TFT_eSPI_Widgets_FS.exists(_path.c_str())) {
+      // First try to open using file extension.
+      String _str = _path;
+      _str.toLowerCase();
+      if (_str.endsWith(".bmp")) {
+        Serial.printf("Trying to open file '%s' from its BMP extension...\t", _path.c_str());
+        if (_drawBmpImage(false)) {
+          _format = BMP;
+          Serial.println("[Success]");
+        } else {
+          Serial.println("[Failure]");
+        }
+      } else if (_str.endsWith(".jpg") or _str.endsWith(".jpeg")) {
+        Serial.printf("Trying to open file '%s' from its JPG extension...\t", _path.c_str());
+        if (_drawJpgImage(false)) {
+          _format = JPG;
+          Serial.println("[Success]");
+        } else {
+          Serial.println("[Failure]");
+        }
+      } else if (_str.endsWith(".png")) {
+        Serial.printf("Trying to open file '%s' from its PNG extension...\t", _path.c_str());
+        if (_drawPngImage(false)) {
+          _format = PNG;
+          Serial.println("[Success]");
+        } else {
+          Serial.println("[Failure]");
+        }
+      } else {
+        // At the end, try to open the file with all the methods
+        Serial.printf("Trying to open file '%s' as a BMP...\t", _path.c_str());
+        if (!_str.endsWith(".bmp") and _drawBmpImage(false)) {
+          _format = BMP;
+          Serial.println("[Success]");
+        } else {
+          Serial.println("[Failure]");
+          Serial.printf("Trying to open file '%s' as a JPG...\t", _path.c_str());
+          if (!_str.endsWith(".jpg") and !_str.endsWith(".jpeg") and _drawJpgImage(false)) {
+            _format = JPG;
+            Serial.println("[Success]");
+          } else {
+            Serial.println("[Failure]");
+            Serial.printf("Trying to open file '%s' as a PNG...\t", _path.c_str());
+            if (!_str.endsWith(".png") and _drawPngImage(false)) {
+              _format = PNG;
+              Serial.println("[Success]");
+            } else {
+              Serial.println("[Failure]");
+              Serial.printf("Unable to detect the file format for the path '%s'\n", _path.c_str());
+              _format = UNKNOWN;
+            }
+          }
+        }
+      }
+    } else {
+      _format = UNKNOWN;
+      Serial.printf("File '%s' not found.\n", _path.c_str());
+    }
+  }
+  yield();
+  if (_format != UNKNOWN) {
+    Serial.printf("Image size is %ux%u\n", _dimensions.width, _dimensions.height);
+  }
+  return _format != UNKNOWN;
+}
 
 void ImageWidget::_draw() {
   const GraphicalProperties &props = getGraphicalProperties();
@@ -232,52 +308,9 @@ void ImageWidget::_draw() {
       _drawPngImage();
       break;
     case NOT_SET:
-      if (TFT_eSPI_Widgets_FS.exists(_path.c_str())) {
-        // First try to open using file extension.
-        String _str = _path;
-        _str.toLowerCase();
-        if (_str.endsWith(".bmp")) {
-          if (_drawBmpImage()) {
-            _format = BMP;
-          } else {
-            Serial.println("[Failure]");
-          }
-        } else if (_str.endsWith(".jpg") or _str.endsWith(".jpeg")) {
-          if (_drawJpgImage()) {
-            _format = JPG;
-          } else {
-            Serial.println("[Failure]");
-          }
-        } else if (_str.endsWith(".png")) {
-          if (_drawPngImage()) {
-            _format = PNG;
-          } else {
-            Serial.println("[Failure]");
-          }
-        } else {
-          // At the end, try to open the file with all the methods
-          if (!_str.endsWith(".bmp") and _drawBmpImage()) {
-            _format = BMP;
-          } else {
-            Serial.println("[Failure]");
-            if (!_str.endsWith(".jpg") and !_str.endsWith(".jpeg") and _drawJpgImage()) {
-              _format = JPG;
-            } else {
-              Serial.println("[Failure]");
-              if (!_str.endsWith(".png") and _drawPngImage()) {
-                _format = PNG;
-              } else {
-                Serial.println("[Failure]");
-                Serial.printf("Unable to draw the image '%s'\n", _path.c_str());
-                _format = UNKNOWN;
-              }
-            }
-          }
-        }
-      } else {
-        _format = UNKNOWN;
-        Serial.printf("File '%s' not found.\n", _path.c_str());
-      }
+      _updateDimensions();
+      _draw(); // Recursive call [after calling _updateDimensions(),
+               // the _format is anything but NOT_SET].
       break;
     default:
       Serial.println("File format not supported.");
@@ -286,8 +319,7 @@ void ImageWidget::_draw() {
   yield();
 }
 
-bool ImageWidget::_drawBmpImage() {
-  Serial.printf("Trying to draw file '%s' as a BMP...\t", _path.c_str());
+bool ImageWidget::_drawBmpImage(bool real_drawing) {
   File fd = _read_only_open(_path.c_str());
   if (!fd) return false;
   uint32_t seekOffset;
@@ -308,36 +340,36 @@ bool ImageWidget::_drawBmpImage() {
   _read32(fd);
   _dimensions.width = _read32(fd);
   _dimensions.height = _read32(fd);
-  Serial.printf("[Success]\nImage size is %ux%u\n", _dimensions.width, _dimensions.height);
+  if (real_drawing) {
+    if ((_read16(fd) == 1) && (_read16(fd) == 24) && (_read32(fd) == 0)) {
+      y += _dimensions.height - 1;
 
-  if ((_read16(fd) == 1) && (_read16(fd) == 24) && (_read32(fd) == 0)) {
-    y += _dimensions.height - 1;
+      TFT_eSPI &tft = getTFT();
+      bool oldSwapBytes = tft.getSwapBytes();
+      tft.setSwapBytes(true);
+      fd.seek(seekOffset);
 
-    TFT_eSPI &tft = getTFT();
-    bool oldSwapBytes = tft.getSwapBytes();
-    tft.setSwapBytes(true);
-    fd.seek(seekOffset);
+      uint16_t padding = (4 - ((_dimensions.width * 3) & 3)) & 3;
+      uint8_t lineBuffer[_dimensions.width * 3 + padding];
 
-    uint16_t padding = (4 - ((_dimensions.width * 3) & 3)) & 3;
-    uint8_t lineBuffer[_dimensions.width * 3 + padding];
+      for (row = 0; row < _dimensions.height; row++) {
+        fd.read(lineBuffer, sizeof(lineBuffer));
+        uint8_t*  bptr = lineBuffer;
+        uint16_t* tptr = (uint16_t*)lineBuffer;
+        // Convert 24 to 16 bit colours
+        for (uint16_t col = 0; col < _dimensions.width; col++) {
+          uint8_t b = *bptr++;
+          uint8_t g = *bptr++;
+          uint8_t r = *bptr++;
+          *tptr++ = tft.color565(r, g, b);
+        }
 
-    for (row = 0; row < _dimensions.height; row++) {
-      fd.read(lineBuffer, sizeof(lineBuffer));
-      uint8_t*  bptr = lineBuffer;
-      uint16_t* tptr = (uint16_t*)lineBuffer;
-      // Convert 24 to 16 bit colours
-      for (uint16_t col = 0; col < _dimensions.width; col++) {
-        uint8_t b = *bptr++;
-        uint8_t g = *bptr++;
-        uint8_t r = *bptr++;
-        *tptr++ = tft.color565(r, g, b);
+        // Push the pixel row to screen, pushImage will crop the line if needed
+        // y is decremented as the BMP image is drawn bottom up
+        tft.pushImage(x, y--, _dimensions.width, 1, (uint16_t*)lineBuffer);
       }
-
-      // Push the pixel row to screen, pushImage will crop the line if needed
-      // y is decremented as the BMP image is drawn bottom up
-      tft.pushImage(x, y--, _dimensions.width, 1, (uint16_t*)lineBuffer);
+      tft.setSwapBytes(oldSwapBytes);
     }
-    tft.setSwapBytes(oldSwapBytes);
   }
   fd.close();
   yield();
@@ -348,18 +380,15 @@ static ImageWidget *_current_image_widget = NULL;
 
 bool _jpg_draw_cb(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t* bitmap) {
   if (!_current_image_widget) return false;
-  if (x >= _current_image_widget->getArea().width) return true;
-  if (y >= _current_image_widget->getArea().height) return true;
+  if (x >= _current_image_widget->getInnerArea().width) return true;
+  if (y >= _current_image_widget->getInnerArea().height) return true;
   _current_image_widget->getTFT().pushImage(x, y, w, h, bitmap);
   yield();
   return true;
 }
 
-bool ImageWidget::_drawJpgImage() {
-  Serial.printf("Trying to draw file '%s' as a JPG...\t", _path.c_str());
+bool ImageWidget::_drawJpgImage(bool real_drawing) {
   TFT_eSPI &tft = getTFT();
-  bool oldSwapBytes = tft.getSwapBytes();
-  tft.setSwapBytes(true);
   TJpgDec.setJpgScale(1);
   TJpgDec.setCallback(_jpg_draw_cb);
   JRESULT v = TJpgDec.getFsJpgSize(&_dimensions.width,
@@ -367,33 +396,34 @@ bool ImageWidget::_drawJpgImage() {
                                    _path.c_str(),
                                    TFT_eSPI_Widgets_FS);
   if (v == JDR_OK) {
-    Serial.printf("[Success]\nImage size is %ux%u\n", _dimensions.width, _dimensions.height);
-    xSemaphoreTake(_mutex, portMAX_DELAY);
-    if (_current_image_widget) {
-      Serial.printf("%s:%s:%:This is a bug. "
-                    "Please contact the authors of this library.\n",
-                    __FILE__, __FUNCTION__, __LINE__);
-      // _current_image_widget internal variable must be NULL
-      exit(1);
+    if (real_drawing) {
+      xSemaphoreTake(_mutex, portMAX_DELAY);
+      if (_current_image_widget) {
+        Serial.printf("%s:%s:%:This is a bug. "
+                      "Please contact the authors of this library.\n",
+                      __FILE__, __FUNCTION__, __LINE__);
+        // _current_image_widget internal variable must be NULL
+        exit(1);
+      }
+      _current_image_widget = this;
+      bool oldSwapBytes = tft.getSwapBytes();
+      tft.setSwapBytes(true);
+      v = TJpgDec.drawFsJpg(_offset.x,
+                            _offset.y,
+                            _path.c_str(),
+                            TFT_eSPI_Widgets_FS);
+      tft.setSwapBytes(oldSwapBytes);
+      _current_image_widget = NULL;
+      xSemaphoreGive(_mutex);
     }
-    _current_image_widget = this;
-    v = TJpgDec.drawFsJpg(_offset.x,
-                          _offset.y,
-                          _path.c_str(),
-                          TFT_eSPI_Widgets_FS);
-    _current_image_widget = NULL;
-    xSemaphoreGive(_mutex);
   } else {
     _dimensions = Dimensions::empty;
   }
-  tft.setSwapBytes(oldSwapBytes);
   yield();
   return v == JDR_OK;
 }
 
-bool ImageWidget::_drawPngImage() {
-
-  Serial.printf("Trying to draw file '%s' as a PNG...\t", _path.c_str());
+bool ImageWidget::_drawPngImage(bool real_drawing) {
   xSemaphoreTake(_mutex, portMAX_DELAY);
   int16_t v = _png_handler.open(_path.c_str(),
                                 _png_open_cb,
@@ -404,19 +434,20 @@ bool ImageWidget::_drawPngImage() {
   if (v == PNG_SUCCESS) {
     TFT_eSPI &tft = getTFT();
     _dimensions = Dimensions(_png_handler.getWidth(), _png_handler.getHeight());
-    Serial.printf("[Success]\nImage size is %ux%u\n", _dimensions.width, _dimensions.height);
-    tft.startWrite();
-    uint16_t *buffer = new uint16_t[_png_handler.getWidth()];
-    _png_user_data extra_data = {
-                                 tft,
-                                 _offset,
-                                 buffer,
-                                 _png_handler.getWidth()
-    };
-    v = _png_handler.decode(&extra_data, 0);
-    delete [] buffer;
-    _png_handler.close();
-    tft.endWrite();
+    if (real_drawing) {
+      tft.startWrite();
+      uint16_t *buffer = new uint16_t[_png_handler.getWidth()];
+      _png_user_data extra_data = {
+                                   tft,
+                                   _offset,
+                                   buffer,
+                                   _png_handler.getWidth()
+      };
+      v = _png_handler.decode(&extra_data, 0);
+      delete [] buffer;
+      _png_handler.close();
+      tft.endWrite();
+    }
   }
   xSemaphoreGive(_mutex);
   return v == PNG_SUCCESS;

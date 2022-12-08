@@ -106,10 +106,35 @@ MessageWidget::MessageWidget(Widget &parent,
   updateMessage();
 }
 
+void MessageWidget::_shrink() {
+  size_t n = _orig_message.length();
+  size_t nb_l = (n > 0), nb_c = 0, max_c = 0;
+  for (size_t i = 0; i < n; ++i) {
+    if (_orig_message[i] == '\n') {
+      if (nb_c > max_c) {
+        max_c = nb_c;
+      }
+      nb_c = 0;
+      ++nb_l;
+    } else {
+      ++nb_c;
+    }
+  }
+  if (nb_c > max_c) {
+    max_c = nb_c;
+  }
+  TFT_eSPI &tft = getTFT();
+  int16_t c_w = tft.textWidth("0");
+  int16_t c_h = tft.fontHeight();
+  _area.width = nb_c * c_w;
+  _area.height = nb_l * c_h;
+}
+
 void MessageWidget::_draw() {
   TFT_eSPI &tft = getTFT();
   // Wrap on x axis
   tft.setTextWrap(_wrap, false);
+  tft.setTextDatum(TL_DATUM);
   tft.setCursor(_offset.x, _offset.y);
   tft.print(_message);
   _last_update = millis();
@@ -124,7 +149,8 @@ void MessageWidget::updateMessage() {
   if (!_wrap) return;
 
   TFT_eSPI &tft = getTFT();
-  int16_t max_chars_per_line = max(_area.width / tft.textWidth("A"), 1);
+  Area inner_area = getInnerArea();
+  int16_t max_chars_per_line = max(inner_area.width / tft.textWidth("A"), 1);
 
   size_t last_space = 0, cur_line_width = 0;
   for (size_t i = 0; i < _message.length(); ++i) {
@@ -161,14 +187,14 @@ void MessageWidget::_loop() {
   TFT_eSPI &tft = getTFT();
   // Compute the width of each character (mono font).
   int16_t c_w = tft.textWidth("A");
-  uint8_t b = getGraphicalProperties().getBorderSize();
+  Area inner_area = getInnerArea();
   if (_wrap) {
     // The text is wrapped
     // then by computing the minimal number of lines required to display all characters.
-    int16_t h = tft.fontHeight() * _number_of_lines + 2 * b;
-    if (h > _area.height) {
+    int16_t h = tft.fontHeight() * _number_of_lines;
+    if (h > inner_area.height) {
       // The text height is greater than the widget inner height.
-      if (h + _offset.y > _area.height) {
+      if (h + _offset.y > inner_area.height) {
         // The end of the text is outside the widget inner area.
         if (((_offset.y < 0) and (ellapsed_time > _animation_delay)) or
             ((_offset.y == 0) and (ellapsed_time > _stick_delay))) {
@@ -190,10 +216,10 @@ void MessageWidget::_loop() {
   } else {
     // The text is not wrapped
     // Compute the width of the unwrapped message.
-    int16_t w = c_w * _message.length() + 2 * b;
-    if (w > _area.width) {
+    int16_t w = c_w * _message.length();
+    if (w > inner_area.width) {
       // The text width is greater than the widget width.
-      if (w + _offset.x > _area.width) {
+      if (w + _offset.x > inner_area.width) {
         // The end of the text is outside the widget area.
         if (((_offset.x < 0) and (ellapsed_time > _animation_delay)) or
             ((_offset.x == 0) and (ellapsed_time > _stick_delay))) {

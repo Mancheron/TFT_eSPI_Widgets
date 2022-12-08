@@ -133,6 +133,14 @@ void StringEntryWidget::setCursorPos(uint8_t p) {
   }
 }
 
+void StringEntryWidget::_shrink() {
+  TFT_eSPI &tft = getTFT();
+  int16_t c_w = tft.textWidth(" ");
+  int16_t c_h = tft.fontHeight();
+  _area.width = c_w * _value.length();
+  _area.height = c_h + 4 /* for the underline */;
+}
+
 void StringEntryWidget::_handleEvent(Event event) {
   switch (event) {
   case SINGLE_LEFT_CLICK:
@@ -155,24 +163,24 @@ void StringEntryWidget::_handleEvent(Event event) {
 
 void StringEntryWidget::_draw() {
   TFT_eSPI &tft = getTFT();
-  GraphicalProperties props =  getFocusGraphicalProperties();
-  GraphicalProperties props2 =  getDefaultGraphicalProperties();
-  uint8_t border_size = max<uint8_t>(1, props.getBorderSize());
-  Area inner_area(_area.width - 2 * border_size, _area.height - 2 * border_size, 0, 0);
+  GraphicalProperties props =  getGraphicalProperties();
+  Area inner_area = getInnerArea();
+  inner_area.x = 0; // Since in viewport
+  inner_area.y = 0; // Since in viewport
   int16_t c_w = tft.textWidth(" ");
   int16_t c_h = tft.fontHeight();
   int16_t lg = c_w * _value.length();
   int16_t m = inner_area.width - lg;
-  _offset.y = inner_area.y + (inner_area.height - c_h) / 2;
+  _offset.y = (inner_area.height - c_h) / 2;
   if (m < 0) {
     Area cursor(c_w, c_h, _offset.x + c_w * _pos, _offset.y);
     if (!inner_area.contains(cursor)) {
-      if (cursor.x + cursor.width > inner_area.x + inner_area.width) {
+      if (cursor.x + cursor.width > inner_area.width) {
         // Cursor position is out of bound on the right side of the widget area
-        _offset.x -= (cursor.x + cursor.width) - (inner_area.x + inner_area.width);
-      } else if (cursor.x < inner_area.x) {
+        _offset.x -= (cursor.x + cursor.width) - inner_area.width;
+      } else if (cursor.x < 0) {
         // Cursor position is out of bound on the left side of the widget area
-        _offset.x += inner_area.x - cursor.x + 1;
+        _offset.x -= cursor.x - 1;
       } else {
         Serial.printf("%s:%s:%:This is a bug. "
                       "Please contact the authors of this library.\n",
@@ -182,7 +190,7 @@ void StringEntryWidget::_draw() {
       }
     }
   } else {
-    _offset.x = inner_area.x + m / 2;
+    _offset.x = m / 2;
   }
   tft.setCursor(_offset.x, _offset.y);
   tft.setTextDatum(TL_DATUM);

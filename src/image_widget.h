@@ -165,6 +165,29 @@ namespace TFT_eSPI_Widgets {
     Coordinates _offset;
 
     /**
+     * Shrink the current widget area to the smallest dimension that
+     * allows to see its content.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
+    virtual void _shrink();
+
+    /**
+     * Update the image dimensions information.
+     *
+     * If image is defined from file, then if the format is not set,
+     * try to detect the file format then on success, update the image
+     * dimensions. If image is defined from raw data, this does
+     * nothing.
+     *
+     * \return If image is defined from file, this return true if the
+     * dimensions are correctly set and the file format detected. If
+     * image is defined from raw data, this is always true.
+     */
+    bool _updateDimensions();
+
+    /**
      * The specific drawing code for image widgets.
      *
      * \return Returns nothing but doxygen is buggy with inline
@@ -175,28 +198,38 @@ namespace TFT_eSPI_Widgets {
     /**
      * Try drawing a BMP image.
      *
-     * \return This method returns true if the file format is
-     * recognized and correctly drawn. CURRENTLY, THIS METHOD IS NOT
-     * YET IMPLEMENTED AND RETURNS FALSE.
+     * \param real_drawing When true (default), try to draw the image
+     * from file. When false, only try to set the file format and on
+     * success updates the image dimensions.
      *
+     * \return This method returns true if the file format is
+     * recognized and correctly drawn.
      */
-    bool _drawBmpImage();
+    bool _drawBmpImage(bool real_drawing = true);
 
     /**
      * Try drawing a JPEG image.
      *
-     * \return This method returns true if the file format is
-     * recognized and correctly drawn.
-     */
-    bool _drawJpgImage();
-
-    /**
-     * Try drawing a PNG image.
+     * \param real_drawing When true (default), try to draw the image
+     * from file. When false, only try to set the file format and on
+     * success updates the image dimensions.
      *
      * \return This method returns true if the file format is
      * recognized and correctly drawn.
      */
-    bool _drawPngImage();
+    bool _drawJpgImage(bool real_drawing = true);
+
+    /**
+     * Try drawing a PNG image.
+     *
+     * \param real_drawing When true (default), try to draw the image
+     * from file. When false, only try to set the file format and on
+     * success updates the image dimensions.
+     *
+     * \return This method returns true if the file format is
+     * recognized and correctly drawn.
+     */
+    bool _drawPngImage(bool real_drawing = true);
 
   public:
 
@@ -303,6 +336,7 @@ namespace TFT_eSPI_Widgets {
       _dimensions = Dimensions::empty;
       _path = path;
       _format = NOT_SET;
+      _updateDimensions();
     }
 
     /**

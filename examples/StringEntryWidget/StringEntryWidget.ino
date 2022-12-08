@@ -156,8 +156,12 @@ void setup(void) {
   // keyword.
   new StringEntryWidget(canvas, 12, "Hello World");
 
-  // Give focus on the integer entry widget
+  // Give focus on the string entry widget
   canvas.getChild().focus();
+
+  // Shrinking the string entry widget
+  canvas.getChild().shrink();
+
   // Force redraw on next loop.
   canvas.touch();
 

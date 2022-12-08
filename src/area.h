@@ -188,6 +188,16 @@ namespace TFT_eSPI_Widgets {
      */
     bool contains(const Coordinates &coords) const;
 
+    /**
+     * Get a string representation of current area.
+     *
+     * \return This method returns a string representation of the
+     * current area.
+     */
+    inline String toString() const {
+      return Dimensions::toString() + "@" + Coordinates::toString();
+    }
+
   };
 
 }

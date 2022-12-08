@@ -113,6 +113,15 @@ namespace TFT_eSPI_Widgets {
     int32_t _maximal_value;
 
     /**
+     * Shrink the current widget area to the smallest dimension that
+     * allows to see its content.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
+    virtual void _shrink();
+
+    /**
      * Action to perform when the current widget is passed some event.
      *
      * Specific events this widget can handle are:
@@ -127,7 +136,6 @@ namespace TFT_eSPI_Widgets {
      * virtual void signature.
      */
     virtual void _handleEvent(Event event);
-
 
     /**
      * The specific drawing code for integer entry widgets.

@@ -133,6 +133,7 @@ Widget::Widget(Widget &parent, const Area &area):
 }
 
 Widget::~Widget() {
+  unfocus();
   removeChild();
   if (!isRoot()) {
     _parent._child = NULL;
@@ -148,46 +149,129 @@ void Widget::removeChild() {
   }
 }
 
-Area Widget::getArea() const {
+Area Widget::getArea(bool absolute) const {
   Area area = _area;
   if (!isRoot()) {
-    area.x -= _parent._area.x;
-    area.y -= _parent._area.y;
+    if (!absolute) {
+      area.x -= _parent._area.x;
+      area.y -= _parent._area.y;
+    }
   }
   return area;
 }
 
-void Widget::setArea(const Area &area) {
-  if (isRoot()) {
-    if (area.isEmpty()) {
-      TFT_eSPI &tft = getTFT();
-      _area.width = tft.width();
-      _area.height = tft.height();
-      _area.x = 0;
-      _area.y = 0;
-    } else {
-      _area = area;
-    }
+Area Widget::getInnerArea(bool absolute) const {
+  Area area = getArea(absolute);
+  uint8_t border_size = max(getFocusGraphicalProperties().getBorderSize(),
+                            getDefaultGraphicalProperties().getBorderSize());
+  if (area.width > 2 * border_size) {
+    area.width -= 2 * border_size;
   } else {
-    if (area.isEmpty()) {
-      uint8_t b = max(_default_graph_props.getBorderSize(), _focus_graph_props.getBorderSize());
-      _area = _parent._area;
-      if (_area.width > 2 * b) {
-        _area.width -= 2 * b;
-      } else {
-        _area.width = 0;
-      }
-      if (_area.height > 2 * b) {
-        _area.height -= 2 * b;
-      } else {
-        _area.height = 0;
-      }
-      _area.x += b;
-      _area.y += b;
+    area.width = 0;
+  }
+  if (area.height > 2 * border_size) {
+    area.height -= 2 * border_size;
+  } else {
+    area.height = 0;
+  }
+  area.x += border_size;
+  area.y += border_size;
+  return area;
+}
+
+void Widget::setArea(const Area &area, bool absolute, bool check_for_update) {
+  Area orig_area = _area;
+  if (area.isEmpty()) {
+    fit(false, false);
+  } else {
+    if (isRoot()) {
+      _area = area;
     } else {
       _area = area;
-      _area.x += _parent._area.x;
-      _area.y += _parent._area.y;
+      if (!absolute) {
+        _area.x += _parent._area.x;
+        _area.y += _parent._area.y;
+      }
+    }
+  }
+  if (check_for_update) {
+    touchOnAreaChanges(orig_area);
+  }
+}
+
+void Widget::fit(bool recurse, bool check_for_update) {
+  Area orig_area = _area;
+  if (isRoot()) {
+    _area = getScreenArea();
+  } else {
+    _area = _parent.getInnerArea(true);
+  }
+  if (recurse and _child) {
+    _child->fit(true, check_for_update);
+  }
+  if (check_for_update) {
+    touchOnAreaChanges(orig_area);
+  }
+}
+
+void Widget::shrink(uint8_t horizontal, uint8_t vertical, bool recurse, bool check_for_update) {
+  Area orig_area = _area;
+  _area.width = 0;
+  _area.height = 0;
+  if (_child) {
+    if (recurse) {
+      _child->shrink(horizontal, vertical, true, check_for_update);
+    }
+    _area = _child->getArea(true);
+  }
+  TFT_eSPI &tft = getTFT();
+  tft.setTextSize(getGraphicalProperties().getFontSize());
+  _shrink();
+  uint8_t border_size = max(getFocusGraphicalProperties().getBorderSize(),
+                            getDefaultGraphicalProperties().getBorderSize());
+  _area.width += 2 * border_size;
+  _area.height += 2 * border_size;
+  _area.x -= border_size;
+  _area.y -= border_size;
+  setPosition(horizontal, vertical, false);
+  if (check_for_update) {
+    touchOnAreaChanges(orig_area);
+  }
+}
+
+void Widget::setPosition(uint8_t horizontal, uint8_t vertical, bool check_for_update) {
+  Area area, orig_area = _area;
+  if (isRoot()) {
+    area = getScreenArea();
+  } else {
+    area = _parent.getInnerArea(true);
+  }
+  if (horizontal != -1) {
+    horizontal = constrain(horizontal, 0, 100);
+    // We don't care about the current widget fits horizontally into
+    // its parent/screen since the computation is the same in both
+    // cases.
+    _area.x = area.x + horizontal * (area.width - _area.width) / 100;
+  }
+  if (vertical != -1) {
+    vertical = constrain(vertical, 0, 100);
+    // We don't care about the current widget fits vertically into its
+    // parent/screen since the computation is the same in both cases.
+    _area.y = area.y + vertical * (area.height - _area.height) / 100;
+  }
+  if (check_for_update) {
+    touchOnAreaChanges(orig_area);
+  }
+}
+
+void Widget::touchOnAreaChanges(const Area &orig_area) {
+  if (orig_area != _area) {
+    // The widget area has changed, we need to redraw it.
+    touch();
+    if (!_area.contains(orig_area)) {
+      // The new widget area doesn't includes its old area.
+      // It is better to redraw the canvas.
+      _parent.touch();
     }
   }
 }
@@ -238,14 +322,14 @@ void Widget::draw() {
   TFT_eSPI &tft = getTFT();
   tft.setViewport(_area.x, _area.y, _area.width, _area.height);
   tft.fillScreen(props.getBackgroundColor());
-  uint8_t border_size = props.getBorderSize();
-  if (border_size) {
+  if (props.getBorderSize()) {
     tft.frameViewport(props.getBorderColor(), props.getBorderSize());
-    tft.setViewport(_area.x + border_size,
-                    _area.y + border_size,
-                    _area.width - 2 * border_size,
-                    _area.height - 2 * border_size);
   }
+  Area inner_area = getInnerArea(true);
+  tft.setViewport(inner_area.x,
+                  inner_area.y,
+                  inner_area.width,
+                  inner_area.height);
   tft.setTextSize(props.getFontSize());
   tft.setTextColor(props.getFontColor());
   yield();

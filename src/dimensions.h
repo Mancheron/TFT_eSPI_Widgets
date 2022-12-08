@@ -182,6 +182,16 @@ namespace TFT_eSPI_Widgets {
       return !width or !height;
     }
 
+    /**
+     * Get a string representation of current dimension.
+     *
+     * \return This method returns a string representation of the
+     * current dimension.
+     */
+    inline String toString() const {
+      return String(width) + "x" + height;
+    }
+
   };
 
 }

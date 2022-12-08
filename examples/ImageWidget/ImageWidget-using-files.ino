@@ -121,16 +121,14 @@ void setup(void) {
   // keyword.
   current_extension = 0;
   new ImageWidget(canvas,
-                  img1 + extensions[current_extension],
-                  Coordinates::origin,
-                  Area(160, 80, // Set the image area to 160x80
-                       // centered on the canvas (which is expected to be
-                       // larger than 160x80)
-                       (canvas.getArea().width - 160) / 2,
-                       (canvas.getArea().height - 80) / 2));
+                  img1 + extensions[current_extension]);
 
   // Force redraw on next loop.
   canvas.touch();
+
+  // Shrink the image widget to fit the image dimensions and center it
+  // on the canvas.
+  canvas.getChild().shrink(50, 50);
 
   Serial.print("- root widget type is: ");
   Serial.println(canvas.getTypeString());

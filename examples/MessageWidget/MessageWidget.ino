@@ -88,7 +88,7 @@ using namespace TFT_eSPI_Widgets;
 TFT_eSPI tft;
 Canvas canvas;
 
-const char *simple_message = "A simple message";
+const char *simple_message = "Short message";
 const char *long_message = "A long message that should be animated to be readable.";
 const char *wrapped_message = "A long message that should fit on several lines without the need of some animation.";
 const char *huge_message = "A so long message that even beeing wrapped, the entire screen is not enough to display it at once.\n\n"
@@ -114,13 +114,12 @@ void setup(void) {
   // Add a generic widget to the canvas such that this widget area
   // fits 90% of the full screen and is centered on it.
   Area area = canvas.getArea();
-  area.x += 0.05 * area.width;
-  area.y += 0.05 * area.height;
   area *= 0.9;
 
   // It is REQUIRED to create any child widget using the "new"
   // keyword.
   new GenericWidget(canvas, area);
+  canvas.getChild().setPosition(50, 50);
 
   // Change the generic widget graphical properties.
   canvas.getChild().setDefaultGraphicalProperties(GraphicalProperties(TFT_WHITE /* background color */,
@@ -255,9 +254,13 @@ void loop(void) {
     if (w.hasFocus()) {
       Serial.println("=> Unfocus the message widget.");
       w.unfocus();
+      Serial.println("=> fit message widget to parent widget");
+      w.fit();
     } else {
       Serial.println("=> Set focus on the message widget.");
       w.focus();
+      Serial.println("=> Shrink message widget and position it at the bottom left corner of its parent.");
+      w.shrink(0 /* left horizontal align */, 100 /* bottom vertical align */);
     }
     w.touch();
     Serial.println("This message will be prompted for 5 seconds.");

@@ -169,17 +169,9 @@ void setup(void) {
                                   4 /* border size */)
               );
 
-  // Add a generic widget to the canvas such that this widget area
-  // fits 50% of the full screen and is centered on it.
-  Area area = canvas.getArea();
-  area.x += 0.25 * area.width;
-  area.y += 0.25 * area.height;
-  area *= 0.5;
-
   // It is REQUIRED to create any child widget using the "new"
   // keyword.
   new FloatEntryWidget(canvas);
-  canvas.getChild().setArea(area);
 
   // Associated the onDoubleClickCb function to the float entry
   // widget.
@@ -204,9 +196,17 @@ void setup(void) {
 
 void loop(void) {
 
+  // We will shrink the float entry widget to its minimal size.
+
+  // We shrink the widget
+  canvas.getChild().shrink();
+
   // Calling the loop() method will call the loop of any descendant
   // widget from the current canvas in the widget tree.
   canvas.loop();
+
+  // Calling the refresh() method will call the refresh of any
+  // descendant widget from the current canvas in the widget tree.
   canvas.refresh();
 
   // Catch button events.

@@ -112,16 +112,11 @@ void setup(void) {
   // keyword.
   new ImageWidget(canvas,
                   Gnu_Tux_160x80_data,
-                  Dimensions(Gnu_Tux_160x80_width, Gnu_Tux_160x80_height),
-                  Coordinates::origin,
-                  Area(160, 80, // Set the image area to 160x80
-                       // centered on the canvas (which is expected to be
-                       // larger than 160x80)
-                       (canvas.getArea().width - 160) / 2,
-                       (canvas.getArea().height - 80) / 2));
+                  Dimensions(Gnu_Tux_160x80_width, Gnu_Tux_160x80_height));
 
-  // Force redraw on next loop.
-  canvas.touch();
+  // Shrink the image widget to fit the image dimensions and center it
+  // on the canvas.
+  canvas.getChild().shrink(50, 50);
 
   Serial.print("- root widget type is: ");
   Serial.println(canvas.getTypeString());
