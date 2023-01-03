@@ -125,10 +125,10 @@ namespace TFT_eSPI_Widgets {
      * Action to perform when the current widget is passed some event.
      *
      * Specific events this widget can handle are:
-     *   - Simple left click => increase the value
-     *   - Long left click => fast increase the value
-     *   - Simple right click => decrease the value
-     *   - Long right click => fast decrease the value
+     *   - Simple right click => increase the value
+     *   - Long right click => fast increase the value
+     *   - Simple left click => decrease the value
+     *   - Long left click => fast decrease the value
      *
      * \param event The event to handle.
      *

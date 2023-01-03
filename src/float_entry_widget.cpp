@@ -105,11 +105,11 @@ void FloatEntryWidget::_handleEvent(Event event) {
   switch (event) {
   case SINGLE_LEFT_CLICK:
   case LONG_LEFT_PRESS:
-    incrValue();
+    decrValue();
     break;
   case SINGLE_RIGHT_CLICK:
   case LONG_RIGHT_PRESS:
-    decrValue();
+    incrValue();
     break;
   }
   touch();

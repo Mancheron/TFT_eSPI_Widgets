@@ -99,14 +99,14 @@ PhysicalButtonHandler right_btn(0, HIGH);
 // IntegerEntryWidget.
 //
 // When the double click comes from the left button, the integer entry
-// value is incremented by 10 whereas when the double click comes from
-// the right button, the integer entry value is decremented by 10.
+// value is decremented by 10 whereas when the double click comes from
+// the right button, the integer entry value is incremented by 10.
 bool onDoubleClickCb(Widget &w, Event e) {
-  IntegerEntryWidget &ww = *static_cast<IntegerEntryWidget *>(&w);
+  IntegerEntryWidget &_w = w.as<IntegerEntryWidget>();
   if (e == DOUBLE_LEFT_CLICK) {
-    ww.setValue(ww.getValue()+10);
+    _w.setValue(_w.getValue() - 10);
   } else if (e == DOUBLE_RIGHT_CLICK) {
-    ww.setValue(ww.getValue()-10);
+    _w.setValue(_w.getValue() + 10);
   }
   return true;
 }

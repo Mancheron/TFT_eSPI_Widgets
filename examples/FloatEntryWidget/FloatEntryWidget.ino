@@ -98,15 +98,15 @@ PhysicalButtonHandler right_btn(0, HIGH);
 // either the right or the left button) occurs on an FloatEntryWidget.
 //
 // When the double click comes from the left button, the float entry
-// value is incremented 10 times whereas when the double click comes
-// from the right button, the float entry value is decremented 10
+// value is decremented 10 times whereas when the double click comes
+// from the right button, the float entry value is incremented 10
 // times.
 bool onDoubleClickCb(Widget &w, Event e) {
-  FloatEntryWidget &ww = *static_cast<FloatEntryWidget *>(&w);
+  FloatEntryWidget &_w = w.as<FloatEntryWidget>();
   if (e == DOUBLE_LEFT_CLICK) {
-    ww.setValue(ww.getValue() + 10 * ww.getDelta());
+    _w.setValue(_w.getValue() - 10 * _w.getDelta());
   } else if (e == DOUBLE_RIGHT_CLICK) {
-    ww.setValue(ww.getValue() - 10 * ww.getDelta());
+    _w.setValue(_w.getValue() + 10 * _w.getDelta());
   }
   return true;
 }
