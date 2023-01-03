@@ -106,7 +106,7 @@ MessageWidget::MessageWidget(Widget &parent,
   updateMessage();
 }
 
-void MessageWidget::_shrink() {
+void MessageWidget::_shrink(bool recurse, bool check_for_update) {
   size_t n = _orig_message.length();
   size_t nb_l = (n > 0), nb_c = 0, max_c = 0;
   for (size_t i = 0; i < n; ++i) {
@@ -126,7 +126,7 @@ void MessageWidget::_shrink() {
   TFT_eSPI &tft = getTFT();
   int16_t c_w = tft.textWidth("0");
   int16_t c_h = tft.fontHeight();
-  _area.width = nb_c * c_w;
+  _area.width = max_c * c_w;
   _area.height = nb_l * c_h;
 }
 
@@ -182,7 +182,7 @@ void MessageWidget::updateMessage() {
   _last_update = millis();
 }
 
-void MessageWidget::_loop() {
+void MessageWidget::_loop(bool recurse) {
   unsigned long ellapsed_time = millis() - _last_update;
   TFT_eSPI &tft = getTFT();
   // Compute the width of each character (mono font).

@@ -110,7 +110,7 @@ void IntegerEntryWidget::_handleEvent(Event event) {
   touch();
 }
 
-void IntegerEntryWidget::_shrink() {
+void IntegerEntryWidget::_shrink(bool recurse, bool check_for_update) {
   TFT_eSPI &tft = getTFT();
   int16_t c_w = tft.textWidth("0");
   int16_t c_h = tft.fontHeight();

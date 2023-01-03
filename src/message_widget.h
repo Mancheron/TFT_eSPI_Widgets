@@ -145,13 +145,37 @@ namespace TFT_eSPI_Widgets {
     uint16_t _step;
 
     /**
-     * Shrink the current widget area to the smallest dimension that
-     * allows to see its content.
+     * Fit the current widget area to the inner area of its parent.
+     *
+     * \param recurse This is the recurse value passed to the fit()
+     * method. This parameter is not used for this widget.
+     *
+     * \param check_for_update This is the check_for_update parameter
+     * passed to the fit() method. This parameter is not used for this
+     * widget.
      *
      * \return Returns nothing but doxygen is buggy with inline
      * virtual void signature.
      */
-    virtual void _shrink();
+    inline virtual void _fit(bool recurse, bool check_for_update) {
+      updateMessage();
+    }
+
+    /**
+     * Shrink the current widget area to the smallest dimension that
+     * allows to see its content.
+     *
+     * \param recurse This is the recurse value passed to the shrink()
+     * method. This parameter is not used for this widget.
+     *
+     * \param check_for_update This is the check_for_update parameter
+     * passed to the fit() method. This parameter is not used for this
+     * widget.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
+    virtual void _shrink(bool recurse, bool check_for_update);
 
     /**
      * The specific drawing code for message widgets.
@@ -165,10 +189,13 @@ namespace TFT_eSPI_Widgets {
      * The specific loop code for message widgets (computation for any
      * animation).
      *
+     * \param recurse This is the recurse value passed to the loop()
+     * method. This parameter is not used for this widget.
+     *
      * \return Returns nothing but doxygen is buggy with inline
      * virtual void signature.
      */
-    virtual void _loop();
+    virtual void _loop(bool recurse);
 
   public:
 

@@ -152,8 +152,8 @@ namespace TFT_eSPI_Widgets {
    *
    * In order to customize the widget behavior, the following
    * protected methods should be overridden:
-   *  - _onFocus(),
-   *  - _onUnfocus(),
+   *  - _focus(),
+   *  - _unfocus(),
    *  - _handleEvent(),
    *  - _loop(),
    *  - _draw().
@@ -170,7 +170,8 @@ namespace TFT_eSPI_Widgets {
 
     /**
      * The type of callback function that can be applyed to add some
-     * hooks on widget loop(), focus() and unfocus() methods.
+     * hooks on widget loop(), draw(), refresh(), focus() and
+     * unfocus() methods.
      */
     typedef void (*widget_cb_t)(Widget &);
 
@@ -178,10 +179,10 @@ namespace TFT_eSPI_Widgets {
      * The type of callback function that can be applyed to add some
      * hooks on widget handleEvent() method.
      *
-     * If the function returns false, then the event will not be
+     * If the function returns true, then the event will not be
      * further processed by the default event handler of the widget.
      */
-    typedef bool (*event_handler_cb_t)(Widget &, Event event);
+    typedef bool (*event_handler_cb_t)(Widget &, Event);
 
   protected:
 
@@ -234,6 +235,18 @@ namespace TFT_eSPI_Widgets {
     event_handler_cb_t _event_handler_cb;
 
     /**
+     * A custom callback function to call when the draw() method is
+     * called on the current widget.
+     */
+    widget_cb_t _draw_cb;
+
+    /**
+     * A custom callback function to call when the refresh() method is
+     * called on the current widget.
+     */
+    widget_cb_t _refresh_cb;
+
+    /**
      * A custom callback function to call when the loop() method is
      * called on the current widget.
      */
@@ -264,16 +277,39 @@ namespace TFT_eSPI_Widgets {
     inline virtual TFT_eSPI &_getTFT() const { return _root._getTFT(); }
 
     /**
+     * Fit the current widget area to the inner area of its parent.
+     *
+     * \remark This method might be overridden by any derived class
+     * that have some custom size fitting strategy.
+     *
+     * \param recurse This is the recurse value passed to the fit()
+     * method.
+     *
+     * \param check_for_update This is the check_for_update parameter
+     * passed to the fit() method.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
+    inline virtual void _fit(bool recurse, bool check_for_update) {}
+
+    /**
      * Shrink the current widget area to the smallest dimension that
      * allows to see its content.
      *
      * \remark This method might be overridden by any derived class
      * that have some minimal size content.
      *
+     * \param recurse This is the recurse value passed to the shrink()
+     * method. Allmost all widgets should ignore this parameter.
+     *
+     * \param check_for_update This is the check_for_update parameter
+     * passed to the fit() method.
+     *
      * \return Returns nothing but doxygen is buggy with inline
      * virtual void signature.
      */
-    inline virtual void _shrink() {}
+    inline virtual void _shrink(bool recurse, bool check_for_update) {}
 
     /**
      * Get the focus status of the given widget by asking the root of
@@ -338,7 +374,7 @@ namespace TFT_eSPI_Widgets {
      * \return Returns nothing but doxygen is buggy with inline
      * virtual void signature.
      */
-    inline virtual void _onFocus() {}
+    inline virtual void _focus() {}
 
     /**
      * Action to perform when the current widget loose the focus.
@@ -352,7 +388,7 @@ namespace TFT_eSPI_Widgets {
      * \return Returns nothing but doxygen is buggy with inline
      * virtual void signature.
      */
-    inline virtual void _onUnfocus() {}
+    inline virtual void _unfocus() {}
 
     /**
      * Action to perform when the current widget is passed some event.
@@ -380,10 +416,13 @@ namespace TFT_eSPI_Widgets {
      * that needs to perform specific actions when loop() method is
      * called on the current widget.
      *
+     * \param recurse This is the recurse value passed to the loop()
+     * method. Allmost all widgets should ignore this parameter.
+     *
      * \return Returns nothing but doxygen is buggy with inline
      * virtual void signature.
      */
-    inline virtual void _loop() {}
+    inline virtual void _loop(bool recurse) {}
 
     /**
      * Action to perform when the draw() method is called on the
@@ -396,13 +435,30 @@ namespace TFT_eSPI_Widgets {
      * Does nothing by default.
      *
      * \remark This method should be overridden by any derived class
-     * that needs to perform specific actions when loop() method is
-     * called on the current widget.
+     * that needs to perform specific actions when the current widget
+     * is drawn.
      *
      * \return Returns nothing but doxygen is buggy with inline
      * virtual void signature.
      */
     inline virtual void _draw() {}
+
+    /**
+     * Action to perform when the refresh() method is called on the
+     * current widget.
+     *
+     * This method is called at the end of the refresh().
+     *
+     * Does nothing by default.
+     *
+     * \remark This method should be overridden by any derived class
+     * that needs to perform specific actions when the current widget
+     * is refreshed.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
+    inline virtual void _refresh() {}
 
   public:
 
@@ -494,6 +550,34 @@ namespace TFT_eSPI_Widgets {
     }
 
     /**
+     * Cast the current widget to its real derived class.
+     *
+     * \see It is safer to ensure the correct widget type is used (may
+     * be using getType()).
+     *
+     * \return Return a reference on the current widget child (be
+     * aware that this child must exist).
+     */
+    template <typename T>
+    T &as() {
+      return *static_cast<T *>(this);
+    }
+
+    /**
+     * Cast the current widget to its real derived class.
+     *
+     * \see It is safer to ensure the correct widget type is used (may
+     * be using getType()).
+     *
+     * \return Return a reference on the current widget child (be
+     * aware that this child must exist).
+     */
+    template <typename T>
+    const T &as() const {
+      return *static_cast<const T *>(this);
+    }
+
+    /**
      * Retrieve the child of the current widget.
      *
      * By default, the return type is Widget reference, but one can
@@ -505,19 +589,21 @@ namespace TFT_eSPI_Widgets {
      * ensure the correct widget type is used (may be using
      * getType()).
      *
+     * \see The type conversion is operated by the as() method.
+     *
      * \return Return a reference on the current widget child (be
      * aware that this child must exist).
      */
     template <typename T = Widget>
     T &getChild() const {
-      return *static_cast<T *>(_child);
+      return _child->as<T>();
     }
 
     /**
      * Remove current widget child and all its descendants in the
      * widget tree (if any).
      */
-    void removeChild();
+    virtual void removeChild();
 
     /**
      * Return the widget type (must be overridden by specialized
@@ -644,7 +730,8 @@ namespace TFT_eSPI_Widgets {
      * Shrink the current widget area to the smallest dimension that
      * allows to see its content.
      *
-     * \see This method will internally call setPosition().
+     * \see This method will internally call setPosition() and
+     * _shrink().
      *
      * \param horizontal The horizontal anchor placement of this
      * widget expressed as a percentage. Setting 0% means align on the
@@ -780,10 +867,30 @@ namespace TFT_eSPI_Widgets {
     }
 
     /**
+     * Any extra action that must operate during the drawing.
+     *
+     * \param cb The callback function to call when the draw() method
+     * is called on the widget.
+     */
+    inline void onDraw(const widget_cb_t &cb) {
+      _draw_cb = cb;
+    }
+
+    /**
+     * Any extra action that must operate during the refresh.
+     *
+     * \param cb The callback function to call when the refresh()
+     * method is called on the widget.
+     */
+    inline void onRefresh(const widget_cb_t &cb) {
+      _refresh_cb = cb;
+    }
+
+    /**
      * Any extra action that must operate during the loop.
      *
-     * \param cb The callback function to call when the loop method is
-     * called on the widget.
+     * \param cb The callback function to call when the loop() method
+     * is called on the widget.
      */
     inline void onLoop(const widget_cb_t &cb) {
       _loop_cb = cb;

@@ -145,7 +145,7 @@ static int16_t _computeValueStringLength(float v,
   return w;
 }
 
-void FloatEntryWidget::_shrink() {
+void FloatEntryWidget::_shrink(bool recurse, bool check_for_update) {
   TFT_eSPI &tft = getTFT();
   uint8_t f_s = getGraphicalProperties().getFontSize();
   int16_t c_w = tft.textWidth("0");

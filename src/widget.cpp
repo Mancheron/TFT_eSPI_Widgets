@@ -109,6 +109,8 @@ Widget::Widget():
   _focus_graph_props(),
   _need_update(false),
   _event_handler_cb(NULL),
+  _draw_cb(NULL),
+  _refresh_cb(NULL),
   _loop_cb(NULL),
   _focus_cb(NULL),
   _unfocus_cb(NULL)
@@ -123,6 +125,8 @@ Widget::Widget(Widget &parent, const Area &area):
   _focus_graph_props(parent._focus_graph_props),
   _need_update(false),
   _event_handler_cb(NULL),
+  _draw_cb(NULL),
+  _refresh_cb(NULL),
   _loop_cb(NULL),
   _focus_cb(NULL),
   _unfocus_cb(NULL)
@@ -206,6 +210,7 @@ void Widget::fit(bool recurse, bool check_for_update) {
   } else {
     _area = _parent.getInnerArea(true);
   }
+  _fit(recurse, check_for_update);
   if (recurse and _child) {
     _child->fit(true, check_for_update);
   }
@@ -226,7 +231,7 @@ void Widget::shrink(uint8_t horizontal, uint8_t vertical, bool recurse, bool che
   }
   TFT_eSPI &tft = getTFT();
   tft.setTextSize(getGraphicalProperties().getFontSize());
-  _shrink();
+  _shrink(recurse, check_for_update);
   uint8_t border_size = max(getFocusGraphicalProperties().getBorderSize(),
                             getDefaultGraphicalProperties().getBorderSize());
   _area.width += 2 * border_size;
@@ -333,6 +338,10 @@ void Widget::draw() {
   tft.setTextSize(props.getFontSize());
   tft.setTextColor(props.getFontColor());
   yield();
+  if (_draw_cb) {
+    _draw_cb(*this);
+    yield();
+  }
   _draw();
   yield();
   tft.resetViewport();
@@ -344,10 +353,15 @@ void Widget::draw() {
 }
 
 void Widget::refresh() {
+  if (_refresh_cb) {
+    _refresh_cb(*this);
+    yield();
+  }
   draw();
   if (_child) {
     _child->refresh();
   }
+  _refresh();
   yield();
 }
 
@@ -356,7 +370,7 @@ void Widget::loop(bool recurse) {
     _loop_cb(*this);
     yield();
   }
-  _loop();
+  _loop(recurse);
   yield();
   if (recurse and _child) {
     _child->loop(recurse);

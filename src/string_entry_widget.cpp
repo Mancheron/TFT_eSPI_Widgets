@@ -133,7 +133,7 @@ void StringEntryWidget::setCursorPos(uint8_t p) {
   }
 }
 
-void StringEntryWidget::_shrink() {
+void StringEntryWidget::_shrink(bool recurse, bool check_for_update) {
   TFT_eSPI &tft = getTFT();
   int16_t c_w = tft.textWidth(" ");
   int16_t c_h = tft.fontHeight();
@@ -214,7 +214,7 @@ void StringEntryWidget::_draw() {
   _last_update -= 2;
 }
 
-void StringEntryWidget::_loop() {
+void StringEntryWidget::_loop(bool recurse) {
   // Nothing for the moment.
   unsigned long now = millis();
   if (now - _last_update > 500) {

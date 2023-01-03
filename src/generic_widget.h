@@ -95,6 +95,7 @@ namespace TFT_eSPI_Widgets {
   class GenericWidget: public Widget {
 
   public:
+
     /**
      * Creates a generic widget (rectangular area) attached to the
      * given Widget.
@@ -116,6 +117,29 @@ namespace TFT_eSPI_Widgets {
      * parent area.
      */
     GenericWidget(Widget &parent, const Area &area = Area::reference_value);
+
+    /**
+     * Creates a generic widget (rectangular area) attached to the
+     * given generic Widget.
+     *
+     * The widget graphical properties (background color, line color,
+     * line width, font color, font size) are inherited from the
+     * parent widget. This widget accepts the focus if and only of its
+     * parent does too.
+     *
+     * \param parent The parent widget of the current one. Be aware
+     * that if this parent already has a child widget, then this child
+     * is automatically destroyed.
+     *
+     * \param area The area used by the widget. If the area dimension
+     * is empty, then use the area of its parent minus its maximal
+     * border size according to its focus state. The top left anchor
+     * of the area is relative to the top left corner of its parent.
+     *
+     * \remark There is no verification about the area to fit into the
+     * parent area.
+     */
+    inline GenericWidget(GenericWidget &parent): GenericWidget(parent.as<Widget>()) {}
 
     /**
      * Return the widget type.

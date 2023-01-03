@@ -213,9 +213,11 @@ ImageWidget::ImageWidget(Widget &parent,
   _offset(offset)
 {}
 
-void ImageWidget::_shrink() {
-  _area.width = _dimensions.width;
-  _area.height = _dimensions.height;
+void ImageWidget::_shrink(bool recurse, bool check_for_update) {
+  _updateDimensions();
+  _area.width = max(_area.width, _dimensions.width);
+  _area.height = max(_area.height, _dimensions.height);
+  _offset = Coordinates::origin;
 }
 
 bool ImageWidget::_updateDimensions() {
