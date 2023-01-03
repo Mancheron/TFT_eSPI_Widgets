@@ -73,7 +73,7 @@ of the project.
 Licensing
 ---------
 
-Copyright © 2022 -- LIRMM / CNRS / UM
+Copyright © 2022-2023 -- LIRMM / CNRS / UM
 (Laboratoire d'Informatique, de Robotique et de Microélectronique de Montpellier /
 Centre National de la Recherche Scientifique /
 Université de Montpellier)
