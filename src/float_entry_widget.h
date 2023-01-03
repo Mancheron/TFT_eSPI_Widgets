@@ -95,6 +95,16 @@ namespace TFT_eSPI_Widgets {
    */
   class FloatEntryWidget: public Widget {
 
+  public:
+
+    /**
+     * The type of callback function that can be called when the
+     * float entry widget value is changed.
+     *
+     * \see See onValueChange() method
+     */
+    typedef void (*value_change_cb_t)(Widget &, float, float);
+
   protected:
 
     /**
@@ -121,6 +131,12 @@ namespace TFT_eSPI_Widgets {
      * The maximal allowed value for the widget.
      */
     float _maximal_value;
+
+    /**
+     * A custom callback function to call when this widget value
+     * changes.
+     */
+    value_change_cb_t _value_change_cb;
 
     /**
      * Shrink the current widget area to the smallest dimension that
@@ -166,10 +182,6 @@ namespace TFT_eSPI_Widgets {
 
     /**
      * Creates a float entry widget attached to the given Widget.
-     *
-     * The widget graphical properties (background color, line
-     * color, line width, font color, font size) are inherited from
-     * the parent widget.
      *
      * The widget initial value is 0 by default, but must belong to
      * the interval defined by the minimal_value and maximal_value
@@ -341,6 +353,16 @@ namespace TFT_eSPI_Widgets {
      * Decrement the current value (down to the lower bound).
      */
     void decrValue();
+
+    /**
+     * Any extra action that must operate when the value changes.
+     *
+     * \param cb The callback function to call when the setValue()
+     * method is called on this widget.
+     */
+    inline void onValueChange(const value_change_cb_t cb) {
+      _value_change_cb = cb;
+    }
 
   };
 

@@ -94,6 +94,18 @@ namespace TFT_eSPI_Widgets {
    */
   class StringEntryWidget: public Widget {
 
+
+  public:
+
+   /**
+     * The type of callback function that can be called when the
+     * string entry widget value is changed.
+     *
+     * \see See onValueChange() method
+     */
+    typedef void (*value_change_cb_t)(Widget &, const String &, const String &);
+
+
   protected:
 
     /**
@@ -116,6 +128,12 @@ namespace TFT_eSPI_Widgets {
      * to the top left corner of the inner area).
      */
     Coordinates _offset;
+
+    /**
+     * A custom callback function to call when this widget value
+     * changes.
+     */
+    value_change_cb_t _value_change_cb;
 
     /**
      * Shrink the current widget area to the smallest dimension that
@@ -301,15 +319,21 @@ namespace TFT_eSPI_Widgets {
     /**
      * Set the letter at the cursor position to the next value.
      */
-    inline void nextLetterAtCursorPos() {
-      if (++_value[_pos] > 126) _value[_pos] = 32;
-    }
+    void nextLetterAtCursorPos();
 
     /**
      * Set the letter at the cursor position to the next value.
      */
-    inline void previousLetterAtCursorPos() {
-      if (--_value[_pos] < 32) _value[_pos] = 126;
+    void previousLetterAtCursorPos();
+
+    /**
+     * Any extra action that must operate when the value changes.
+     *
+     * \param cb The callback function to call when the setValue()
+     * method is called on this widget.
+     */
+    inline void onValueChange(const value_change_cb_t cb) {
+      _value_change_cb = cb;
     }
 
   };

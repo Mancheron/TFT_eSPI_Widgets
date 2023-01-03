@@ -95,6 +95,16 @@ namespace TFT_eSPI_Widgets {
    */
   class IntegerEntryWidget: public Widget {
 
+  public:
+
+    /**
+     * The type of callback function that can be called when the
+     * integer entry widget value is changed.
+     *
+     * \see See onValueChange() method
+     */
+    typedef void (*value_change_cb_t)(Widget &, int32_t, int32_t);
+
   protected:
 
     /**
@@ -111,6 +121,12 @@ namespace TFT_eSPI_Widgets {
      * The maximal allowed value for the widget.
      */
     int32_t _maximal_value;
+
+    /**
+     * A custom callback function to call when this widget value
+     * changes.
+     */
+    value_change_cb_t _value_change_cb;
 
     /**
      * Shrink the current widget area to the smallest dimension that
@@ -225,7 +241,11 @@ namespace TFT_eSPI_Widgets {
      * current value is set to the maximal value.
      */
     inline void setValue(int32_t v) {
+      int32_t orig_value = _value;
       _value = constrain(v, _minimal_value, _maximal_value);
+      if (_value_change_cb and (orig_value != _value)) {
+        _value_change_cb(*this, orig_value, _value);
+      }
     }
 
     /**
@@ -282,6 +302,16 @@ namespace TFT_eSPI_Widgets {
      */
     inline void decrValue() {
       setValue(--_value);
+    }
+
+    /**
+     * Any extra action that must operate when the value changes.
+     *
+     * \param cb The callback function to call when the setValue()
+     * method is called on this widget.
+     */
+    inline void onValueChange(const value_change_cb_t cb) {
+      _value_change_cb = cb;
     }
 
   };

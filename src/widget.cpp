@@ -299,7 +299,7 @@ void Widget::unfocus() {
 
 void Widget::handleEvent(Event event) {
   if (hasFocus()) {
-    bool raise_event = (!_event_handler_cb or _event_handler_cb(*this, event));
+    bool raise_event = !(_event_handler_cb and _event_handler_cb(*this, event));
     switch (event) {
     case TRIPLE_RIGHT_CLICK:
       if (_child) {

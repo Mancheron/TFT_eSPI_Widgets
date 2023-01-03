@@ -198,7 +198,7 @@ namespace TFT_eSPI_Widgets {
       if (_focus_widget and (_focus_widget != this)) {
         _focus_widget->handleEvent(event);
       } else {
-        if (event == TRIPLE_LEFT_CLICK) {
+        if (event == TRIPLE_RIGHT_CLICK) {
           if (!_focus_widget) {
             focus();
           }

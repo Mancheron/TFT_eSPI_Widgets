@@ -105,6 +105,7 @@ StringEntryWidget::StringEntryWidget(Widget &parent,
 }
 
 void StringEntryWidget::setValue(const String &v) {
+  String orig_value = _value;
   size_t n = v.length();
   size_t l = _value.length();
   for (size_t i = 0; i < l; ++i) {
@@ -116,6 +117,9 @@ void StringEntryWidget::setValue(const String &v) {
       }
     }
     _value[i] = c;
+  }
+  if (_value_change_cb and (orig_value != _value)) {
+    _value_change_cb(*this, orig_value, _value);
   }
 }
 
@@ -219,5 +223,21 @@ void StringEntryWidget::_loop(bool recurse) {
   unsigned long now = millis();
   if (now - _last_update > 500) {
     touch();
+  }
+}
+
+void StringEntryWidget::nextLetterAtCursorPos() {
+  String orig_value = _value;
+  if (++_value[_pos] > 126) _value[_pos] = 32;
+  if (_value_change_cb) {
+    _value_change_cb(*this, orig_value, _value);
+  }
+}
+
+void StringEntryWidget::previousLetterAtCursorPos() {
+  String orig_value = _value;
+  if (--_value[_pos] < 32) _value[_pos] = 126;
+  if (_value_change_cb) {
+    _value_change_cb(*this, orig_value, _value);
   }
 }
