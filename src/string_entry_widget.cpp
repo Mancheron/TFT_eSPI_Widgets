@@ -94,7 +94,8 @@ StringEntryWidget::StringEntryWidget(Widget &parent,
   _value(), // Reset by setValue() in the constructor body
   _pos(0), // Reset by the setCursorPos() in the constructor body
   _last_update(millis()),
-  _offset()
+  _offset(),
+  _value_change_cb(NULL)
 {
   _value.reserve(entry_length);
   for (size_t i = 0; i < entry_length; ++i) {
@@ -202,7 +203,7 @@ void StringEntryWidget::_draw() {
   tft.drawFastHLine(_offset.x, _offset.y + c_h + 1, lg, props.getFontColor());
   bool inversion = _last_update & 1lu; // Using the _last_update millisecond as color inversion status
   _last_update = millis();
-  if (inversion) {
+  if (hasFocus() and inversion) {
     // draw current position with inverted colors
     tft.fillRect(_offset.x + _pos * c_w - 1, _offset.y - 1, c_w, c_h, props.getFontColor());
     tft.setTextColor(props.getBackgroundColor());

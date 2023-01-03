@@ -165,10 +165,9 @@ void setup(void) {
   // Force redraw on next loop.
   canvas.touch();
 
-  Serial.print("- root widget type is: ");
-  Serial.println(canvas.getTypeString());
-  Serial.print("- child widget type is: ");
-  Serial.println(canvas.getChild().getTypeString());
+  // Print widget tree on Serial.
+  Serial.println("Widget tree:");
+  canvas.print();
 
   Serial.println("[End of demo setup]");
   Serial.println("It is required to have two 'buttons' that can send events.");

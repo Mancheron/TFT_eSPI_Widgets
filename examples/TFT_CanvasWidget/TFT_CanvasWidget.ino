@@ -161,6 +161,11 @@ void setup(void) {
   // Add a calbback on Canvas loop() method called in order to perform
   // some extra actions.
   canvas.onLoop(onCanvasLoopCb);
+
+  // Print widget tree on Serial.
+  Serial.println("Widget tree:");
+  canvas.print();
+
   Serial.println("[End of demo setup]");
 }
 

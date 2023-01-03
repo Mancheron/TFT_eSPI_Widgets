@@ -297,7 +297,9 @@ namespace TFT_eSPI_Widgets {
      *
      * \return This method returns the TFT screen object.
      */
-    inline virtual TFT_eSPI &_getTFT() const { return _root._getTFT(); }
+    inline virtual TFT_eSPI &_getTFT() const {
+      return _root._getTFT();
+    }
 
     /**
      * Fit the current widget area to the inner area of its parent.
@@ -483,6 +485,19 @@ namespace TFT_eSPI_Widgets {
      */
     inline virtual void _refresh() {}
 
+    /**
+     * Print the current widget subtree.
+     *
+     * \see This is called by the print() method.
+     *
+     * \param prefix String to prepend to the current widget
+     * description.
+     *
+     * \param printer The Print object to print on (Serial by
+     * default).
+     */
+    virtual void _print(const String &prefix, Print &printer) const;
+
   public:
 
     /**
@@ -651,10 +666,20 @@ namespace TFT_eSPI_Widgets {
      *
      * \param t The widget type.
      *
-     * \return Return a C string human readable name for the given
+     * \return Return a human readable name C string for the given
      * type.
      */
     static const char *getTypeString(Type t);
+
+    /**
+     * Return the given event type as a string.
+     *
+     * \param e The event.
+     *
+     * \return Return a human readable name C string for the given
+     * event.
+     */
+    static const char *getEventString(Event e);
 
     /**
      * Return the widget type as a string.
@@ -1082,6 +1107,20 @@ namespace TFT_eSPI_Widgets {
      * default).
      */
     void loop(bool recurse = true);
+
+    /**
+     * Print the current widget and its subtree.
+     *
+     * \see This internally calls the _print() protected virtual
+     * method.
+     *
+     * \param prefix String to prepend to the current widget
+     * description.
+     *
+     * \param printer The Print object to print on (Serial by
+     * default).
+     */
+    void print(const String &prefix = "- ", Print &printer = Serial) const;
 
   };
 

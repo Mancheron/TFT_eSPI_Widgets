@@ -102,6 +102,19 @@ const char *Widget::getTypeString(Type t) {
   }
 }
 
+const char *Widget::getEventString(Event e) {
+  switch (e) {
+    TYPE2CSTR_CASE(SINGLE_LEFT_CLICK);
+    TYPE2CSTR_CASE(DOUBLE_LEFT_CLICK);
+    TYPE2CSTR_CASE(TRIPLE_LEFT_CLICK);
+    TYPE2CSTR_CASE(LONG_LEFT_PRESS);
+    TYPE2CSTR_CASE(SINGLE_RIGHT_CLICK);
+    TYPE2CSTR_CASE(DOUBLE_RIGHT_CLICK);
+    TYPE2CSTR_CASE(TRIPLE_RIGHT_CLICK);
+    TYPE2CSTR_CASE(LONG_RIGHT_PRESS);
+  }
+}
+
 Widget::Widget():
   _root(*this),
   _parent(*this),
@@ -395,4 +408,20 @@ void Widget::loop(bool recurse) {
   if (recurse and _child) {
     _child->loop(recurse);
   }
+}
+
+void Widget::_print(const String &prefix, Print &printer) const {
+  printer.printf("(%s)", getTypeString());
+  if (hasChild()) {
+    printer.println(":");
+    getChild().print("  " + prefix, printer);
+  } else {
+    printer.println("");
+  }
+}
+
+void Widget::print(const String &prefix, Print &printer) const {
+  printer.print(prefix);
+  printer.printf("Widget %lu [%s] ", id, getArea(true).toString().c_str());
+  _print(prefix, printer);
 }

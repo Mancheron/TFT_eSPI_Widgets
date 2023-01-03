@@ -149,16 +149,14 @@ void setup(void) {
   p.setBorderColor(TFT_BLACK);
   p.setFontColor(TFT_WHITE);
   canvas.getChild().getChild().setFocusGraphicalProperties(p);
+  canvas.getChild().getChild().setAcceptFocus(true);
 
   // Force redraw on next loop.
   canvas.touch();
 
-  Serial.print("- root widget type is: ");
-  Serial.println(canvas.getTypeString());
-  Serial.print("- child widget type is: ");
-  Serial.println(canvas.getChild().getTypeString());
-  Serial.print("- grandchild widget type is: ");
-  Serial.println(canvas.getChild().getChild().getTypeString());
+  // Print widget tree on Serial.
+  Serial.println("Widget tree:");
+  canvas.print();
 
   Serial.println("[End of demo setup]");
   Serial.println("The first message will be prompted for only 5 seconds.");

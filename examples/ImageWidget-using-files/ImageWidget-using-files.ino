@@ -130,10 +130,9 @@ void setup(void) {
   // on the canvas.
   canvas.getChild().shrink(50, 50);
 
-  Serial.print("- root widget type is: ");
-  Serial.println(canvas.getTypeString());
-  Serial.print("- child widget type is: ");
-  Serial.println(canvas.getChild().getTypeString());
+  // Print widget tree on Serial.
+  Serial.println("Widget tree:");
+  canvas.print();
 
   Serial.println("[End of demo setup]");
   Serial.println("Images will be displayed for 2 seconds.");

@@ -93,7 +93,8 @@ IntegerEntryWidget::IntegerEntryWidget(Widget &parent,
   Widget(parent, area),
   _value(constrain(initial_value, minimal_value, maximal_value)),
   _minimal_value(minimal_value),
-  _maximal_value(maximal_value)
+  _maximal_value(maximal_value),
+  _value_change_cb(NULL)
 {}
 
 void IntegerEntryWidget::_handleEvent(Event event) {

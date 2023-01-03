@@ -95,7 +95,8 @@ FloatEntryWidget::FloatEntryWidget(Widget &parent,
   _value(initial_value), // reset by setValue() in constructor body
   _precision(precision), // reset by setPrecision() in constructor body
   _minimal_value(minimal_value),
-  _maximal_value(maximal_value)
+  _maximal_value(maximal_value),
+  _value_change_cb(NULL)
 {
   setPrecision(precision); // This is to ensure constraints on precision are respected
   setValue(initial_value); // This is to ensure constraints on value are respected

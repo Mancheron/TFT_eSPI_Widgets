@@ -103,12 +103,17 @@ PhysicalButtonHandler right_btn(0, HIGH);
 // times.
 bool onDoubleClickCb(Widget &w, Event e) {
   FloatEntryWidget &_w = w.as<FloatEntryWidget>();
-  if (e == DOUBLE_LEFT_CLICK) {
-    _w.setValue(_w.getValue() - 10 * _w.getDelta());
-  } else if (e == DOUBLE_RIGHT_CLICK) {
-    _w.setValue(_w.getValue() + 10 * _w.getDelta());
+  bool handled = false;
+  if ((e == DOUBLE_LEFT_CLICK) || (e == DOUBLE_RIGHT_CLICK)) {
+    if (e == DOUBLE_LEFT_CLICK) {
+      _w.setValue(_w.getValue() - 10 * _w.getDelta());
+    } else {
+      _w.setValue(_w.getValue() + 10 * _w.getDelta());
+    }
+    _w.touch();
+    handled = true;
   }
-  return true;
+  return handled;
 }
 
 // Capture left and right buttons' events and pass them to the canvas
@@ -182,10 +187,9 @@ void setup(void) {
   // Force redraw on next loop.
   canvas.touch();
 
-  Serial.print("- root widget type is: ");
-  Serial.println(canvas.getTypeString());
-  Serial.print("- child widget type is: ");
-  Serial.println(canvas.getChild().getTypeString());
+  // Print widget tree on Serial.
+  Serial.println("Widget tree:");
+  canvas.print();
 
   Serial.println("[End of demo setup]");
   Serial.println("It is required to have two 'buttons' that can send events.");
