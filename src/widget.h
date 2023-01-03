@@ -166,7 +166,22 @@ namespace TFT_eSPI_Widgets {
    */
   class Widget {
 
+    /**
+     * The counter for setting widget IDs.
+     */
+    static size_t _counter;
+
   public:
+
+    /**
+     * Retrieve the current ID counter value.
+     *
+     * \return This gives the number of created widgets since the
+     * beginning.
+     */
+    inline static size_t getCounter() {
+      return _counter;
+    }
 
     /**
      * The type of callback function that can be applyed to add some
@@ -461,6 +476,11 @@ namespace TFT_eSPI_Widgets {
     inline virtual void _refresh() {}
 
   public:
+
+    /**
+     * This widget ID.
+     */
+    const size_t id;
 
     /**
      * Creates an orphan widget with an empty area.

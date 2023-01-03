@@ -85,6 +85,8 @@
 
 using namespace TFT_eSPI_Widgets;
 
+size_t Widget::_counter = 0;
+
 #define TYPE2CSTR_CASE(t) case t: return #t
 
 const char *Widget::getTypeString(Type t) {
@@ -129,7 +131,8 @@ Widget::Widget(Widget &parent, const Area &area):
   _refresh_cb(NULL),
   _loop_cb(NULL),
   _focus_cb(NULL),
-  _unfocus_cb(NULL)
+  _unfocus_cb(NULL),
+  id(++_counter)
 {
   setArea(area);
   _parent.removeChild();
