@@ -86,25 +86,7 @@
 
 #include "widget.h"
 
-#if defined(ESP32)
-#  include <FS.h>
-typedef fs::File File;
-#else
-#  include <SD.h>
-typedef SDLib::File File;
-#endif
-
 namespace TFT_eSPI_Widgets {
-
-
-/**
- * The File class is hardware dependent.
- *
- * The only requirement is this class must have the same interface
- * than the official Arduino SD library (at least open(), close(),
- * exists(), and boolean cast operator).
- */
-//class File;
 
   /**
    * A widget to display images.

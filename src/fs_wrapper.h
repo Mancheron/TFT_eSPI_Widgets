@@ -81,25 +81,34 @@
  *                                                                             *
  ******************************************************************************/
 
-#ifndef __TFT_ESPI_WIDGETS_H__
-#define __TFT_ESPI_WIDGETS_H__
+#ifndef __FS_WRAPPER_H__
+#define __FS_WRAPPER_H__
 
-#include <TFT_eSPI.h>
+#  if not(defined(USE_SPIFFS) | defined(USE_LittleFS) | defined(USE_SDFS))
+#    if defined(ESP32)
+#      define USE_SPIFFS
+#    elif defined(ESP8266)
+#      define USE_LittleFS
+#    else
+#      define USE_SDFS
+#    endif
+#  endif
 
-#include "src/area.h"
-#include "src/button_handler.h"
-#include "src/canvas.h"
-#include "src/coordinates.h"
-#include "src/dimensions.h"
-#include "src/float_entry_widget.h"
-#include "src/fs_wrapper.h"
-#include "src/generic_widget.h"
-#include "src/graphical_properties.h"
-#include "src/image_widget.h"
-#include "src/integer_entry_widget.h"
-#include "src/message_widget.h"
-#include "src/physical_button_handler.h"
-#include "src/string_entry_widget.h"
-#include "src/widget.h"
+#  if defined(USE_SPIFFS)
+#    include <FS.h>
+#    include <SPIFFS.h>
+#    define TFT_eSPI_Widgets_FS SPIFFS
+#  elif defined(USE_LittleFS)
+#    include <FS.h>
+#    include <LittleFS.h>
+#    define TFT_eSPI_Widgets_FS LittleFS
+#  elif defined(USE_SDFS)
+#    include <SDFS.h>
+#    define TFT_eSPI_Widgets_FS SDFS
+#  else
+#    warn "No file system specified using legacy SD."
+#    include <SD.h>
+#    define TFT_eSPI_Widgets_FS SDLib::SD
+#  endif
 
 #endif

@@ -85,17 +85,7 @@
 #include <PNGdec.h>
 #include <TJpg_Decoder.h>
 
-#if defined(ESP32)
-#  include <FS.h>
-#  include <SPIFFS.h>
-#  define TFT_eSPI_Widgets_FS SPIFFS
-#elif defined(ESP8266)
-#  include <LittleFS.h>
-#  define TFT_eSPI_Widgets_FS LittleFS
-#else
-#  include <SD.h>
-#  define TFT_eSPI_Widgets_FS SDLib::SD
-#endif
+#include "fs_wrapper.h"
 
 using namespace TFT_eSPI_Widgets;
 
