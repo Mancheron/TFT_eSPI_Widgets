@@ -202,9 +202,10 @@ namespace TFT_eSPI_Widgets {
     /**
      * Creates a message widget attached to the given Widget.
      *
-     * The widget graphical properties (background color, line
-     * color, line width, font color, font size) are inherited from
-     * the parent widget.
+     * The widget graphical properties (background color, line color,
+     * line width, font color, font size) are inherited from the
+     * parent widget. This widget doesn't accept the focus by default
+     * (this can be changed using the setAcceptFocus() method).
      *
      * \param parent The parent widget of the current one. Be aware
      * that if this parent already has a child widget, then this child

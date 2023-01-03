@@ -225,9 +225,10 @@ namespace TFT_eSPI_Widgets {
     /**
      * Creates an image widget attached to the given Widget.
      *
-     * The widget graphical properties (background color, line
-     * color, line width, font color, font size) are inherited from
-     * the parent widget.
+     * The widget graphical properties (background color, line color,
+     * line width, font color, font size) are inherited from the
+     * parent widget. This widget doesn't accept the focus by default
+     * (this can be changed using the setAcceptFocus() method).
      *
      * The image is displayed with its natural dimensions and is not
      * resized to fit or expand to this inner area.

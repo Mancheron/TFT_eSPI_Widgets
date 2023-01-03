@@ -183,6 +183,7 @@ ImageWidget::ImageWidget(Widget &parent,
   _dimensions(Dimensions::empty),
   _offset(offset)
 {
+  setAcceptFocus(false);
   if (!_mutex) {
     _mutex = xSemaphoreCreateBinaryStatic(&_mutex_buffer);
     xSemaphoreGive(_mutex);
@@ -201,7 +202,9 @@ ImageWidget::ImageWidget(Widget &parent,
   _data(data),
   _dimensions(dimensions),
   _offset(offset)
-{}
+{
+  setAcceptFocus(false);
+}
 
 void ImageWidget::_shrink(bool recurse, bool check_for_update) {
   _updateDimensions();

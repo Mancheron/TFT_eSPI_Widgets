@@ -158,12 +158,14 @@ namespace TFT_eSPI_Widgets {
      */
     inline virtual void _setFocus(Widget &w) {
       _ensure_initialized();
-      if (_focus_widget) {
-        _transmit_focus = false;
-        _focus_widget->unfocus();
-        _transmit_focus = true;
+      if (w.getAcceptFocus()) {
+        if (_focus_widget and (_focus_widget != &w)) {
+          _transmit_focus = false;
+          _focus_widget->unfocus();
+          _transmit_focus = true;
+        }
+        _focus_widget = &w;
       }
-      _focus_widget = &w;
     }
 
     /**

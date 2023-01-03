@@ -107,6 +107,7 @@ Widget::Widget():
   _parent(*this),
   _child(NULL),
   _area(),
+  _accept_focus(true),
   _default_graph_props(),
   _focus_graph_props(),
   _need_update(false),
@@ -115,7 +116,8 @@ Widget::Widget():
   _refresh_cb(NULL),
   _loop_cb(NULL),
   _focus_cb(NULL),
-  _unfocus_cb(NULL)
+  _unfocus_cb(NULL),
+  id(++_counter)
 {}
 
 Widget::Widget(Widget &parent, const Area &area):
@@ -123,6 +125,7 @@ Widget::Widget(Widget &parent, const Area &area):
   _parent(parent),
   _child(NULL),
   _area(),
+  _accept_focus(parent._accept_focus),
   _default_graph_props(parent._default_graph_props),
   _focus_graph_props(parent._focus_graph_props),
   _need_update(false),
@@ -285,19 +288,33 @@ void Widget::touchOnAreaChanges(const Area &orig_area) {
 }
 
 void Widget::focus() {
-  if (_focus_cb) {
-    _focus_cb(*this);
+  if (_accept_focus) {
+    if (_focus_cb) {
+      _focus_cb(*this);
+    }
+    _focus(); // Specific widget subclass focus action (if any).
+    _setFocus(*this); // Root of the widget tree can now focus this widget.
+    touch();
+  } else {
+    if (hasChild()) {
+      getChild().focus();
+    }
   }
-  _setFocus(*this);
-  touch();
 }
 
 void Widget::unfocus() {
-  if (_unfocus_cb) {
-    _unfocus_cb(*this);
+  if (_accept_focus) {
+    if (_unfocus_cb) {
+      _unfocus_cb(*this);
+    }
+    _unfocus(); // Specific widget subclass unfocus action (if any).
+    _unsetFocus(*this); // Root of the widget tree can now unfocus this widget.
+    touch();
+  } else {
+    if (!isRoot()) {
+      getParent().unfocus();
+    }
   }
-  _unsetFocus(*this);
-  touch();
 }
 
 void Widget::handleEvent(Event event) {

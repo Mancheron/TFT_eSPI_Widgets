@@ -103,6 +103,7 @@ MessageWidget::MessageWidget(Widget &parent,
   _stick_delay(stick_delay),
   _step(step)
 {
+  setAcceptFocus(false);
   updateMessage();
 }
 

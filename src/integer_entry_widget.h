@@ -173,9 +173,10 @@ namespace TFT_eSPI_Widgets {
     /**
      * Creates an integer entry widget attached to the given Widget.
      *
-     * The widget graphical properties (background color, line
-     * color, line width, font color, font size) are inherited from
-     * the parent widget.
+     * The widget graphical properties (background color, line color,
+     * line width, font color, font size) are inherited from the
+     * parent widget. This widget accepts the focus if and only of its
+     * parent does too.
      *
      * The widget initial value is 0 by default, but must belong to
      * the interval defined by the minimal_value and maximal_value

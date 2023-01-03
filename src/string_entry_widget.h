@@ -204,9 +204,10 @@ namespace TFT_eSPI_Widgets {
     /**
      * Creates a string entry widget attached to the given Widget.
      *
-     * The widget graphical properties (background color, line
-     * color, line width, font color, font size) are inherited from
-     * the parent widget.
+     * The widget graphical properties (background color, line color,
+     * line width, font color, font size) are inherited from the
+     * parent widget. This widget accepts the focus if and only of its
+     * parent does too.
      *
      * \param parent The parent widget of the current one. Be aware
      * that if this parent already has a child widget, then this child

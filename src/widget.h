@@ -225,6 +225,14 @@ namespace TFT_eSPI_Widgets {
     Area _area;
 
     /**
+     * The widget focus acceptation status.
+     *
+     * If this widget doesn't accept the focus, then giving it the
+     * focus does nothing.
+     */
+    bool _accept_focus;
+
+    /**
      * The graphical properties to use to draw the widget when it
      * hasn't got the focus.
      */
@@ -484,6 +492,10 @@ namespace TFT_eSPI_Widgets {
 
     /**
      * Creates an orphan widget with an empty area.
+     *
+     * \remark This widget accept being focused by default. To prevent
+     * being focused, it is needed to call the setAcceptFocus()
+     * method.
      */
     Widget();
 
@@ -493,7 +505,8 @@ namespace TFT_eSPI_Widgets {
      *
      * The widget graphical properties (background color, line color,
      * line width, font color, font size) are inherited from the
-     * parent widget.
+     * parent widget. This widget accepts the focus if and only of its
+     * parent does too.
      *
      * \param parent The parent widget of the current one. Be aware
      * that if this parent already has a child widget, then this child
@@ -956,6 +969,26 @@ namespace TFT_eSPI_Widgets {
      */
     inline bool hasFocus() const {
       return _hasFocus(*this);
+    }
+
+    /**
+     * Get the accept focus status.
+     *
+     * \return This is true if this widget can be focused and false
+     * otherwise.
+     */
+    inline bool getAcceptFocus() const {
+      return _accept_focus;
+    }
+
+    /**
+     * Set the accept focus status.
+     *
+     * \param status When set to true, this widget can be focused
+     * whereas it can't be anymore if set to false.
+     */
+    inline virtual void setAcceptFocus(bool status) {
+      _accept_focus = status;
     }
 
     /**
