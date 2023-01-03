@@ -255,12 +255,7 @@ namespace TFT_eSPI_Widgets {
      * value is greater than the maximal widget value, then the
      * current value is set to the maximal value.
      */
-    inline void setValue(float v) {
-      float delta = getDelta();
-      v = roundf(v / delta) * delta;
-      _value = constrain(v, _minimal_value, _maximal_value);
-    }
-
+    void setValue(float v);
 
     /**
      * Get the current widget floating point number precision.

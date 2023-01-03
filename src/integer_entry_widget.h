@@ -294,14 +294,14 @@ namespace TFT_eSPI_Widgets {
      * Increment the current value (up to the upper bound).
      */
     inline void incrValue() {
-      setValue(++_value);
+      setValue(_value + 1);
     }
 
     /**
      * Decrement the current value (down to the lower bound).
      */
     inline void decrValue() {
-      setValue(--_value);
+      setValue(_value - 1);
     }
 
     /**

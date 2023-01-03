@@ -202,6 +202,22 @@ void FloatEntryWidget::_draw() {
   }
 }
 
+void FloatEntryWidget::setValue(float v) {
+  float orig_value = _value;
+  // The following code doesn't behave as calling directly setValue(v)
+  // since the rounding is operated according to the current widget
+  // value and when next expected value is one level of exponent less,
+  // the result of setValue(v) doesn't change the current wigdet value
+  // since the delta is 10 times smaller than the rounding threshold.
+  _value = constrain(v, _minimal_value, _maximal_value);
+  float delta = getDelta();
+  v = roundf(v / delta) * delta;
+  _value = constrain(v, _minimal_value, _maximal_value);
+  if (_value_change_cb and (orig_value != _value)) {
+    _value_change_cb(*this, orig_value, _value);
+  }
+}
+
 void FloatEntryWidget::incrValue() {
   float delta = getDelta();
   float step = powf(10, -_precision);
@@ -211,15 +227,7 @@ void FloatEntryWidget::incrValue() {
       delta = step;
     }
   }
-  // The following code doesn't behave as calling directly
-  // setValue(_value + _delta) since the rounding is operated
-  // accroding to the current widget value and when next expected
-  // value is one level of exponent less, the result of
-  // setValue(_value + delta) doesn't change the current wigdet
-  // value since the delta is 10 times smalled than the rounding
-  // threshold.
-  _value = constrain(_value + delta, _minimal_value, _maximal_value);
-  setValue(_value);
+  setValue(_value + delta);
 }
 
 void FloatEntryWidget::decrValue() {
@@ -231,13 +239,5 @@ void FloatEntryWidget::decrValue() {
       delta = step;
     }
   }
-  // The following code doesn't behave as calling directly
-  // setValue(_value - _delta) since the rounding is operated
-  // accroding to the current widget value and when next expected
-  // value is one level of exponent less, the result of
-  // setValue(_value - delta) doesn't change the current wigdet
-  // value since the delta is 10 times smalled than the rounding
-  // threshold.
-  _value = constrain(_value - delta, _minimal_value, _maximal_value);
-  setValue(_value);
+  setValue(_value - delta);
 }
