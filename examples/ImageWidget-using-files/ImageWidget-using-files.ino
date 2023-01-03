@@ -82,8 +82,6 @@
  ******************************************************************************/
 
 #include <TFT_eSPI_Widgets.h>
-#include <FS.h>
-#include <SPIFFS.h>
 
 using namespace TFT_eSPI_Widgets;
 
@@ -102,12 +100,14 @@ void setup(void) {
   while (!Serial) {
     delay(100);
   }
-  Serial.println("Starting TFT_eSPI Widget library Message demo...");
-  Serial.println("[Mounting SPIFFS]");
-  if(!SPIFFS.begin(false)){
-    Serial.println("SPIFFS mount Failed!!!");
+  Serial.println("Starting TFT_eSPI Widget library Image (using files) demo...");
+
+  Serial.println("[Mounting " stringify(TFT_eSPI_Widgets_FS) "]");
+  if(!TFT_eSPI_Widgets_FS.begin(false)){
+    Serial.println(stringify(TFT_eSPI_Widgets_FS) " mount Failed!!!");
     return;
   }
+
   tft.init();
   tft.setRotation(1);
   canvas.init(tft,
@@ -129,6 +129,10 @@ void setup(void) {
   // Shrink the image widget to fit the image dimensions and center it
   // on the canvas.
   canvas.getChild().shrink(50, 50);
+
+  // Print file system content.
+  Serial.println("Files on storage:");
+  listDirectoryContent();
 
   // Print widget tree on Serial.
   Serial.println("Widget tree:");

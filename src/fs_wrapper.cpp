@@ -81,60 +81,31 @@
  *                                                                             *
  ******************************************************************************/
 
-#ifndef __FS_WRAPPER_H__
-#define __FS_WRAPPER_H__
+#include "fs_wrapper.h"
 
-#  if not(defined(USE_SPIFFS) | defined(USE_LittleFS) | defined(USE_SDFS))
-#    if defined(ESP32)
-#      define USE_SPIFFS
-#    elif defined(ESP8266)
-#      define USE_LittleFS
-#    else
-#      define USE_SDFS
-#    endif
-#  endif
+void TFT_eSPI_Widgets::listDirectoryContent(fs::FS &fs, const char * dirname, uint8_t levels, Print &printer) {
+  printer.printf("Listing directory: %s\r\n", dirname);
 
-#  if defined(USE_SPIFFS)
-#    include <FS.h>
-#    include <SPIFFS.h>
-#    define TFT_eSPI_Widgets_FS SPIFFS
-#  elif defined(USE_LittleFS)
-#    include <FS.h>
-#    include <LittleFS.h>
-#    define TFT_eSPI_Widgets_FS LittleFS
-#  elif defined(USE_SDFS)
-#    include <SDFS.h>
-#    define TFT_eSPI_Widgets_FS SDFS
-#  else
-#    warn "No file system specified using legacy SD."
-#    include <SD.h>
-#    define TFT_eSPI_Widgets_FS SDLib::SD
-#  endif
+  fs::File root = fs.open(dirname);
+  if (!root) {
+    printer.println("- failed to open directory");
+    return;
+  }
+  if (!root.isDirectory()) {
+    printer.println(" - not a directory");
+    return;
+  }
 
-#  define _str(s) #s
-#  define stringify(s) _str(s)
-// Useful for expand and print the wrapped file system as a C string.
-// stringify(TFT_eSPI_Widgets_FS) will return the real C string:
-// "SPIFFS" or "LittleFS" or "SDFS" or "SDLib::SD".
-
-namespace TFT_eSPI_Widgets {
-
-  /**
-   * List files stored in the file system.
-   *
-   * \param fs The file system.
-   *
-   * \param dirname The name of the path to list file content.
-   *
-   * \param levels The maximal depth for recursion.
-   *
-   * \param printer The Printable object to print on.
-   */
-  void listDirectoryContent(fs::FS &fs = TFT_eSPI_Widgets_FS,
-                            const char * dirname = "/",
-                            uint8_t levels = 10,
-                            Print &printer = Serial);
-
+  fs::File file = root.openNextFile();
+  while (file) {
+    if (file.isDirectory()) {
+      printer.printf("%s [dir]:\n", file.name());
+      if (levels) {
+        listDirectoryContent(fs, file.name(), levels - 1, printer);
+      }
+    } else {
+      printer.printf("- %s\t[%10d B]\n", file.name(), file.size());
+    }
+    file = root.openNextFile();
+  }
 }
-
-#endif
