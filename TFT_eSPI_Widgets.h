@@ -100,6 +100,7 @@
 #include "src/message_widget.h"
 #include "src/physical_button_handler.h"
 #include "src/string_entry_widget.h"
+#include "src/splitter_widget.h"
 #include "src/widget.h"
 
 #endif

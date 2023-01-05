@@ -95,14 +95,16 @@ namespace TFT_eSPI_Widgets {
    * The kind of widget currently displayed on the screen.
    */
   enum Type {
-             CANVAS,        /**< Canvas widget. */
-             GENERIC,       /**< Generic widget. */
-             IMAGE,         /**< Image widget. */
-             INT_ENTRY,     /**< Integer entry widget. */
-             FLOAT_ENTRY,   /**< Float entry widget. */
-             STRING_ENTRY,  /**< String entry widget. */
-             MESSAGE,       /**< Simple message widget. */
-             CUSTOM,        /**< Custom widget. */
+             CANVAS,         /**< Canvas widget. */
+             GENERIC,        /**< Generic widget. */
+             IMAGE,          /**< Image widget. */
+             INT_ENTRY,      /**< Integer entry widget. */
+             FLOAT_ENTRY,    /**< Float entry widget. */
+             STRING_ENTRY,   /**< String entry widget. */
+             MESSAGE,        /**< Simple message widget. */
+             SPLITTER,       /**< Splitter widget */
+             SPLITTER_CHILD, /**< Splitter child widget */
+             CUSTOM,         /**< Custom widget. */
   };
 
   /**
@@ -209,7 +211,7 @@ namespace TFT_eSPI_Widgets {
     /**
      * The parent of the current widget in the widget tree
      */
-    Widget &_parent;
+    Widget *_parent;
 
     /**
      * The address of the child widget (if any).
@@ -584,7 +586,7 @@ namespace TFT_eSPI_Widgets {
      * widget tree (see getRoot() documentation).
      */
     inline Widget &getParent() const {
-      return _parent;
+      return *_parent;
     }
 
     /**
@@ -646,6 +648,16 @@ namespace TFT_eSPI_Widgets {
     T &getChild() const {
       return _child->as<T>();
     }
+
+    /**
+     * Set the given widget as current widget child.
+     *
+     * \see This method internally call removeChild() prior to add the
+     * given widget as a child.
+     *
+     * \param w The widget to set as current widget child.
+     */
+    virtual void setChild(Widget &w);
 
     /**
      * Remove current widget child and all its descendants in the

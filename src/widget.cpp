@@ -98,6 +98,8 @@ const char *Widget::getTypeString(Type t) {
     TYPE2CSTR_CASE(FLOAT_ENTRY);
     TYPE2CSTR_CASE(STRING_ENTRY);
     TYPE2CSTR_CASE(MESSAGE);
+    TYPE2CSTR_CASE(SPLITTER);
+    TYPE2CSTR_CASE(SPLITTER_CHILD);
     TYPE2CSTR_CASE(CUSTOM);
   }
 }
@@ -117,7 +119,7 @@ const char *Widget::getEventString(Event e) {
 
 Widget::Widget():
   _root(*this),
-  _parent(*this),
+  _parent(this),
   _child(NULL),
   _area(),
   _accept_focus(true),
@@ -135,7 +137,7 @@ Widget::Widget():
 
 Widget::Widget(Widget &parent, const Area &area):
   _root(parent._root),
-  _parent(parent),
+  _parent(&parent),
   _child(NULL),
   _area(),
   _accept_focus(parent._accept_focus),
@@ -151,17 +153,22 @@ Widget::Widget(Widget &parent, const Area &area):
   id(++_counter)
 {
   setArea(area);
-  _parent.removeChild();
-  _parent._child = this;
+  _parent->setChild(*this);
 }
 
 Widget::~Widget() {
   unfocus();
   removeChild();
   if (!isRoot()) {
-    _parent._child = NULL;
+    _parent->_child = NULL;
     yield();
   }
+}
+
+void Widget::setChild(Widget &w) {
+  removeChild();
+  _child = &w;
+  yield();
 }
 
 void Widget::removeChild() {
@@ -176,8 +183,8 @@ Area Widget::getArea(bool absolute) const {
   Area area = _area;
   if (!isRoot()) {
     if (!absolute) {
-      area.x -= _parent._area.x;
-      area.y -= _parent._area.y;
+      area.x -= _parent->_area.x;
+      area.y -= _parent->_area.y;
     }
   }
   return area;
@@ -212,8 +219,8 @@ void Widget::setArea(const Area &area, bool absolute, bool check_for_update) {
     } else {
       _area = area;
       if (!absolute) {
-        _area.x += _parent._area.x;
-        _area.y += _parent._area.y;
+        _area.x += _parent->_area.x;
+        _area.y += _parent->_area.y;
       }
     }
   }
@@ -227,7 +234,7 @@ void Widget::fit(bool recurse, bool check_for_update) {
   if (isRoot()) {
     _area = getScreenArea();
   } else {
-    _area = _parent.getInnerArea(true);
+    _area = _parent->getInnerArea(true);
   }
   _fit(recurse, check_for_update);
   if (recurse and _child) {
@@ -268,7 +275,7 @@ void Widget::setPosition(uint8_t horizontal, uint8_t vertical, bool check_for_up
   if (isRoot()) {
     area = getScreenArea();
   } else {
-    area = _parent.getInnerArea(true);
+    area = _parent->getInnerArea(true);
   }
   if (horizontal != -1) {
     horizontal = constrain(horizontal, 0, 100);
@@ -295,7 +302,7 @@ void Widget::touchOnAreaChanges(const Area &orig_area) {
     if (!_area.contains(orig_area)) {
       // The new widget area doesn't includes its old area.
       // It is better to redraw the canvas.
-      _parent.touch();
+      _parent->touch();
     }
   }
 }
