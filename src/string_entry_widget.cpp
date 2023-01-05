@@ -187,9 +187,9 @@ void StringEntryWidget::_draw() {
         // Cursor position is out of bound on the left side of the widget area
         _offset.x -= cursor.x - 1;
       } else {
-        Serial.printf("%s:%s:%:This is a bug. "
+        Serial.printf("%s:%d:%s:This is a bug. "
                       "Please contact the authors of this library.\n",
-                      __FILE__, __FUNCTION__, __LINE__);
+                      __FILE__, __LINE__, __FUNCTION__);
         // The cursor is supposed to be outside the inner area, but is
         // not outside the left border neither the right border.
       }

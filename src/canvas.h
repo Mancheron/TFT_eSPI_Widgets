@@ -152,39 +152,15 @@ namespace TFT_eSPI_Widgets {
      * Set the focus on the given widget.
      *
      * \param w The widget for which we want to give the focus.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
-    inline virtual void _setFocus(Widget &w) {
-      _ensure_initialized();
-      if (w.getAcceptFocus()) {
-        if (_focus_widget and (_focus_widget != &w)) {
-          _transmit_focus = false;
-          _focus_widget->unfocus();
-          _transmit_focus = true;
-        }
-        _focus_widget = &w;
-      }
-    }
+    virtual void _setFocus(Widget &w);
 
     /**
      * Loose the focus from the given widget.
      *
      * \param w The widget for which we want to remove the focus.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
-    inline virtual void _unsetFocus(Widget &w) {
-      _ensure_initialized();
-      if (_focus_widget == &w) {
-        _focus_widget = NULL;
-        if (_transmit_focus and (&w != this)) {
-          w.getParent().focus();
-        }
-      }
-    }
+    virtual void _unsetFocus(Widget &w);
 
     /**
      * Action to perform when the current widget is passed some event.
@@ -196,17 +172,7 @@ namespace TFT_eSPI_Widgets {
      * \return Returns nothing but doxygen is buggy with inline
      * virtual void signature.
      */
-    inline virtual void _handleEvent(Event event) {
-      if (_focus_widget and (_focus_widget != this)) {
-        _focus_widget->handleEvent(event);
-      } else {
-        if (event == TRIPLE_RIGHT_CLICK) {
-          if (!_focus_widget) {
-            focus();
-          }
-        }
-      }
-    }
+    virtual void _handleEvent(Event event);
 
   public:
 

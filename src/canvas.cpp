@@ -115,3 +115,43 @@ void Canvas::init(TFT_eSPI &tft,
   }
   setArea(area);
 }
+
+void Canvas::_setFocus(Widget &w) {
+  _ensure_initialized();
+  if (w.getAcceptFocus()) {
+    if (_focus_widget and (_focus_widget != &w)) {
+      _transmit_focus = false;
+      _focus_widget->unfocus();
+      _transmit_focus = true;
+    }
+    _focus_widget = &w;
+  }
+}
+
+void Canvas::_unsetFocus(Widget &w) {
+  _ensure_initialized();
+  if (_focus_widget == &w) {
+    _focus_widget = NULL;
+    if (_transmit_focus) {
+      if (&w != this) {
+        Widget *ptr = &w.getParent();
+        while ((ptr != this) and !ptr->getAcceptFocus()) {
+          ptr = &(ptr->getParent());
+        }
+        ptr->focus();
+      }
+    }
+  }
+}
+
+void Canvas::_handleEvent(Event event) {
+  if (_focus_widget and (_focus_widget != this)) {
+    _focus_widget->handleEvent(event);
+  } else {
+    if (event == TRIPLE_RIGHT_CLICK) {
+      if (!_focus_widget) {
+        focus();
+      }
+    }
+  }
+}

@@ -222,7 +222,9 @@ bool ImageWidget::_updateDimensions() {
       String _str = _path;
       _str.toLowerCase();
       if (_str.endsWith(".bmp")) {
-        Serial.printf("Trying to open file '%s' from its BMP extension...\t", _path.c_str());
+        Serial.printf("[%s widget with id %lu] Trying to open file '%s' from its BMP extension...\t",
+                      getTypeString(), id,
+                      _path.c_str());
         if (_drawBmpImage(false)) {
           _format = BMP;
           Serial.println("[Success]");
@@ -230,7 +232,9 @@ bool ImageWidget::_updateDimensions() {
           Serial.println("[Failure]");
         }
       } else if (_str.endsWith(".jpg") or _str.endsWith(".jpeg")) {
-        Serial.printf("Trying to open file '%s' from its JPG extension...\t", _path.c_str());
+        Serial.printf("[%s widget with id %lu] Trying to open file '%s' from its JPG extension...\t",
+                      getTypeString(), id,
+                      _path.c_str());
         if (_drawJpgImage(false)) {
           _format = JPG;
           Serial.println("[Success]");
@@ -238,7 +242,9 @@ bool ImageWidget::_updateDimensions() {
           Serial.println("[Failure]");
         }
       } else if (_str.endsWith(".png")) {
-        Serial.printf("Trying to open file '%s' from its PNG extension...\t", _path.c_str());
+        Serial.printf("[%s widget with id %lu] Trying to open file '%s' from its PNG extension...\t",
+                      getTypeString(), id,
+                      _path.c_str());
         if (_drawPngImage(false)) {
           _format = PNG;
           Serial.println("[Success]");
@@ -247,25 +253,33 @@ bool ImageWidget::_updateDimensions() {
         }
       } else {
         // At the end, try to open the file with all the methods
-        Serial.printf("Trying to open file '%s' as a BMP...\t", _path.c_str());
+        Serial.printf("[%s widget with id %lu] Trying to open file '%s' as a BMP...\t",
+                      getTypeString(), id,
+                      _path.c_str());
         if (!_str.endsWith(".bmp") and _drawBmpImage(false)) {
           _format = BMP;
           Serial.println("[Success]");
         } else {
           Serial.println("[Failure]");
-          Serial.printf("Trying to open file '%s' as a JPG...\t", _path.c_str());
+          Serial.printf("[%s widget with id %lu] Trying to open file '%s' as a JPG...\t",
+                        getTypeString(), id,
+                        _path.c_str());
           if (!_str.endsWith(".jpg") and !_str.endsWith(".jpeg") and _drawJpgImage(false)) {
             _format = JPG;
             Serial.println("[Success]");
           } else {
             Serial.println("[Failure]");
-            Serial.printf("Trying to open file '%s' as a PNG...\t", _path.c_str());
+            Serial.printf("[%s widget with id %lu] Trying to open file '%s' as a PNG...\t",
+                          getTypeString(), id,
+                          _path.c_str());
             if (!_str.endsWith(".png") and _drawPngImage(false)) {
               _format = PNG;
               Serial.println("[Success]");
             } else {
               Serial.println("[Failure]");
-              Serial.printf("Unable to detect the file format for the path '%s'\n", _path.c_str());
+              Serial.printf("[%s widget with id %lu] Unable to detect the file format for the path '%s'\n",
+                            getTypeString(), id,
+                            _path.c_str());
               _format = UNKNOWN;
             }
           }
@@ -273,12 +287,16 @@ bool ImageWidget::_updateDimensions() {
       }
     } else {
       _format = UNKNOWN;
-      Serial.printf("File '%s' not found.\n", _path.c_str());
+      Serial.printf("[%s widget with id %lu] File '%s' not found.\n",
+                    getTypeString(), id,
+                    _path.c_str());
     }
   }
   yield();
   if (_format != UNKNOWN) {
-    Serial.printf("Image size is %ux%u\n", _dimensions.width, _dimensions.height);
+    Serial.printf("[%s widget with id %lu] Image size is %ux%u\n",
+                  getTypeString(), id,
+                  _dimensions.width, _dimensions.height);
   }
   return _format != UNKNOWN;
 }
@@ -308,7 +326,8 @@ void ImageWidget::_draw() {
                // the _format is anything but NOT_SET].
       break;
     default:
-      Serial.println("File format not supported.");
+      Serial.printf("[%s widget with id %lu] File format not supported.\n",
+                    getTypeString(), id);
     }
   }
   yield();
@@ -394,9 +413,9 @@ bool ImageWidget::_drawJpgImage(bool real_drawing) {
     if (real_drawing) {
       xSemaphoreTake(_mutex, portMAX_DELAY);
       if (_current_image_widget) {
-        Serial.printf("%s:%s:%:This is a bug. "
+        Serial.printf("%s:%d:%s:This is a bug. "
                       "Please contact the authors of this library.\n",
-                      __FILE__, __FUNCTION__, __LINE__);
+                      __FILE__, __LINE__, __FUNCTION__);
         // _current_image_widget internal variable must be NULL
         exit(1);
       }

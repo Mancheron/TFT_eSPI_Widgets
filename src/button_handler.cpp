@@ -120,9 +120,9 @@ ButtonHandler::Event ButtonHandler::getEvent() {
           event = SINGLE_CLICK;
         } else {
           if (Serial) {
-            Serial.printf("%s:%s:%:This is a bug. "
+            Serial.printf("%s:%d:%s:This is a bug. "
                           "Please contact the authors of this library.\n",
-                          __FILE__, __FUNCTION__, __LINE__);
+                          __FILE__, __LINE__, __FUNCTION__);
           }
         }
         reset();
@@ -182,9 +182,9 @@ ButtonHandler::Event ButtonHandler::getEvent() {
         _third_pressed = now;
       } else {
         if (Serial) {
-          Serial.printf("%s:%s:%:This is a bug. "
+          Serial.printf("%s:%d:%s:This is a bug. "
                         "Please contact the authors of this library.\n",
-                        __FILE__, __FUNCTION__, __LINE__);
+                        __FILE__, __LINE__, __FUNCTION__);
         }
       }
     }

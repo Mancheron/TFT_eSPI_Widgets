@@ -1019,6 +1019,9 @@ namespace TFT_eSPI_Widgets {
     /**
      * Focus on the current widget.
      *
+     * \remark This has no effect if this widget doesn't accept the
+     * focus.
+     *
      * \see A callback function can be set using onFocus() method.
      */
     void focus();

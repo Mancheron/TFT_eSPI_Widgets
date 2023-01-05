@@ -308,10 +308,6 @@ void Widget::focus() {
     _focus(); // Specific widget subclass focus action (if any).
     _setFocus(*this); // Root of the widget tree can now focus this widget.
     touch();
-  } else {
-    if (hasChild()) {
-      getChild().focus();
-    }
   }
 }
 
@@ -323,10 +319,6 @@ void Widget::unfocus() {
     _unfocus(); // Specific widget subclass unfocus action (if any).
     _unsetFocus(*this); // Root of the widget tree can now unfocus this widget.
     touch();
-  } else {
-    if (!isRoot()) {
-      getParent().unfocus();
-    }
   }
 }
 
@@ -422,6 +414,7 @@ void Widget::_print(const String &prefix, Print &printer) const {
 
 void Widget::print(const String &prefix, Print &printer) const {
   printer.print(prefix);
-  printer.printf("Widget %lu [%s] ", id, getArea(true).toString().c_str());
+  const char *hl = hasFocus() ? "*" : "";
+  printer.printf("%sWidget%s %lu [%s] ", hl, hl, id, getArea(true).toString().c_str());
   _print(prefix, printer);
 }
