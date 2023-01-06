@@ -159,7 +159,12 @@ Contact:
 URL:
 ----
 
+The source code is hosted on the LIRMM GitLab instance at:
 https://gite.lirmm.fr/doccy/TFT_eSPI_Widgets
+
+
+The complete API documentation is hosted on the LIRMM GitLab pages at:
+https://doccy.lirmm.net/TFT_eSPI_Widgets
 
 <!--
 Local Variables:
