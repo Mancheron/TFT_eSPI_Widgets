@@ -1,6 +1,6 @@
 {
   "name": "TFT_eSPI_Widgets",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "license": "CeCILL-C",
   "keywords": "Arduino, tft, display, widgets",
   "description": "Widget API to enhance the TFT_eSPI library.",
