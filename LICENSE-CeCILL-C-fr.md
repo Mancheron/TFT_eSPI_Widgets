@@ -275,7 +275,7 @@ Modifié, étant entendu que le coût additionnel d'acquisition du code
 source ne devra pas excéder le simple coût de transfert des données.
 
 
-#### 5.3.3 DISTRIBUTION DU LOGICIEL DERIVE
+#### 5.3.3 DISTRIBUTION DU LOGICIEL DÉRIVÉ
 
 Lorsque le Licencié crée un Logiciel Dérivé, ce Logiciel Dérivé peut
 être distribué sous un contrat de licence autre que le présent Contrat
@@ -333,7 +333,8 @@ conditions définies par la législation applicable.
 Le Licencié qui a développé un Module Lié est titulaire sur celui-ci
 des droits de propriété intellectuelle dans les conditions définies
 par la législation applicable et reste libre du choix du contrat
-régissant sa diffusion dans les conditions définies à l'[Article 5.3.3](5-3-3).
+régissant sa diffusion dans les conditions définies à l'[Article
+5.3.3](#533-distribution-du-logiciel-dérivé).
 
 
 ### 6.4 MENTIONS DES DROITS
@@ -438,7 +439,7 @@ biens.
 
 Le Concédant déclare de bonne foi être en droit de concéder l'ensemble
 des droits attachés au Logiciel (comprenant notamment les droits visés
-à l'[Article 5](#5-étendue-des-droits-concédés)).
+à l'[Article 5](#article-5-étendue-des-droits-concédés)).
 
 
 ### 9.3

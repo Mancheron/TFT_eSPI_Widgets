@@ -1,7 +1,197 @@
+2023-01-06  DoccY <alban.mancheron@lirmm.fr>
+
+	* :
+	commit 6b8e5c6451f265d234e5c6823c9777d3dd0b3cbd
+	Author: DoccY <alban.mancheron@lirmm.fr>
+	Date:   Fri Jan 6 19:25:11 2023 +0100
+	
+	
+2023-01-06  Alban Mancheron <alban.mancheron@lirmm.fr>
+
+	* .gitlab-ci.yml:
+	Configurez SAST dans `.gitlab-ci.yml`, en créant ce fichier s'il n'existe pas déjà
+	
+	
+2023-01-06  Alban Mancheron <alban.mancheron@lirmm.fr>
+
+	* .gitlab-ci.yml:
+	Ajouter .gitlab-ci.yml
+	
+	
+2023-01-06  DoccY <alban.mancheron@lirmm.fr>
+
+	* Doxyfile, library.json, library.properties:
+	Update library version to 0.1.0
+	
+	
+2023-01-06  DoccY <alban.mancheron@lirmm.fr>
+
+	* keywords.txt:
+	Update keywords
+	
+	
+2023-01-06  DoccY <alban.mancheron@lirmm.fr>
+
+	* Doxyfile, README.md,
+	examples/FloatEntryWidget/FloatEntryWidget.ino,
+	examples/FloatEntryWidget/README.md,
+	examples/ImageWidget-raw-data/Gnu-Tux-160x80.h,
+	examples/ImageWidget-raw-data/ImageWidget-raw-data.ino,
+	examples/ImageWidget-raw-data/README.md,
+	examples/ImageWidget-using-files/ImageWidget-using-files.ino,
+	examples/ImageWidget-using-files/README.md,
+	examples/IntegerEntryWidget/IntegerEntryWidget.ino,
+	examples/IntegerEntryWidget/README.md,
+	examples/MessageWidget/MessageWidget.ino,
+	examples/MessageWidget/README.md, examples/README.md,
+	examples/SplitterWidget/README.md,
+	examples/SplitterWidget/SplitterWidget.ino,
+	examples/StringEntryWidget/README.md,
+	examples/StringEntryWidget/StringEntryWidget.ino,
+	examples/TFT_CanvasWidget/README.md,
+	examples/TFT_CanvasWidget/TFT_CanvasWidget.ino, src/canvas.h,
+	src/fs_wrapper.h, src/generic_widget.h, src/splitter_widget.cpp,
+	src/splitter_widget.h, src/widget.h:
+	Fix documentation issues.
+	Add examples in the library documentation.
+	
+	
+2023-01-05  DoccY <alban.mancheron@lirmm.fr>
+
+	* TFT_eSPI_Widgets.h, examples/SplitterWidget/SplitterWidget.ino,
+	examples/SplitterWidget/data/README.txt, src/splitter_widget.cpp,
+	src/splitter_widget.h, src/widget.cpp, src/widget.h:
+	Add a Splitter Widget.
+	
+	
+2023-01-05  DoccY <alban.mancheron@lirmm.fr>
+
+	* src/button_handler.cpp, src/canvas.cpp, src/canvas.h,
+	src/image_widget.cpp, src/string_entry_widget.cpp, src/widget.cpp,
+	src/widget.h:
+	Change error message format.
+	Minor bug fix on focus/unfocus.
+	
+	
+2023-01-03  DoccY <alban.mancheron@lirmm.fr>
+
+	* examples/ImageWidget-using-files/ImageWidget-using-files.ino,
+	src/fs_wrapper.cpp, src/fs_wrapper.h:
+	Add a function to list directory content of the file system.
+	
+	
+2023-01-03  DoccY <alban.mancheron@lirmm.fr>
+
+	* examples/FloatEntryWidget/FloatEntryWidget.ino,
+	examples/ImageWidget-raw-data/ImageWidget-raw-data.ino,
+	examples/ImageWidget-using-files/ImageWidget-using-files.ino,
+	examples/IntegerEntryWidget/IntegerEntryWidget.ino,
+	examples/MessageWidget/MessageWidget.ino,
+	examples/StringEntryWidget/StringEntryWidget.ino,
+	examples/TFT_CanvasWidget/TFT_CanvasWidget.ino,
+	src/float_entry_widget.cpp, src/integer_entry_widget.cpp,
+	src/string_entry_widget.cpp, src/widget.cpp, src/widget.h:
+	Add some printing facilities for the widget trees and events.
+	Some bug fix on integer/float/string entry widgets.
+	Minor changes to existing examples (mostly to print the widget trees).
+	
+	
+2023-01-03  DoccY <alban.mancheron@lirmm.fr>
+
+	* src/canvas.h, src/image_widget.cpp, src/image_widget.h,
+	src/integer_entry_widget.h, src/message_widget.cpp,
+	src/message_widget.h, src/string_entry_widget.h, src/widget.cpp,
+	src/widget.h:
+	From now, widgets can either be focusable or not.
+	
+	
+2023-01-03  DoccY <alban.mancheron@lirmm.fr>
+
+	* README.md, TFT_eSPI_Widgets.h,
+	examples/FloatEntryWidget/FloatEntryWidget.ino,
+	examples/ImageWidget-raw-data/ImageWidget-raw-data.ino,
+	examples/ImageWidget-using-files/ImageWidget-using-files.ino,
+	examples/IntegerEntryWidget/IntegerEntryWidget.ino,
+	examples/MessageWidget/MessageWidget.ino,
+	examples/StringEntryWidget/StringEntryWidget.ino,
+	examples/TFT_CanvasWidget/TFT_CanvasWidget.ino, src/area.cpp,
+	src/area.h, src/button_handler.cpp, src/button_handler.h,
+	src/canvas.cpp, src/canvas.h, src/coordinates.cpp,
+	src/coordinates.h, src/dimensions.cpp, src/dimensions.h,
+	src/float_entry_widget.cpp, src/float_entry_widget.h,
+	src/fs_wrapper.h, src/generic_widget.cpp, src/generic_widget.h,
+	src/graphical_properties.cpp, src/graphical_properties.h,
+	src/image_widget.cpp, src/image_widget.h,
+	src/integer_entry_widget.cpp, src/integer_entry_widget.h,
+	src/message_widget.cpp, src/message_widget.h,
+	src/physical_button_handler.cpp, src/physical_button_handler.h,
+	src/string_entry_widget.cpp, src/string_entry_widget.h,
+	src/widget.cpp, src/widget.h:
+	Update copyrights.
+	
+	
+2023-01-03  DoccY <alban.mancheron@lirmm.fr>
+
+	* src/widget.cpp, src/widget.h:
+	Add a unique ID to widgets (mostly for debugging).
+	
+	
+2023-01-03  DoccY <alban.mancheron@lirmm.fr>
+
+	* TFT_eSPI_Widgets.h, src/fs_wrapper.h, src/image_widget.cpp,
+	src/image_widget.h:
+	Add a file system wrapper facility.
+	
+	
+2023-01-03  DoccY <alban.mancheron@lirmm.fr>
+
+	* src/float_entry_widget.cpp, src/float_entry_widget.h,
+	src/integer_entry_widget.h:
+	Rewrite setValue functions for float/integer entry widgets.
+	
+	
+2023-01-03  DoccY <alban.mancheron@lirmm.fr>
+
+	* src/canvas.h, src/float_entry_widget.h,
+	src/integer_entry_widget.h, src/string_entry_widget.cpp,
+	src/string_entry_widget.h, src/widget.cpp:
+	Add a callback function facility when value is changed on float/integer/string entry widgets.
+	
+	
+2023-01-03  DoccY <alban.mancheron@lirmm.fr>
+
+	* src/float_entry_widget.cpp, src/float_entry_widget.h,
+	src/generic_widget.h, src/image_widget.cpp, src/image_widget.h,
+	src/integer_entry_widget.cpp, src/integer_entry_widget.h,
+	src/message_widget.cpp, src/message_widget.h,
+	src/string_entry_widget.cpp, src/string_entry_widget.h,
+	src/widget.cpp, src/widget.h:
+	Add some more virtual private methods to handle refreshing/drawing/...
+	
+	
+2023-01-03  DoccY <alban.mancheron@lirmm.fr>
+
+	* examples/FloatEntryWidget/FloatEntryWidget.ino,
+	examples/IntegerEntryWidget/IntegerEntryWidget.ino,
+	src/float_entry_widget.cpp, src/float_entry_widget.h,
+	src/integer_entry_widget.cpp, src/integer_entry_widget.h:
+	Change left/right click settings to increment/decrement values.
+	
+	
+2022-12-13  DoccY <alban.mancheron@lirmm.fr>
+
+	* examples/{ImageWidget => ImageWidget-raw-data}/Gnu-Tux-160x80.h,
+	examples/{ImageWidget => ImageWidget-raw-data}/Gnu-Tux-320x160.h,
+	examples/{ImageWidget/ImageWidget.ino =>
+	ImageWidget-raw-data/ImageWidget-raw-data.ino},
+	examples/{ImageWidget =>
+	ImageWidget-using-files}/ImageWidget-using-files.ino:
+	Rearranging example directories for Image widgets demonstration.
+	
+	
 2022-12-08  DoccY <alban.mancheron@lirmm.fr>
 
-	* examples/ChangeLog,
-	examples/FloatEntryWidget/FloatEntryWidget.ino,
+	* examples/FloatEntryWidget/FloatEntryWidget.ino,
 	examples/ImageWidget/ImageWidget-using-files.ino,
 	examples/ImageWidget/ImageWidget.ino,
 	examples/IntegerEntryWidget/IntegerEntryWidget.ino,
