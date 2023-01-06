@@ -129,7 +129,7 @@ Ces termes s'entendent au singulier comme au pluriel.
 
 Le Contrat a pour objet la concession par le Concédant au Licencié
 d'une licence non exclusive, cessible et mondiale du Logiciel telle
-que définie ci-après à l'[Article 5](#article-5---étendue-des-droits-concédés) pour toute la durée de
+que définie ci-après à l'[Article 5](#article-5-étendue-des-droits-concédés) pour toute la durée de
 protection des droits portant sur ce Logiciel.
 
 
@@ -154,7 +154,7 @@ Un exemplaire du Contrat, contenant notamment un avertissement relatif
 aux spécificités du Logiciel, à la restriction de garantie et à la
 limitation à un usage par des utilisateurs expérimentés a été mis à
 disposition du Licencié préalablement à son acceptation telle que
-définie à l'[Article 3.1](#3.1) ci dessus et le Licencié reconnaît en avoir
+définie à l'[Article 3.1](#31) ci dessus et le Licencié reconnaît en avoir
 pris connaissance.
 
 
@@ -163,7 +163,7 @@ pris connaissance.
 ### 4.1  ENTRÉE EN VIGUEUR
 
 Le Contrat entre en vigueur à la date de son acceptation par le
-Licencié telle que définie en [3.1](#3.1).
+Licencié telle que définie en [3.1](#31).
 
 
 ### 4.2  DURÉE
@@ -242,7 +242,7 @@ totalité et soit accompagnée:
 
 2. d'un avertissement relatif à la restriction de garantie et de
    responsabilité du Concédant telle que prévue aux articles
-   [8](#article-8---responsabilité) et [9](#article-9---garantie),
+   [8](#article-8-responsabilité) et [9](#article-9-garantie),
 
 et que, dans le cas où seul le Code Objet du Logiciel est redistribué,
 le Licencié permette un accès effectif au Code Source complet du
@@ -266,7 +266,7 @@ accompagnée:
 
 2. d'un avertissement relatif à la restriction de garantie et de
    responsabilité du Concédant telle que prévue aux articles
-   [8](#article-8---responsabilité) et [9](#article-9---garantie),
+   [8](#article-8-responsabilité) et [9](#article-9-garantie),
 
 et que, dans le cas où seul le code objet du Logiciel Modifié est
 redistribué, le Licencié permette un accès effectif à son code source
@@ -280,7 +280,7 @@ source ne devra pas excéder le simple coût de transfert des données.
 Lorsque le Licencié crée un Logiciel Dérivé, ce Logiciel Dérivé peut
 être distribué sous un contrat de licence autre que le présent Contrat
 à condition de respecter les obligations de mention des droits sur le
-Logiciel telles que définies à l'[Article 6.4](#6-4-mention-des-droits). Dans le cas où la
+Logiciel telles que définies à l'[Article 6.4](#64-mention-des-droits). Dans le cas où la
 création du Logiciel Dérivé a nécessité une modification du Code
 Source le licencié s'engage à ce que:
 
@@ -304,7 +304,7 @@ Source le licencié s'engage à ce que:
 Lorsqu'un Logiciel Modifié contient une Contribution Intégrée soumise
 au contrat de licence CeCILL, ou lorsqu'un Logiciel Dérivé contient un
 Module Lié soumis au contrat de licence CeCILL, les stipulations
-prévues au troisième item de l'[Article 6.4](#6-4-mention-des-droits) sont facultatives.
+prévues au troisième item de l'[Article 6.4](#64-mention-des-droits) sont facultatives.
 
 
 ## Article 6 - PROPRIÉTÉ INTELLECTUELLE
@@ -318,7 +318,7 @@ oeuvre et nul autre n'a la faculté de modifier les conditions de
 diffusion de ce Logiciel Initial.
 
 Le Titulaire s'engage à ce que le Logiciel Initial reste au moins régi
-par le Contrat et ce, pour la durée visée à l'[Article 4.2](#4.2---durée).
+par le Contrat et ce, pour la durée visée à l'[Article 4.2](#42-durée).
 
 
 ### 6.2 SUR LES CONTRIBUTIONS INTÉGRÉES
@@ -387,7 +387,7 @@ le Concédant et le Licencié.
 
 ### 8.1
 
-Sous réserve des dispositions de l'[Article 8.2](#8.2), le Licencié a la
+Sous réserve des dispositions de l'[Article 8.2](#82), le Licencié a la
 faculté, sous réserve de prouver la faute du Concédant concerné, de
 solliciter la réparation du préjudice direct qu'il subirait du fait du
 Logiciel et dont il apportera la preuve.
@@ -438,14 +438,14 @@ biens.
 
 Le Concédant déclare de bonne foi être en droit de concéder l'ensemble
 des droits attachés au Logiciel (comprenant notamment les droits visés
-à l'[Article 5](#5---étendue-des-droits-concédés)).
+à l'[Article 5](#5-étendue-des-droits-concédés)).
 
 
 ### 9.3
 
 Le Licencié reconnaît que le Logiciel est fourni "en l'état" par le
 Concédant sans autre garantie, expresse ou tacite, que celle prévue à
-l'[Article 9.2](#9.2) et notamment sans aucune garantie sur sa valeur
+l'[Article 9.2](#92) et notamment sans aucune garantie sur sa valeur
 commerciale, son caractère sécurisé, innovant ou pertinent.
 
 En particulier, le Concédant ne garantit pas que le Logiciel est
