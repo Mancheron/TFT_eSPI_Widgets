@@ -258,7 +258,7 @@ SplitterWidget::SplitterWidget(Widget &parent,
   _orientation(orientation),
   _weights_sum(0),
   _current_child(end()),
-  _layout(FITTED),
+  _layout(FIT),
   _need_layout(false),
   _state(true)
 {
@@ -273,9 +273,9 @@ SplitterWidget::~SplitterWidget() {
 void SplitterWidget::_applyLayout() {
   if (!_need_layout) return;
 
-  if (_layout == FITTED) {
+  if (_layout == FIT) {
     fit(true, true);
-  } else if (_layout == SHRINKED) {
+  } else if (_layout == SHRINK) {
     shrink(true, true);
   }
   _updateCurrentChild();
@@ -371,7 +371,7 @@ void SplitterWidget::_shrink(bool recurse, bool check_for_update) {
       }
     }
   }
-  // Centering shrinked children
+  // Centering shrunken children
   for (iterator it = begin(); it != end(); ++it) {
     if (it->getWeight()) {
       Area child_area = it->getArea();

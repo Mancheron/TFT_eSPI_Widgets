@@ -85,7 +85,10 @@
 
 using namespace TFT_eSPI_Widgets;
 
+// The TFT screen used for this demo
 TFT_eSPI tft;
+
+// The Canvas widget on which widgets are printed
 Canvas canvas;
 
 #include "Gnu-Tux-160x80.h"
@@ -93,7 +96,8 @@ Canvas canvas;
 
 unsigned long start_cycle;
 
-void setup(void) {
+// The arduino initialisation function
+void setup() {
   Serial.begin(115200);
   while (!Serial) {
     delay(100);
@@ -128,7 +132,8 @@ void setup(void) {
   start_cycle = millis();
 }
 
-void loop(void) {
+// The arduino infinite loop function
+void loop() {
 
   // Calling the loop() method will call the loop of any descendant
   // widget from the current canvas in the widget tree.

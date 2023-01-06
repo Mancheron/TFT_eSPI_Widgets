@@ -85,7 +85,10 @@
 
 using namespace TFT_eSPI_Widgets;
 
+// The TFT screen used for this demo
 TFT_eSPI tft;
+
+// The Canvas widget on which widgets are printed
 Canvas canvas;
 
 // On a TTGO T-Display, there is two builtin buttons, one is attached
@@ -102,84 +105,56 @@ void processButtonEvents() {
 
   switch (left_event) {
   case ButtonHandler::SINGLE_CLICK:
-    Serial.println("Canvas is passed a single left click");
     canvas.handleEvent(SINGLE_LEFT_CLICK);
     break;
   case ButtonHandler::DOUBLE_CLICK:
-    Serial.println("Canvas is passed a double left click");
     canvas.handleEvent(DOUBLE_LEFT_CLICK);
     break;
   case ButtonHandler::TRIPLE_CLICK:
-    Serial.println("Canvas is passed a triple left click");
     canvas.handleEvent(TRIPLE_LEFT_CLICK);
     break;
   case ButtonHandler::LONG_PRESS:
-    Serial.println("Canvas is passed a long left click");
     canvas.handleEvent(LONG_LEFT_PRESS);
     break;
   }
   switch (right_event) {
   case ButtonHandler::SINGLE_CLICK:
-    Serial.println("Canvas is passed a single right click");
     canvas.handleEvent(SINGLE_RIGHT_CLICK);
     break;
   case ButtonHandler::DOUBLE_CLICK:
-    Serial.println("Canvas is passed a double right click");
     canvas.handleEvent(DOUBLE_RIGHT_CLICK);
     break;
   case ButtonHandler::TRIPLE_CLICK:
-    Serial.println("Canvas is passed a triple right click");
     canvas.handleEvent(TRIPLE_RIGHT_CLICK);
     break;
   case ButtonHandler::LONG_PRESS:
-    Serial.println("Canvas is passed a long right click");
     canvas.handleEvent(LONG_RIGHT_PRESS);
     break;
   }
 }
 
+// Available Icons for this demo.
 enum Icon_t {
-             MIN_ICON_ID,
-             AUTHENTICATION_ICON = MIN_ICON_ID,
+             AUTHENTICATION_ICON,
              ERROR_ICON,
              INFO_ICON,
              QUESTION_ICON,
              WARNING_ICON,
+             MIN_ICON_ID = AUTHENTICATION_ICON,
              MAX_ICON_ID = WARNING_ICON
 };
 
+// The icon displayed on the previous loop
 Icon_t previous_icon;
+
+// The icon displayed on the current loop
 Icon_t current_icon;
+
+// The README.txt file content
 String README_message;
 
-// This demo screen is structured like this:
-// +-------------------- TFT canvas -------------------+
-// | +------------ main vertical splitter -----------+ |
-// | | +------------------ title ------------------+ | |
-// | | |      This is a demo splitter widget.      | | |
-// | | +-------------------------------------------+ | |
-// | | | +--------- horizontal splitter ---------+ | | |
-// | | | | +-icon-+----- vertical splitter ----+ | | | |
-// | | | | |      | +------ information -----+ | | | | |
-// | | | | |      | |Changing the integer    | | | | | |
-// | | | | | ???? | |value below should      | | | | | |
-// | | | | | ???? | |change the displayed    | | | | | |
-// | | | | | ???? | |icon                    | | | | | |
-// | | | | | ???? | +----- integer entry ----+ | | | | |
-// | | | | | ???? | |         <value>        | | | | | |
-// | | | | | ???? | +------ description -----+ | | | | |
-// | | | | | ???? | |[??????] + README.txt   | | | | | |
-// | | | | |      | |file content.           | | | | | |
-// | | | | |      | +------------------------+ | | | | |
-// | | | | +------+----------------------------+ | | | |
-// | | | +---------------------------------------+ | | |
-// | | +-------------------------------------------+ | |
-// | +-----------------------------------------------+ |
-// +---------------------------------------------------+
-
-
-// Change the icon path if current_icon has changed since the last
-// loop
+// Callback function to change the icon path if current_icon has
+// changed since the last loop (w is the [Image] widget to update).
 void onIconLoop(Widget &w) {
   if (current_icon != previous_icon) {
     ImageWidget &_w = w.as<ImageWidget>();
@@ -204,8 +179,9 @@ void onIconLoop(Widget &w) {
   }
 }
 
-// Change the displayed description if current_icon has changed since
-// the last loop
+// Callback function to change the displayed description if
+// current_icon has changed since / the last loop (w is the [Message]
+// widget to update).
 void onDescriptionLoop(Widget &w) {
   if (current_icon != previous_icon) {
     String message = "[";
@@ -233,14 +209,17 @@ void onDescriptionLoop(Widget &w) {
   }
 }
 
+// The callback function when the integer entry value is changed (w is
+// the [Integer Entry] Widget for which value has changed from
+// old_value to new_value).
 void onIconSelectionChange(Widget &w, int32_t old_value, int32_t new_value) {
   IntegerEntryWidget &_w = w.as<IntegerEntryWidget>();
   previous_icon = (Icon_t) old_value;
   current_icon = (Icon_t) new_value;
 }
 
-// Function to call once during the setup to initialize the tft and
-// its associated widgets.
+// This initializes the tft and add all the expected widgets for this
+// demo.
 void initScreen() {
 
   // Initialize the TFT screen.
@@ -353,7 +332,8 @@ void initScreen() {
   canvas.touch();
 }
 
-void setup(void) {
+// The arduino initialisation function
+void setup() {
   Serial.begin(115200);
   while (!Serial) {
     delay(100);
@@ -380,7 +360,8 @@ void setup(void) {
   Serial.println("[End of demo setup]");
 }
 
-void loop(void) {
+// The arduino infinite loop function
+void loop() {
 
   // Catch button events.
   processButtonEvents();

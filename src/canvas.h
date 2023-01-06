@@ -152,6 +152,9 @@ namespace TFT_eSPI_Widgets {
      * Set the focus on the given widget.
      *
      * \param w The widget for which we want to give the focus.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
      */
     virtual void _setFocus(Widget &w);
 
@@ -159,6 +162,9 @@ namespace TFT_eSPI_Widgets {
      * Loose the focus from the given widget.
      *
      * \param w The widget for which we want to remove the focus.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
      */
     virtual void _unsetFocus(Widget &w);
 

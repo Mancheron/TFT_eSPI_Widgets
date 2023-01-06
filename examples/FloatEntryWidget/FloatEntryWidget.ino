@@ -85,7 +85,10 @@
 
 using namespace TFT_eSPI_Widgets;
 
+// The TFT screen used for this demo
 TFT_eSPI tft;
+
+// The Canvas widget on which widgets are printed
 Canvas canvas;
 
 // On a TTGO T-Display, there is two builtin buttons, one is attached
@@ -152,7 +155,8 @@ void processButtonEvents() {
   }
 }
 
-void setup(void) {
+// The arduino initialisation function
+void setup() {
   Serial.begin(115200);
   while (!Serial) {
     delay(100);
@@ -198,7 +202,8 @@ void setup(void) {
   Serial.println("To unfocus the float entry, use a triple left click. Do it again to unfocus the canvas.");
 }
 
-void loop(void) {
+// The arduino infinite loop function
+void loop() {
 
   // We will shrink the float entry widget to its minimal size.
 

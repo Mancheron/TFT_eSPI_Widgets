@@ -497,6 +497,9 @@ namespace TFT_eSPI_Widgets {
      *
      * \param printer The Print object to print on (Serial by
      * default).
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
      */
     virtual void _print(const String &prefix, Print &printer) const;
 
@@ -656,12 +659,18 @@ namespace TFT_eSPI_Widgets {
      * given widget as a child.
      *
      * \param w The widget to set as current widget child.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
      */
     virtual void setChild(Widget &w);
 
     /**
      * Remove current widget child and all its descendants in the
      * widget tree (if any).
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
      */
     virtual void removeChild();
 
@@ -811,12 +820,11 @@ namespace TFT_eSPI_Widgets {
      * change the horizontal position. Default is centering.
      *
      * \param vertical The vertical anchor placement of this widget
-     * after being shrinked expressed as a percentage. Setting 0%
-     * means align on the top of the parent inner area, whereas 100%
-     * means align on the bottom of the parent inner area. The special
-     * '-1' value means (which is equalt to 255 as unsigned 8 bits
-     * integer) won't change the vertical position. Default is
-     * centering.
+     * after being shrunk expressed as a percentage. Setting 0% means
+     * align on the top of the parent inner area, whereas 100% means
+     * align on the bottom of the parent inner area. The special '-1'
+     * value means (which is equalt to 255 as unsigned 8 bits integer)
+     * won't change the vertical position. Default is centering.
      *
      * \param recurse If the widget has a child and if recurse is
      * true, then the shrink() method is applied on the child and its
@@ -1023,6 +1031,9 @@ namespace TFT_eSPI_Widgets {
      *
      * \param status When set to true, this widget can be focused
      * whereas it can't be anymore if set to false.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
      */
     inline virtual void setAcceptFocus(bool status) {
       _accept_focus = status;

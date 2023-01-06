@@ -161,3 +161,9 @@ URL:
 
 https://gite.lirmm.fr/doccy/TFT_eSPI_Widgets
 
+<!--
+Local Variables:
+eval: (flyspell-mode)
+ispell-local-dictionary: "american"
+End:
+-->

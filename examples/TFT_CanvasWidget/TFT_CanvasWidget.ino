@@ -85,7 +85,10 @@
 
 using namespace TFT_eSPI_Widgets;
 
+// The TFT screen used for this demo
 TFT_eSPI tft;
+
+// The Canvas widget on which widgets are printed
 Canvas canvas;
 
 void onCanvasLoopCb(Widget &w) {
@@ -140,7 +143,8 @@ void onCanvasLoopCb(Widget &w) {
   w.touch(); // force redrawing the widget
 }
 
-void setup(void) {
+// The arduino initialisation function
+void setup() {
   Serial.begin(115200);
   while (!Serial) {
     delay(100);
@@ -158,7 +162,7 @@ void setup(void) {
   // default ones. If no default is given, then uses default values
   // (see GraphicalProperties class documentation).
   canvas.init(tft, default_props, focus_props);
-  // Add a calbback on Canvas loop() method called in order to perform
+  // Add a callback on Canvas loop() method called in order to perform
   // some extra actions.
   canvas.onLoop(onCanvasLoopCb);
 
@@ -169,7 +173,8 @@ void setup(void) {
   Serial.println("[End of demo setup]");
 }
 
-void loop(void) {
+// The arduino infinite loop function
+void loop() {
 
   Serial.println("[Entering loop]");
   // Calling the loop() method will call the loop callback function

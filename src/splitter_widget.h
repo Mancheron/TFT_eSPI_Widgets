@@ -128,6 +128,19 @@ namespace TFT_eSPI_Widgets {
 
     public:
 
+      /**
+       * Builds a splitter child widget.
+       *
+       * This wraps the *real* child widget.
+       *
+       * \param parent The parent splitter widget of this current
+       * splitter child widget.
+       *
+       * \param child The address of the *real* child widget to wrap
+       * inside this widget.
+       *
+       * \param weight The weight of this child widget.
+       */
       SplitterChildWidget(SplitterWidget &parent,
                           Widget *child = NULL,
                           uint8_t weight = 1);
@@ -168,6 +181,9 @@ namespace TFT_eSPI_Widgets {
        *
        * \param status When set to true, this widget can be focused
        * whereas it can't be anymore if set to false.
+       *
+       * \return Returns nothing but doxygen is buggy with inline
+       * virtual void signature.
        */
       virtual void setAcceptFocus(bool status);
 
@@ -193,8 +209,6 @@ namespace TFT_eSPI_Widgets {
      * children.
      */
     class const_iterator: public std::iterator<std::random_access_iterator_tag, const SplitterChildWidget> {
-
-      friend class SplitterWidget;
 
     private:
 
@@ -321,8 +335,6 @@ namespace TFT_eSPI_Widgets {
      * A splitter widget random access iterator on its children.
      */
     class iterator: public std::iterator<std::random_access_iterator_tag, SplitterChildWidget> {
-
-      friend class SplitterWidget;
 
     private:
 
@@ -491,10 +503,10 @@ namespace TFT_eSPI_Widgets {
      * The splitter layout.
      */
     enum {
-          FITTED,   /**< The splitter children fit this splitter
-                       according to their weight. */
-          SHRINKED, /**< This splitter is shrinked to its children
-                       size. */
+          FIT,    /**< The splitter children fit this splitter
+                     according to their weight. */
+          SHRINK, /**< This splitter is shrunk to its children
+                     size. */
     } _layout;
 
     /**
@@ -559,7 +571,7 @@ namespace TFT_eSPI_Widgets {
      * method. If the widget has children and if recurse is true, then
      * the shrink() method is applied on the children and their
      * descendants (starting from the deeper descendants widgets)
-     * before shrinking current widget. The weight of shrinked
+     * before shrinking current widget. The weight of shrunken
      * children is simply ignored for shrinking current splitter,
      * except for children having a zero weight which are considered
      * as empty areas.
@@ -658,6 +670,22 @@ namespace TFT_eSPI_Widgets {
      */
     virtual void _refresh();
 
+    /**
+     * Print the current splitter widget subtree.
+     *
+     * \see This is called by the print() method.
+     *
+     * \param prefix String to prepend to the current widget
+     * description.
+     *
+     * \param printer The Print object to print on (Serial by
+     * default).
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
+     */
+    virtual void _print(const String &prefix, Print &printer) const;
+
   public:
 
     /**
@@ -706,6 +734,10 @@ namespace TFT_eSPI_Widgets {
      * widget. Otherwise, the compiler interpret the construction as a
      * copy constructor. This is why we need to force using the
      * "normal" splitter constructor to avoid this issue.
+     *
+     * \param parent The parent widget of the current one. Be aware
+     * that if this parent already has a child widget, then this child
+     * is automatically destroyed.
      */
     inline SplitterWidget(SplitterWidget &parent):
       SplitterWidget(parent.as<Widget>()) {}
@@ -734,6 +766,9 @@ namespace TFT_eSPI_Widgets {
      * method does nothing on this splitter widget.
      *
      * \param w The widget to append to the children.
+     *
+     * \return Returns nothing but doxygen is buggy with inline
+     * virtual void signature.
      */
     virtual inline void setChild(Widget &w) {
       setChild(w, 1);
@@ -815,6 +850,9 @@ namespace TFT_eSPI_Widgets {
      *
      * \remark No verification of the validity of the given position
      * is done. Thus it may lead to some error.
+     *
+     * \return This return the *real* child widget at the given
+     * position.
      */
     inline SplitterChildWidget &operator[](size_t i) {
       return *_children[i];
@@ -835,6 +873,9 @@ namespace TFT_eSPI_Widgets {
      *
      * \remark No verification of the validity of the given position
      * is done. Thus it may lead to some error.
+     *
+     * \return This return the *real* read-only child widget at the
+     * given position.
      */
     inline const SplitterChildWidget &operator[](size_t i) const {
       return *_children[i];
@@ -960,7 +1001,7 @@ namespace TFT_eSPI_Widgets {
       return _orientation;
     }
 
-    /*
+    /**
      * Set the layout of splitter.
      *
      * \param orientation The layout orientation.
@@ -1006,8 +1047,6 @@ namespace TFT_eSPI_Widgets {
      * its children in order to clear the reserved memory.
      */
     void clear();
-
-    void _print(const String &prefix, Print &printer) const;
 
   };
 

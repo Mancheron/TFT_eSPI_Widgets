@@ -84,7 +84,7 @@
 #ifndef __FS_WRAPPER_H__
 #define __FS_WRAPPER_H__
 
-#  if not(defined(USE_SPIFFS) | defined(USE_LittleFS) | defined(USE_SDFS))
+#  if not(defined(USE_SPIFFS) | defined(USE_LittleFS) | defined(USE_SDFS) | defined(USE_SD))
 #    if defined(ESP32)
 #      define USE_SPIFFS
 #    elif defined(ESP8266)

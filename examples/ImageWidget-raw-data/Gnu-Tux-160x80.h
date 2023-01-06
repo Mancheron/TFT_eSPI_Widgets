@@ -4,7 +4,6 @@
 // Memory usage   : 25600 bytes
 // Manually modified by DoccY
 
-
 #if defined(__AVR__)
     #include <avr/pgmspace.h>
 #elif defined(__PIC32MX__)

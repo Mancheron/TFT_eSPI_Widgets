@@ -131,11 +131,6 @@ namespace TFT_eSPI_Widgets {
      * that if this parent already has a child widget, then this child
      * is automatically destroyed.
      *
-     * \param area The area used by the widget. If the area dimension
-     * is empty, then use the area of its parent minus its maximal
-     * border size according to its focus state. The top left anchor
-     * of the area is relative to the top left corner of its parent.
-     *
      * \remark There is no verification about the area to fit into the
      * parent area.
      */

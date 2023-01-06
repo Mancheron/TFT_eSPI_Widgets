@@ -85,7 +85,10 @@
 
 using namespace TFT_eSPI_Widgets;
 
+// The TFT screen used for this demo
 TFT_eSPI tft;
+
+// The Canvas widget on which widgets are printed
 Canvas canvas;
 
 // On a TTGO T-Display, there is two builtin buttons, one is attached
@@ -130,7 +133,8 @@ void processButtonEvents() {
   }
 }
 
-void setup(void) {
+// The arduino initialisation function
+void setup() {
   Serial.begin(115200);
   while (!Serial) {
     delay(100);
@@ -178,7 +182,8 @@ void setup(void) {
   Serial.println("To change the current selected letter, do a single left or right button click or long press on these buttons.");
 }
 
-void loop(void) {
+// The arduino infinite loop function
+void loop() {
 
   // Calling the loop() method will call the loop of any descendant
   // widget from the current canvas in the widget tree.
