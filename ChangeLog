@@ -1,5 +1,11 @@
 2023-04-05  DoccY <alban.mancheron@lirmm.fr>
 
+	* Doxyfile, library.json, library.properties:
+	New library release: v0.1.4
+	
+	
+2023-04-05  DoccY <alban.mancheron@lirmm.fr>
+
 	* Doxyfile, LICENSE-CeCILL-C-en.md, LICENSE-CeCILL-C-fr.md,
 	examples/FloatEntryWidget/FloatEntryWidget.ino,
 	examples/FloatEntryWidget/README.md,
@@ -22,7 +28,7 @@
 	src/string_entry_widget.cpp, src/string_entry_widget.h,
 	src/widget.cpp, src/widget.h:
 	Moves the main library header into src subdirectory for compliance with the 1.5+ library specification.
-	This makes the library examples compliant with the Arduino IDE.
+	This makes the library examples compliant with the Arduino IDE (thanks to M. Pujol for letting me know this buggy situation).
 	Fix some compilation warnings.
 	Upgrade the doxygen configuration file and fix documentation issues.
 	
