@@ -5,22 +5,73 @@
 # Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
 # Note that environment variables can be set in several places
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
+
+##########
+# Stages #
+##########
+stages:
+  - test
+  - deploy
+
+#######################
+# Docker image to use #
+#######################
 image: alpine
+
+#########################
+# System Initialisation #
+#########################
 before_script:
 - apk update
 - apk add doxygen graphviz ttf-freefont
-pages:
-  script:
-  - doxygen
-  - mv docs/html/ public/
-  artifacts:
-    paths:
-    - public
-  rules:
-  - if: "$CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH"
-stages:
-- test
+
+######################
+# Test code security #
+######################
 sast:
   stage: test
+
 include:
-- template: Security/SAST.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+
+#################
+# Build release #
+#################
+release:
+  stage: deploy
+  needs:
+    - pages
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  before_script:
+    - echo "Preparation of the ${CI_COMMIT_TAG} release"
+    - apk add git
+    - PREVIOUS_TAG=$(git describe --tags --abbrev=0 @^)
+    - echo "### Changes from ${PREVIOUS_TAG} to ${CI_COMMIT_TAG}" | tee description.txt
+    - git log --pretty="format:%B" "${PREVIOUS_TAG}"..HEAD | tee -a description.txt
+    - RELEASE_CLI_CMD="release-cli create"
+    - RELEASE_CLI_CMD="${RELEASE_CLI_CMD} --name \"Release ${CI_COMMIT_TAG}\""
+    - RELEASE_CLI_CMD="${RELEASE_CLI_CMD} --tag-name \"${CI_COMMIT_TAG}\""
+    - RELEASE_CLI_CMD="${RELEASE_CLI_CMD} --description \"description.txt\""
+  script:
+    - echo "Creating a new release for version ${CI_COMMIT_TAG}:"
+    - echo "${RELEASE_CLI_CMD}"
+    - eval "${RELEASE_CLI_CMD}"
+  after_script:
+    - echo "End of release ${CI_COMMIT_TAG} task"
+  rules:
+    - if: $CI_COMMIT_TAG
+
+###########################
+# Build API documentation #
+###########################
+pages:
+  stage: deploy
+  script:
+    - doxygen
+    - mv docs/html/ public/
+  artifacts:
+    name: "API documentation"
+    paths:
+      - public
+  rules:
+    - if: "$CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH"
