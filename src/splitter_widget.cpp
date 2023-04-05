@@ -160,7 +160,6 @@ SplitterWidget::const_iterator SplitterWidget::const_iterator::operator--(int) {
 }
 
 SplitterWidget::const_iterator::difference_type SplitterWidget::const_iterator::operator-(const const_iterator it) const {
-  ptrdiff_t v = 0;
   const SplitterWidget &splitter = (*_ptr)->getParent().as<SplitterWidget>();
   pointer const *first = splitter._children;
   pointer const *second = first + splitter._number_of_children;
@@ -222,7 +221,6 @@ SplitterWidget::iterator SplitterWidget::iterator::operator--(int) {
 }
 
 SplitterWidget::iterator::difference_type SplitterWidget::iterator::operator-(const iterator it) const {
-  ptrdiff_t v = 0;
   const SplitterWidget &splitter = (*_ptr)->getParent().as<SplitterWidget>();
   pointer *first = splitter._children;
   pointer *second = first + splitter._number_of_children;
@@ -258,9 +256,9 @@ SplitterWidget::SplitterWidget(Widget &parent,
   _orientation(orientation),
   _weights_sum(0),
   _current_child(end()),
+  _state(true),
   _layout(FIT),
-  _need_layout(false),
-  _state(true)
+  _need_layout(false)
 {
   this->reserve(reserve);
 }
@@ -396,6 +394,8 @@ void SplitterWidget::_handleEvent(Event event) {
     case SINGLE_RIGHT_CLICK:
       _updateCurrentChild(++from, _current_child, true);
       break;
+    default:
+      (void) 0; // Event not handled
     }
   }
 }
@@ -448,7 +448,8 @@ void SplitterWidget::_print(const String &prefix, Print &printer) const {
     String str = "  " + prefix;
     String str2 = str;
     str2.replace("-", " ");
-    printer.printf("%s# Widget %lu is wrapped by SplitterChildWidget %lu\n", str2.c_str(), it->getChild().id, it->id);
+    printer.printf("%s# Widget " SIZE_T_FORMAT_STRING " is wrapped by SplitterChildWidget " SIZE_T_FORMAT_STRING "\n",
+                   str2.c_str(), it->getChild().id, it->id);
     if (it == _current_child) {
       printer.printf("%s# ==> this is the current child of this splitter <==\n", str2.c_str());
     }

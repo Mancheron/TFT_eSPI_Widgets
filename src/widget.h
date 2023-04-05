@@ -314,9 +314,6 @@ namespace TFT_eSPI_Widgets {
      *
      * \param check_for_update This is the check_for_update parameter
      * passed to the fit() method.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     inline virtual void _fit(bool recurse, bool check_for_update) {}
 
@@ -332,9 +329,6 @@ namespace TFT_eSPI_Widgets {
      *
      * \param check_for_update This is the check_for_update parameter
      * passed to the fit() method.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     inline virtual void _shrink(bool recurse, bool check_for_update) {}
 
@@ -364,9 +358,6 @@ namespace TFT_eSPI_Widgets {
      * derived class.
      *
      * \param w The widget for which we want to give the focus.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     inline virtual void _setFocus(Widget &w) {
       _root._setFocus(w);
@@ -381,9 +372,6 @@ namespace TFT_eSPI_Widgets {
      * derived class.
      *
      * \param w The widget for which we want to remove the focus.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     inline virtual void _unsetFocus(Widget &w) {
       _root._unsetFocus(w);
@@ -397,9 +385,6 @@ namespace TFT_eSPI_Widgets {
      * \remark This method might be overridden by any derived class
      * that needs to perform specific actions when current widget has
      * the focus.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     inline virtual void _focus() {}
 
@@ -411,9 +396,6 @@ namespace TFT_eSPI_Widgets {
      * \remark This method might be overridden by any derived class
      * that needs to perform specific actions when current widget
      * loose the focus.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     inline virtual void _unfocus() {}
 
@@ -427,9 +409,6 @@ namespace TFT_eSPI_Widgets {
      * passed some event.
      *
      * \param event The event to handle.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     inline virtual void _handleEvent(Event event) {}
 
@@ -445,9 +424,6 @@ namespace TFT_eSPI_Widgets {
      *
      * \param recurse This is the recurse value passed to the loop()
      * method. Allmost all widgets should ignore this parameter.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     inline virtual void _loop(bool recurse) {}
 
@@ -464,9 +440,6 @@ namespace TFT_eSPI_Widgets {
      * \remark This method should be overridden by any derived class
      * that needs to perform specific actions when the current widget
      * is drawn.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     inline virtual void _draw() {}
 
@@ -481,9 +454,6 @@ namespace TFT_eSPI_Widgets {
      * \remark This method should be overridden by any derived class
      * that needs to perform specific actions when the current widget
      * is refreshed.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     inline virtual void _refresh() {}
 
@@ -497,9 +467,6 @@ namespace TFT_eSPI_Widgets {
      *
      * \param printer The Print object to print on (Serial by
      * default).
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     virtual void _print(const String &prefix, Print &printer) const;
 
@@ -659,18 +626,12 @@ namespace TFT_eSPI_Widgets {
      * given widget as a child.
      *
      * \param w The widget to set as current widget child.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     virtual void setChild(Widget &w);
 
     /**
      * Remove current widget child and all its descendants in the
      * widget tree (if any).
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     virtual void removeChild();
 
@@ -1031,9 +992,6 @@ namespace TFT_eSPI_Widgets {
      *
      * \param status When set to true, this widget can be focused
      * whereas it can't be anymore if set to false.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     inline virtual void setAcceptFocus(bool status) {
       _accept_focus = status;

@@ -1,7 +1,7 @@
-Canvas Widget Demo {#CanvasWidgetDemo}
+Canvas Widget demo {#CanvasWidgetDemo}
 ==================
 
-[Doxygen tag -- don't remove]: \example{lineno} TFT_CanvasWidget.ino
+[See [TFT_CanvasWidget.ino](./TFT_CanvasWidget_8ino-example.html)]: @example{lineno} TFT_CanvasWidget.ino
 
 [Widget]: @ref TFT_eSPI_Widgets::Widget "Widget"
 

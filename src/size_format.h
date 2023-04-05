@@ -1,6 +1,6 @@
 /******************************************************************************
  *                                                                             *
- *  Copyright © 2022-2023 -- LIRMM/CNRS/UM                                     *
+ *  Copyright © 2023      -- LIRMM/CNRS/UM                                     *
  *                           (Laboratoire d'Informatique, de Robotique et de   *
  *                           Microélectronique de Montpellier /                *
  *                           Centre National de la Recherche Scientifique /    *
@@ -81,26 +81,10 @@
  *                                                                             *
  ******************************************************************************/
 
-#ifndef __TFT_ESPI_WIDGETS_H__
-#define __TFT_ESPI_WIDGETS_H__
-
-#include <TFT_eSPI.h>
-
-#include "src/area.h"
-#include "src/button_handler.h"
-#include "src/canvas.h"
-#include "src/coordinates.h"
-#include "src/dimensions.h"
-#include "src/float_entry_widget.h"
-#include "src/fs_wrapper.h"
-#include "src/generic_widget.h"
-#include "src/graphical_properties.h"
-#include "src/image_widget.h"
-#include "src/integer_entry_widget.h"
-#include "src/message_widget.h"
-#include "src/physical_button_handler.h"
-#include "src/string_entry_widget.h"
-#include "src/splitter_widget.h"
-#include "src/widget.h"
-
+#ifndef SIZE_T_FORMAT_STRING
+#  if SIZE_MAX > UINT32_MAX
+#    define SIZE_T_FORMAT_STRING "%lu"
+#  else
+#    define SIZE_T_FORMAT_STRING "%u"
+#  endif
 #endif

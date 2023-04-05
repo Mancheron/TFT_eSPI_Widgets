@@ -85,6 +85,7 @@
 #define __SPLITTER_WIDGET_H__
 
 #include "widget.h"
+#include "size_format.h"
 
 namespace TFT_eSPI_Widgets {
 
@@ -116,12 +117,11 @@ namespace TFT_eSPI_Widgets {
        * Action to perform when this widget get the focus.
        *
        * On focus, transmit the focus to its child (which must exists).
-       *
-       * \return Returns nothing but doxygen is buggy with inline
-       * virtual void signature.
        */
       inline virtual void _focus() {
-        Serial.printf("Current Splitter Child Widget %lu is transmitting the focus to its child %lu\n", id, getChild().id);
+        Serial.printf("Current Splitter Child Widget " SIZE_T_FORMAT_STRING
+                      " is transmitting the focus to its child " SIZE_T_FORMAT_STRING "\n",
+                      id, getChild().id);
         setAcceptFocus(false);
         getChild().focus();
       }
@@ -181,9 +181,6 @@ namespace TFT_eSPI_Widgets {
        *
        * \param status When set to true, this widget can be focused
        * whereas it can't be anymore if set to false.
-       *
-       * \return Returns nothing but doxygen is buggy with inline
-       * virtual void signature.
        */
       virtual void setAcceptFocus(bool status);
 
@@ -557,9 +554,6 @@ namespace TFT_eSPI_Widgets {
      * passed to the fit() method. When this parameter is true, then
      * automatically call the touchOnAreaChanges() method after
      * setting the area, else does nothing more.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     virtual void _fit(bool recurse, bool check_for_update);
 
@@ -580,9 +574,6 @@ namespace TFT_eSPI_Widgets {
      * passed to the shrink() method. When this parameter is true,
      * then automatically call the touchOnAreaChanges() method after
      * setting the area, else does nothing more.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     virtual void _shrink(bool recurse, bool check_for_update);
 
@@ -599,9 +590,6 @@ namespace TFT_eSPI_Widgets {
      *   - Double right click => give the focus to the selected child.
      *
      * \param event The event to handle.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     virtual void _handleEvent(Event event);
 
@@ -612,9 +600,6 @@ namespace TFT_eSPI_Widgets {
      * _current_child position (set to the first if not already set)
      * is set to this widget focus graphical properties with a one
      * point line width border.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     virtual void _focus();
 
@@ -625,9 +610,6 @@ namespace TFT_eSPI_Widgets {
      * the _current_child position (set to the first if not already
      * set) is set to this widget default graphical properties with a
      * zero point line width border.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     virtual void _unfocus();
 
@@ -639,9 +621,6 @@ namespace TFT_eSPI_Widgets {
      *
      * \param recurse This is the recurse value passed to the loop()
      * method, which is forwarded to children loop() calls.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     virtual void _loop(bool recurse);
 
@@ -652,9 +631,6 @@ namespace TFT_eSPI_Widgets {
      * This method is called after the viewport is set and drawn
      * according to the graphical properties. This draw the current
      * widget children.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     virtual void _draw();
 
@@ -664,9 +640,6 @@ namespace TFT_eSPI_Widgets {
      *
      * This method is called at the end of the refresh(). This refresh
      * all the current widget children.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     virtual void _refresh();
 
@@ -680,9 +653,6 @@ namespace TFT_eSPI_Widgets {
      *
      * \param printer The Print object to print on (Serial by
      * default).
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     virtual void _print(const String &prefix, Print &printer) const;
 
@@ -766,9 +736,6 @@ namespace TFT_eSPI_Widgets {
      * method does nothing on this splitter widget.
      *
      * \param w The widget to append to the children.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     virtual inline void setChild(Widget &w) {
       setChild(w, 1);

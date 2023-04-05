@@ -1,7 +1,7 @@
-Splitter Widget Demo {#SplitterWidgetDemo}
+Splitter Widget demo {#SplitterWidgetDemo}
 ====================
 
-[Doxygen tag -- don't remove]: \example{lineno} SplitterWidget.ino
+[See [SplitterWidget.ino](./SplitterWidget_8ino-example.html)]: @example{lineno} SplitterWidget.ino
 
 [Widget]: @ref TFT_eSPI_Widgets::Widget "Widget"
 

@@ -1,3 +1,32 @@
+2023-04-05  DoccY <alban.mancheron@lirmm.fr>
+
+	* Doxyfile, LICENSE-CeCILL-C-en.md, LICENSE-CeCILL-C-fr.md,
+	examples/FloatEntryWidget/FloatEntryWidget.ino,
+	examples/FloatEntryWidget/README.md,
+	examples/ImageWidget-raw-data/README.md,
+	examples/ImageWidget-using-files/README.md,
+	examples/IntegerEntryWidget/IntegerEntryWidget.ino,
+	examples/IntegerEntryWidget/README.md,
+	examples/MessageWidget/README.md, examples/README.md,
+	examples/SplitterWidget/README.md,
+	examples/SplitterWidget/SplitterWidget.ino,
+	examples/StringEntryWidget/README.md,
+	examples/StringEntryWidget/StringEntryWidget.ino,
+	examples/TFT_CanvasWidget/README.md, TFT_eSPI_Widgets.h =>
+	src/TFT_eSPI_Widgets.h, src/area.cpp, src/canvas.h,
+	src/float_entry_widget.cpp, src/float_entry_widget.h,
+	src/image_widget.cpp, src/image_widget.h,
+	src/integer_entry_widget.cpp, src/integer_entry_widget.h,
+	src/message_widget.cpp, src/message_widget.h, src/size_format.h,
+	src/splitter_widget.cpp, src/splitter_widget.h,
+	src/string_entry_widget.cpp, src/string_entry_widget.h,
+	src/widget.cpp, src/widget.h:
+	Moves the main library header into src subdirectory for compliance with the 1.5+ library specification.
+	This makes the library examples compliant with the Arduino IDE.
+	Fix some compilation warnings.
+	Upgrade the doxygen configuration file and fix documentation issues.
+	
+	
 2023-02-28  DoccY <alban.mancheron@lirmm.fr>
 
 	* Doxyfile, library.json, library.properties:

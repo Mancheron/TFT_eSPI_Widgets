@@ -86,6 +86,7 @@
 #include <TJpg_Decoder.h>
 
 #include "fs_wrapper.h"
+#include "size_format.h"
 
 using namespace TFT_eSPI_Widgets;
 
@@ -222,7 +223,7 @@ bool ImageWidget::_updateDimensions() {
       String _str = _path;
       _str.toLowerCase();
       if (_str.endsWith(".bmp")) {
-        Serial.printf("[%s widget with id %lu] Trying to open file '%s' from its BMP extension...\t",
+        Serial.printf("[%s widget with id " SIZE_T_FORMAT_STRING "] Trying to open file '%s' from its BMP extension...\t",
                       getTypeString(), id,
                       _path.c_str());
         if (_drawBmpImage(false)) {
@@ -232,7 +233,7 @@ bool ImageWidget::_updateDimensions() {
           Serial.println("[Failure]");
         }
       } else if (_str.endsWith(".jpg") or _str.endsWith(".jpeg")) {
-        Serial.printf("[%s widget with id %lu] Trying to open file '%s' from its JPG extension...\t",
+        Serial.printf("[%s widget with id " SIZE_T_FORMAT_STRING "] Trying to open file '%s' from its JPG extension...\t",
                       getTypeString(), id,
                       _path.c_str());
         if (_drawJpgImage(false)) {
@@ -242,7 +243,7 @@ bool ImageWidget::_updateDimensions() {
           Serial.println("[Failure]");
         }
       } else if (_str.endsWith(".png")) {
-        Serial.printf("[%s widget with id %lu] Trying to open file '%s' from its PNG extension...\t",
+        Serial.printf("[%s widget with id " SIZE_T_FORMAT_STRING "] Trying to open file '%s' from its PNG extension...\t",
                       getTypeString(), id,
                       _path.c_str());
         if (_drawPngImage(false)) {
@@ -253,7 +254,7 @@ bool ImageWidget::_updateDimensions() {
         }
       } else {
         // At the end, try to open the file with all the methods
-        Serial.printf("[%s widget with id %lu] Trying to open file '%s' as a BMP...\t",
+        Serial.printf("[%s widget with id " SIZE_T_FORMAT_STRING "] Trying to open file '%s' as a BMP...\t",
                       getTypeString(), id,
                       _path.c_str());
         if (!_str.endsWith(".bmp") and _drawBmpImage(false)) {
@@ -261,7 +262,7 @@ bool ImageWidget::_updateDimensions() {
           Serial.println("[Success]");
         } else {
           Serial.println("[Failure]");
-          Serial.printf("[%s widget with id %lu] Trying to open file '%s' as a JPG...\t",
+          Serial.printf("[%s widget with id " SIZE_T_FORMAT_STRING "] Trying to open file '%s' as a JPG...\t",
                         getTypeString(), id,
                         _path.c_str());
           if (!_str.endsWith(".jpg") and !_str.endsWith(".jpeg") and _drawJpgImage(false)) {
@@ -269,7 +270,7 @@ bool ImageWidget::_updateDimensions() {
             Serial.println("[Success]");
           } else {
             Serial.println("[Failure]");
-            Serial.printf("[%s widget with id %lu] Trying to open file '%s' as a PNG...\t",
+            Serial.printf("[%s widget with id " SIZE_T_FORMAT_STRING "] Trying to open file '%s' as a PNG...\t",
                           getTypeString(), id,
                           _path.c_str());
             if (!_str.endsWith(".png") and _drawPngImage(false)) {
@@ -277,7 +278,7 @@ bool ImageWidget::_updateDimensions() {
               Serial.println("[Success]");
             } else {
               Serial.println("[Failure]");
-              Serial.printf("[%s widget with id %lu] Unable to detect the file format for the path '%s'\n",
+              Serial.printf("[%s widget with id " SIZE_T_FORMAT_STRING "] Unable to detect the file format for the path '%s'\n",
                             getTypeString(), id,
                             _path.c_str());
               _format = UNKNOWN;
@@ -287,14 +288,14 @@ bool ImageWidget::_updateDimensions() {
       }
     } else {
       _format = UNKNOWN;
-      Serial.printf("[%s widget with id %lu] File '%s' not found.\n",
+      Serial.printf("[%s widget with id " SIZE_T_FORMAT_STRING "] File '%s' not found.\n",
                     getTypeString(), id,
                     _path.c_str());
     }
   }
   yield();
   if (_format != UNKNOWN) {
-    Serial.printf("[%s widget with id %lu] Image size is %ux%u\n",
+    Serial.printf("[%s widget with id " SIZE_T_FORMAT_STRING "] Image size is %ux%u\n",
                   getTypeString(), id,
                   _dimensions.width, _dimensions.height);
   }
@@ -302,7 +303,6 @@ bool ImageWidget::_updateDimensions() {
 }
 
 void ImageWidget::_draw() {
-  const GraphicalProperties &props = getGraphicalProperties();
   if (_data) {
     TFT_eSPI &tft = getTFT();
     bool oldSwapBytes = tft.getSwapBytes();
@@ -326,7 +326,7 @@ void ImageWidget::_draw() {
                // the _format is anything but NOT_SET].
       break;
     default:
-      Serial.printf("[%s widget with id %lu] File format not supported.\n",
+      Serial.printf("[%s widget with id " SIZE_T_FORMAT_STRING "] File format not supported.\n",
                     getTypeString(), id);
     }
   }
@@ -337,7 +337,6 @@ bool ImageWidget::_drawBmpImage(bool real_drawing) {
   File fd = _read_only_open(_path.c_str());
   if (!fd) return false;
   uint32_t seekOffset;
-  uint16_t row, col;
   int16_t x = _offset.x;
   int16_t y = _offset.y;
 
@@ -366,7 +365,7 @@ bool ImageWidget::_drawBmpImage(bool real_drawing) {
       uint16_t padding = (4 - ((_dimensions.width * 3) & 3)) & 3;
       uint8_t lineBuffer[_dimensions.width * 3 + padding];
 
-      for (row = 0; row < _dimensions.height; row++) {
+      for (uint16_t row = 0; row < _dimensions.height; row++) {
         fd.read(lineBuffer, sizeof(lineBuffer));
         uint8_t*  bptr = lineBuffer;
         uint16_t* tptr = (uint16_t*)lineBuffer;
@@ -447,7 +446,7 @@ bool ImageWidget::_drawPngImage(bool real_drawing) {
                                 _png_draw_cb);
   if (v == PNG_SUCCESS) {
     TFT_eSPI &tft = getTFT();
-    _dimensions = Dimensions(_png_handler.getWidth(), _png_handler.getHeight());
+    _dimensions = Dimensions((uint16_t) _png_handler.getWidth(), (uint16_t) _png_handler.getHeight());
     if (real_drawing) {
       tft.startWrite();
       uint16_t *buffer = new uint16_t[_png_handler.getWidth()];
@@ -455,7 +454,7 @@ bool ImageWidget::_drawPngImage(bool real_drawing) {
                                    tft,
                                    _offset,
                                    buffer,
-                                   _png_handler.getWidth()
+                                   (size_t) _png_handler.getWidth()
       };
       v = _png_handler.decode(&extra_data, 0);
       delete [] buffer;

@@ -69,7 +69,7 @@ titulaire des droits patrimoniaux décide de soumettre l'exploitation
 aux dispositions qu'il contient.
 
 
-## Article 1 - DÉFINITIONS
+## Article 1 - DÉFINITIONS {#CeCILL-C-fr-1}
 
 Dans ce contrat, les termes suivants, lorsqu'ils seront écrits avec
 une lettre capitale, auront la signification suivante:
@@ -125,17 +125,17 @@ ou non, et d'un Module Lié.
 Ces termes s'entendent au singulier comme au pluriel.
 
 
-## Article 2 - OBJET
+## Article 2 - OBJET {#CeCILL-C-fr-2}
 
 Le Contrat a pour objet la concession par le Concédant au Licencié
 d'une licence non exclusive, cessible et mondiale du Logiciel telle
-que définie ci-après à l'[Article 5](#article-5-étendue-des-droits-concédés) pour toute la durée de
-protection des droits portant sur ce Logiciel.
+que définie ci-après à l'[Article 5](#CeCILL-C-fr-5) pour toute la
+durée de protection des droits portant sur ce Logiciel.
 
 
-## Article 3 - ACCEPTATION
+## Article 3 - ACCEPTATION {#CeCILL-C-fr-3}
 
-### 3.1
+### 3.1 {#CeCILL-C-fr-3-1}
 
 L'acceptation par le Licencié des termes du Contrat est réputée
 acquise du fait du premier des faits suivants:
@@ -148,31 +148,31 @@ acquise du fait du premier des faits suivants:
      concédés par le Contrat.
 
 
-### 3.2
+### 3.2 {#CeCILL-C-fr-3-2}
 
 Un exemplaire du Contrat, contenant notamment un avertissement relatif
 aux spécificités du Logiciel, à la restriction de garantie et à la
 limitation à un usage par des utilisateurs expérimentés a été mis à
 disposition du Licencié préalablement à son acceptation telle que
-définie à l'[Article 3.1](#31) ci dessus et le Licencié reconnaît en avoir
-pris connaissance.
+définie à l'[Article 3.1](#CeCILL-C-fr-3-1) ci dessus et le Licencié
+reconnaît en avoir pris connaissance.
 
 
-## Article 4 - ENTRÉE EN VIGUEUR ET DURÉE
+## Article 4 - ENTRÉE EN VIGUEUR ET DURÉE {#CeCILL-C-fr-4}
 
-### 4.1  ENTRÉE EN VIGUEUR
+### 4.1  ENTRÉE EN VIGUEUR {#CeCILL-C-fr-4-1}
 
 Le Contrat entre en vigueur à la date de son acceptation par le
-Licencié telle que définie en [3.1](#31).
+Licencié telle que définie en [3.1](#CeCILL-C-fr-3-1).
 
 
-### 4.2  DURÉE
+### 4.2  DURÉE {#CeCILL-C-fr-4-2}
 
 Le Contrat produira ses effets pendant toute la durée légale de
 protection des droits patrimoniaux portant sur le Logiciel.
 
 
-## Article 5 - ÉTENDUE DES DROITS CONCÉDÉS
+## Article 5 - ÉTENDUE DES DROITS CONCÉDÉS {#CeCILL-C-fr-5}
 
 Le Concédant concède au Licencié, qui accepte, les droits suivants sur
 le Logiciel pour toutes destinations et pour la durée du Contrat dans
@@ -187,7 +187,7 @@ Logiciel. En cas de cession de ces brevets, le Concédant s'engage à
 faire reprendre les obligations du présent alinéa aux cessionnaires.
 
 
-### 5.1  DROIT D'UTILISATION
+### 5.1  DROIT D'UTILISATION {#CeCILL-C-fr-5-1}
 
 Le Licencié est autorisé à utiliser le Logiciel, sans restriction
 quant aux domaines d'application, étant ci-après précisé que cela
@@ -207,7 +207,7 @@ comporte:
    en droit d'effectuer en vertu du Contrat.
 
 
-### 5.2 DROIT DE MODIFICATION
+### 5.2 DROIT DE MODIFICATION {#CeCILL-C-fr-5-2}
 
 Le droit de modification comporte le droit de traduire, d'adapter,
 d'arranger ou d'apporter toute autre modification au Logiciel et le
@@ -219,7 +219,7 @@ sous réserve de mentionner, de façon explicite, son nom en tant
 qu'auteur de cette modification et la date de création de celle-ci.
 
 
-### 5.3  DROIT DE DISTRIBUTION
+### 5.3  DROIT DE DISTRIBUTION {#CeCILL-C-fr-5-3}
 
 Le droit de distribution comporte notamment le droit de diffuser, de
 transmettre et de communiquer le Logiciel au public sur tout support
@@ -231,7 +231,7 @@ Le Licencié est autorisé à distribuer des copies du Logiciel, modifié
 ou non, à des tiers dans les conditions ci-après détaillées.
 
 
-#### 5.3.1  DISTRIBUTION DU LOGICIEL SANS MODIFICATION
+#### 5.3.1  DISTRIBUTION DU LOGICIEL SANS MODIFICATION {#CeCILL-C-fr-5-3-1}
 
 Le Licencié est autorisé à distribuer des copies conformes du
 Logiciel, sous forme de Code Source ou de Code Objet, à condition que
@@ -242,7 +242,7 @@ totalité et soit accompagnée:
 
 2. d'un avertissement relatif à la restriction de garantie et de
    responsabilité du Concédant telle que prévue aux articles
-   [8](#article-8-responsabilité) et [9](#article-9-garantie),
+   [8](#CeCILL-C-fr-8) et [9](#CeCILL-C-fr-9),
 
 et que, dans le cas où seul le Code Objet du Logiciel est redistribué,
 le Licencié permette un accès effectif au Code Source complet du
@@ -251,7 +251,7 @@ Logiciel, étant entendu que le coût additionnel d'acquisition du Code
 Source ne devra pas excéder le simple coût de transfert des données.
 
 
-#### 5.3.2  DISTRIBUTION DU LOGICIEL MODIFIÉ
+#### 5.3.2  DISTRIBUTION DU LOGICIEL MODIFIÉ {#CeCILL-C-fr-5-3-2}
 
 Lorsque le Licencié apporte une Contribution Intégrée au Logiciel, les
 conditions de distribution du Logiciel Modifié en résultant sont alors
@@ -266,7 +266,7 @@ accompagnée:
 
 2. d'un avertissement relatif à la restriction de garantie et de
    responsabilité du Concédant telle que prévue aux articles
-   [8](#article-8-responsabilité) et [9](#article-9-garantie),
+   [8](#CeCILL-C-fr-8) et [9](#CeCILL-C-fr-9),
 
 et que, dans le cas où seul le code objet du Logiciel Modifié est
 redistribué, le Licencié permette un accès effectif à son code source
@@ -275,14 +275,14 @@ Modifié, étant entendu que le coût additionnel d'acquisition du code
 source ne devra pas excéder le simple coût de transfert des données.
 
 
-#### 5.3.3 DISTRIBUTION DU LOGICIEL DÉRIVÉ
+#### 5.3.3 DISTRIBUTION DU LOGICIEL DÉRIVÉ {#CeCILL-C-fr-5-3-3}
 
 Lorsque le Licencié crée un Logiciel Dérivé, ce Logiciel Dérivé peut
 être distribué sous un contrat de licence autre que le présent Contrat
 à condition de respecter les obligations de mention des droits sur le
-Logiciel telles que définies à l'[Article 6.4](#64-mention-des-droits). Dans le cas où la
-création du Logiciel Dérivé a nécessité une modification du Code
-Source le licencié s'engage à ce que:
+Logiciel telles que définies à l'[Article 6.4](#CeCILL-C-fr-6-4). Dans
+le cas où la création du Logiciel Dérivé a nécessité une modification
+du Code Source le licencié s'engage à ce que:
 
 1. le Logiciel Modifié correspondant à cette modification soit régi
    par le présent Contrat,
@@ -299,17 +299,18 @@ Source le licencié s'engage à ce que:
    données.
 
 
-#### 5.3.4 COMPATIBILITÉ AVEC LA LICENCE CeCILL
+#### 5.3.4 COMPATIBILITÉ AVEC LA LICENCE CeCILL {#CeCILL-C-fr-5-3-4}
 
 Lorsqu'un Logiciel Modifié contient une Contribution Intégrée soumise
 au contrat de licence CeCILL, ou lorsqu'un Logiciel Dérivé contient un
 Module Lié soumis au contrat de licence CeCILL, les stipulations
-prévues au troisième item de l'[Article 6.4](#64-mention-des-droits) sont facultatives.
+prévues au troisième item de l'[Article 6.4](#CeCILL-C-fr-6-4) sont
+facultatives.
 
 
-## Article 6 - PROPRIÉTÉ INTELLECTUELLE
+## Article 6 - PROPRIÉTÉ INTELLECTUELLE {#CeCILL-C-fr-6}
 
-### 6.1  SUR LE LOGICIEL INITIAL
+### 6.1  SUR LE LOGICIEL INITIAL {#CeCILL-C-fr-6-1}
 
 Le Titulaire est détenteur des droits patrimoniaux sur le Logiciel
 Initial. Toute utilisation du Logiciel Initial est soumise au respect
@@ -318,26 +319,27 @@ oeuvre et nul autre n'a la faculté de modifier les conditions de
 diffusion de ce Logiciel Initial.
 
 Le Titulaire s'engage à ce que le Logiciel Initial reste au moins régi
-par le Contrat et ce, pour la durée visée à l'[Article 4.2](#42-durée).
+par le Contrat et ce, pour la durée visée à l'[Article
+4.2](#CeCILL-C-fr-4-2).
 
 
-### 6.2 SUR LES CONTRIBUTIONS INTÉGRÉES
+### 6.2 SUR LES CONTRIBUTIONS INTÉGRÉES {#CeCILL-C-fr-6-2}
 
 Le Licencié qui a développé une Contribution Intégrée est titulaire
 sur celle-ci des droits de propriété intellectuelle dans les
 conditions définies par la législation applicable.
 
 
-### 6.3 SUR LES MODULES LIÉS
+### 6.3 SUR LES MODULES LIÉS {#CeCILL-C-fr-6-3}
 
 Le Licencié qui a développé un Module Lié est titulaire sur celui-ci
 des droits de propriété intellectuelle dans les conditions définies
 par la législation applicable et reste libre du choix du contrat
 régissant sa diffusion dans les conditions définies à l'[Article
-5.3.3](#533-distribution-du-logiciel-dérivé).
+5.3.3](#CeCILL-C-fr-5-3-3).
 
 
-### 6.4 MENTIONS DES DROITS
+### 6.4 MENTIONS DES DROITS {#CeCILL-C-fr-6-4}
 
 Le Licencié s'engage expressément:
 
@@ -360,9 +362,9 @@ le respect des dits droits de propriété intellectuelle du Titulaire
 et/ou des Contributeurs.
 
 
-## Article 7 - SERVICES ASSOCIÉS
+## Article 7 - SERVICES ASSOCIÉS {#CeCILL-C-fr-7}
 
-### 7.1
+### 7.1 {#CeCILL-C-fr-7-1}
 
 Le Contrat n'oblige en aucun cas le Concédant à la réalisation de
 prestations d'assistance technique ou de maintenance du Logiciel.
@@ -374,7 +376,7 @@ séparé. Ces actes de maintenance et/ou assistance technique
 n'engageront que la seule responsabilité du Concédant qui les propose.
 
 
-### 7.2
+### 7.2 {#CeCILL-C-fr-7-2}
 
 De même, tout Concédant est libre de proposer, sous sa seule
 responsabilité, à ses licenciés une garantie, qui n'engagera que lui,
@@ -384,17 +386,17 @@ financières de son application feront l'objet d'un acte séparé entre
 le Concédant et le Licencié.
 
 
-## Article 8 - RESPONSABILITÉ
+## Article 8 - RESPONSABILITÉ {#CeCILL-C-fr-8}
 
-### 8.1
+### 8.1 {#CeCILL-C-fr-8-1}
 
-Sous réserve des dispositions de l'[Article 8.2](#82), le Licencié a la
-faculté, sous réserve de prouver la faute du Concédant concerné, de
-solliciter la réparation du préjudice direct qu'il subirait du fait du
-Logiciel et dont il apportera la preuve.
+Sous réserve des dispositions de l'[Article 8.2](#CeCILL-C-fr-8-2), le
+Licencié a la faculté, sous réserve de prouver la faute du Concédant
+concerné, de solliciter la réparation du préjudice direct qu'il
+subirait du fait du Logiciel et dont il apportera la preuve.
 
 
-### 8.2
+### 8.2 {#CeCILL-C-fr-8-2}
 
 La responsabilité du Concédant est limitée aux engagements pris en
 application du Contrat et ne saurait être engagée en raison notamment:
@@ -415,10 +417,10 @@ application du Contrat et ne saurait être engagée en raison notamment:
     Concédant.
 
 
-## Article 9 - GARANTIE
+## Article 9 - GARANTIE {#CeCILL-C-fr-9}
 
 
-### 9.1
+### 9.1 {#CeCILL-C-fr-9-1}
 
 Le Licencié reconnaît que l'état actuel des connaissances
 scientifiques et techniques au moment de la mise en circulation du
@@ -435,19 +437,20 @@ et de s'assurer qu'il ne causera pas de dommages aux personnes et aux
 biens.
 
 
-### 9.2
+### 9.2 {#CeCILL-C-fr-9-2}
 
 Le Concédant déclare de bonne foi être en droit de concéder l'ensemble
 des droits attachés au Logiciel (comprenant notamment les droits visés
-à l'[Article 5](#article-5-étendue-des-droits-concédés)).
+à l'[Article 5](#CeCILL-C-fr-5)).
 
 
-### 9.3
+### 9.3 {#CeCILL-C-fr-9-3}
 
 Le Licencié reconnaît que le Logiciel est fourni "en l'état" par le
 Concédant sans autre garantie, expresse ou tacite, que celle prévue à
-l'[Article 9.2](#92) et notamment sans aucune garantie sur sa valeur
-commerciale, son caractère sécurisé, innovant ou pertinent.
+l'[Article 9.2](#CeCILL-C-fr-9-2) et notamment sans aucune garantie
+sur sa valeur commerciale, son caractère sécurisé, innovant ou
+pertinent.
 
 En particulier, le Concédant ne garantit pas que le Logiciel est
 exempt d'erreur, qu'il fonctionnera sans interruption, qu'il sera
@@ -455,7 +458,7 @@ compatible avec l'équipement du Licencié et sa configuration
 logicielle ni qu'il remplira les besoins du Licencié.
 
 
-### 9.4
+### 9.4 {#CeCILL-C-fr-9-4}
 
 Le Concédant ne garantit pas, de manière expresse ou tacite, que le
 Logiciel ne porte pas atteinte à un quelconque droit de propriété
@@ -474,9 +477,9 @@ garantie n'est apportée quant à l'existence de droits antérieurs sur
 le nom du Logiciel et sur l'existence d'une marque.
 
 
-## Article 10 - RÉSILIATION
+## Article 10 - RÉSILIATION {#CeCILL-C-fr-10}
 
-### 10.1
+### 10.1 {#CeCILL-C-fr-10-1}
 
 En cas de manquement par le Licencié aux obligations mises à sa charge
 par le Contrat, le Concédant pourra résilier de plein droit le Contrat
@@ -484,7 +487,7 @@ trente (30) jours après notification adressée au Licencié et restée
 sans effet.
 
 
-### 10.2
+### 10.2 {#CeCILL-C-fr-10-2}
 
 Le Licencié dont le Contrat est résilié n'est plus autorisé à
 utiliser, modifier ou distribuer le Logiciel. Cependant, toutes les
@@ -493,9 +496,9 @@ Contrat resteront valides sous réserve qu'elles aient été effectuées
 en conformité avec le Contrat.
 
 
-## Article 11 - DISPOSITIONS DIVERSES
+## Article 11 - DISPOSITIONS DIVERSES {#CeCILL-C-fr-11}
 
-### 11.1  CAUSE EXTÉRIEURE
+### 11.1  CAUSE EXTÉRIEURE {#CeCILL-C-fr-11-1}
 
 Aucune des Parties ne sera responsable d'un retard ou d'une
 défaillance d'exécution du Contrat qui serait dû à un cas de force
@@ -508,7 +511,7 @@ terre, le feu, les explosions, les grèves et les conflits sociaux,
 l'état de guerre...
 
 
-### 11.2
+### 11.2 {#CeCILL-C-fr-11-2}
 
 Le fait, par l'une ou l'autre des Parties, d'omettre en une ou
 plusieurs occasions de se prévaloir d'une ou plusieurs dispositions du
@@ -516,7 +519,7 @@ Contrat, ne pourra en aucun cas impliquer renonciation par la Partie
 intéressée à s'en prévaloir ultérieurement.
 
 
-### 11.3
+### 11.3 {#CeCILL-C-fr-11-3}
 
 Le Contrat annule et remplace toute convention antérieure, écrite ou
 orale, entre les Parties sur le même objet et constitue l'accord
@@ -526,7 +529,7 @@ Parties à moins d'être faite par écrit et signée par leurs
 représentants dûment habilités.
 
 
-### 11.4
+### 11.4 {#CeCILL-C-fr-11-4}
 
 Dans l'hypothèse où une ou plusieurs des dispositions du Contrat
 s'avèrerait contraire à une loi ou à un texte applicable, existants ou
@@ -537,21 +540,21 @@ nullité, pour quelque raison que ce soit, d'une des dispositions du
 Contrat ne saurait entraîner la nullité de l'ensemble du Contrat.
 
 
-### 11.5  LANGUE
+### 11.5  LANGUE {#CeCILL-C-fr-11-5}
 
 Le Contrat est rédigé en langue française et en langue anglaise, ces
 deux versions faisant également foi.
 
 
-## Article 12 - NOUVELLES VERSIONS DU CONTRAT
+## Article 12 - NOUVELLES VERSIONS DU CONTRAT {#CeCILL-C-fr-12}
 
-### 12.1
+### 12.1 {#CeCILL-C-fr-12-1}
 
 Toute personne est autorisée à copier et distribuer des copies de ce
 Contrat.
 
 
-### 12.2
+### 12.2 {#CeCILL-C-fr-12-2}
 
 Afin d'en préserver la cohérence, le texte du Contrat est protégé et
 ne peut être modifié que par les auteurs de la licence, lesquels se
@@ -562,23 +565,23 @@ compte de nouvelles problématiques rencontrées par les logiciels
 libres.
 
 
-### 12.3
+### 12.3 {#CeCILL-C-fr-12-3}
 
 Tout Logiciel diffusé sous une version donnée du Contrat ne pourra
 faire l'objet d'une diffusion ultérieure que sous la même version du
 Contrat ou une version postérieure.
 
 
-## Article 13 - LOI APPLICABLE ET COMPÉTENCE TERRITORIALE
+## Article 13 - LOI APPLICABLE ET COMPÉTENCE TERRITORIALE {#CeCILL-C-fr-13}
 
-### 13.1
+### 13.1 {#CeCILL-C-fr-13-1}
 
 Le Contrat est régi par la loi française. Les Parties conviennent de
 tenter de régler à l'amiable les différends ou litiges qui viendraient
 à se produire par suite ou à l'occasion du Contrat.
 
 
-### 13.2
+### 13.2 {#CeCILL-C-fr-13-2}
 
 À défaut d'accord amiable dans un délai de deux (2) mois à compter de
 leur survenance et sauf situation relevant d'une procédure d'urgence,

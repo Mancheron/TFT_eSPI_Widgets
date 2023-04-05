@@ -1,7 +1,7 @@
 Image Widgets using files stored on the file system demo {#ImageWidgetDemo2}
 ========================================================
 
-[Doxygen tag -- don't remove]: \example{lineno} ImageWidget-using-files.ino
+[See [ImageWidget-using-files.ino](./ImageWidget-using-files_8ino-example.html)]: @example{lineno} ImageWidget-using-files.ino
 
 [Widget]: @ref TFT_eSPI_Widgets::Widget "Widget"
 

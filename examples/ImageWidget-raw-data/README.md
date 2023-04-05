@@ -1,7 +1,7 @@
 Image Widgets using raw data demo {#ImageWidgetDemo1}
 =================================
 
-[Doxygen tag -- don't remove]: \example{lineno} ImageWidget-raw-data.ino
+[See [ImageWidget-raw-data.ino](./ImageWidget-raw-data_8ino-example.html)]: @example{lineno} ImageWidget-raw-data.ino
 
 [Widget]: @ref TFT_eSPI_Widgets::Widget "Widget"
 

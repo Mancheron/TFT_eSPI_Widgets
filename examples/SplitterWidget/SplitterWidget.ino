@@ -116,6 +116,8 @@ void processButtonEvents() {
   case ButtonHandler::LONG_PRESS:
     canvas.handleEvent(LONG_LEFT_PRESS);
     break;
+  default:
+    (void) 0; // Event not handled
   }
   switch (right_event) {
   case ButtonHandler::SINGLE_CLICK:
@@ -130,6 +132,8 @@ void processButtonEvents() {
   case ButtonHandler::LONG_PRESS:
     canvas.handleEvent(LONG_RIGHT_PRESS);
     break;
+  default:
+    (void) 0; // Event not handled
   }
 }
 
@@ -213,7 +217,7 @@ void onDescriptionLoop(Widget &w) {
 // the [Integer Entry] Widget for which value has changed from
 // old_value to new_value).
 void onIconSelectionChange(Widget &w, int32_t old_value, int32_t new_value) {
-  IntegerEntryWidget &_w = w.as<IntegerEntryWidget>();
+  // IntegerEntryWidget &_w = w.as<IntegerEntryWidget>();
   previous_icon = (Icon_t) old_value;
   current_icon = (Icon_t) new_value;
 }

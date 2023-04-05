@@ -1,7 +1,7 @@
-Float Entry Widgets demo {#FloatEntryWidgetDemo}
-========================
+Float Entry Widget demo {#FloatEntryWidgetDemo}
+=======================
 
-[Doxygen tag -- don't remove]: @example{lineno} FloatEntryWidget.ino
+[See [FloatEntryWidget.ino](./FloatEntryWidget_8ino-example.html)]: @example{lineno} FloatEntryWidget.ino
 
 [Widget]: @ref TFT_eSPI_Widgets::Widget "Widget"
 

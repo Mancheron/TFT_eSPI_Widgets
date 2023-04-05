@@ -1,7 +1,7 @@
 Integer Entry Widget demo {#IntegerEntryWidgetDemo}
 =========================
 
-[Doxygen tag -- don't remove]: \example{lineno} IntegerEntryWidget.ino
+[See [IntegerEntryWidget.ino](./IntegerEntryWidget_8ino-example.html)]: @example{lineno} IntegerEntryWidget.ino
 
 [Widget]: @ref TFT_eSPI_Widgets::Widget "Widget"
 

@@ -162,6 +162,8 @@ void StringEntryWidget::_handleEvent(Event event) {
   case DOUBLE_RIGHT_CLICK:
     nextCursorPos();
     break;
+  default:
+    (void) 0; // Event not handled
   }
   touch();
 }

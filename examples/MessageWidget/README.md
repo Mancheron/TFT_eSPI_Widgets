@@ -1,7 +1,7 @@
-Message Widget Demo {#MessageWidgetDemo}
+Message Widget demo {#MessageWidgetDemo}
 ===================
 
-[Doxygen tag -- don't remove]: \example{lineno} MessageWidget.ino
+[See [MessageWidget.ino](./MessageWidget_8ino-example.html)]: @example{lineno} MessageWidget.ino
 
 [Widget]: @ref TFT_eSPI_Widgets::Widget "Widget"
 

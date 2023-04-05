@@ -1,9 +1,6 @@
-Demos {#Demos}
-=====
+@page examples Learning by examples
 
-@page examples Demos
-
-This is the list of widget demo.
+This is the recommended to explore the demos in the following order:
 
 - @subpage CanvasWidgetDemo
 

@@ -1,7 +1,7 @@
-String Entry Widget Demo {#StringEntryWidgetDemo}
+String Entry Widget demo {#StringEntryWidgetDemo}
 ========================
 
-[Doxygen tag -- don't remove]: @example{lineno} StringEntryWidget.ino
+[See [StringEntryWidget.ino](./StringEntryWidget_8ino-example.html)]: @example{lineno} StringEntryWidget.ino
 
 [Widget]: @ref TFT_eSPI_Widgets::Widget "Widget"
 

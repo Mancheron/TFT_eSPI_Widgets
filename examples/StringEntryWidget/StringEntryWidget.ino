@@ -116,6 +116,8 @@ void processButtonEvents() {
   case ButtonHandler::LONG_PRESS:
     canvas.handleEvent(LONG_LEFT_PRESS);
     break;
+  default:
+    (void) 0; // Event not handled
   }
   switch (right_event) {
   case ButtonHandler::SINGLE_CLICK:
@@ -130,6 +132,8 @@ void processButtonEvents() {
   case ButtonHandler::LONG_PRESS:
     canvas.handleEvent(LONG_RIGHT_PRESS);
     break;
+  default:
+    (void) 0; // Event not handled
   }
 }
 

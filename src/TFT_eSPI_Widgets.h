@@ -81,187 +81,26 @@
  *                                                                             *
  ******************************************************************************/
 
-#ifndef __CANVAS_H__
-#define __CANVAS_H__
+#ifndef __TFT_ESPI_WIDGETS_H__
+#define __TFT_ESPI_WIDGETS_H__
 
-#include <stdexcept>
+#include <TFT_eSPI.h>
+
+#include "area.h"
+#include "button_handler.h"
+#include "canvas.h"
+#include "coordinates.h"
+#include "dimensions.h"
+#include "float_entry_widget.h"
+#include "fs_wrapper.h"
+#include "generic_widget.h"
+#include "graphical_properties.h"
+#include "image_widget.h"
+#include "integer_entry_widget.h"
+#include "message_widget.h"
+#include "physical_button_handler.h"
+#include "string_entry_widget.h"
+#include "splitter_widget.h"
 #include "widget.h"
 
-namespace TFT_eSPI_Widgets {
-
-  /**
-   * The canvas is the only kind of Widget that has no parent, but
-   * is explicitelly attached to some TFT screen.
-   */
-  class Canvas: public Widget {
-
-  protected:
-
-    /**
-     * The address of the TFT attached to this widget.
-     *
-     * It must be set using the init() method (or the non default
-     * Canvas() constructor).
-     */
-    TFT_eSPI *_tft;
-
-    /**
-     * The address of the focused widget (if any).
-     */
-    Widget *_focus_widget;
-
-    /**
-     * Whether or not transmit the focus on the parent of the
-     * unfocused widget.
-     */
-    bool _transmit_focus;
-
-    /**
-     * Throws an exception if the current canvas is not initalized.
-     */
-    inline void _ensure_initialized() const {
-      if (!_tft) {
-        throw std::runtime_error("You must initialize the canvas first before calling any other method on it!");
-      }
-    }
-
-    /**
-     * Get the TFT screen attached to current widget.
-     *
-     * \return This method returns the TFT screen object.
-     */
-    inline virtual TFT_eSPI &_getTFT() const {
-      _ensure_initialized();
-      return *_tft;
-    }
-
-    /**
-     * Get the focus status of the given widget.
-     *
-     * \param w The widget for which we want to know if it is focused.
-     *
-     * \return This method returns true if the given widgets has the
-     * focus.
-     */
-    inline virtual bool _hasFocus(const Widget &w) const {
-      _ensure_initialized();
-      return _focus_widget == &w;
-    }
-
-    /**
-     * Set the focus on the given widget.
-     *
-     * \param w The widget for which we want to give the focus.
-     */
-    virtual void _setFocus(Widget &w);
-
-    /**
-     * Loose the focus from the given widget.
-     *
-     * \param w The widget for which we want to remove the focus.
-     */
-    virtual void _unsetFocus(Widget &w);
-
-    /**
-     * Action to perform when the current widget is passed some event.
-     *
-     * Send the event to the focused widget (if any).
-     *
-     * \param event The event to handle.
-     */
-    virtual void _handleEvent(Event event);
-
-  public:
-
-    /**
-     * Creates a canvas widget (which must be initialized with the
-     * init() method).
-     */
-    Canvas();
-
-    /**
-     * Creates (and initialize) a canvas widget (rectangular area)
-     * associated to the given TFT.
-     *
-     * \param tft The TFT screen where this canvas and its descendants
-     * will be drawn.
-     *
-     * \param default_graphical_properties The graphical properties to
-     * use to draw this canvas when it hasn't got the focus.
-     *
-     * \param focus_graphical_properties The graphical properties to
-     * use to draw this canvas when it has got the focus. If it is set
-     * to the GraphicalProperties::default_values constant), then the
-     * value of the default_graphical_properties is used instead.
-     *
-     * \param area The area on the TFT screen to use for this
-     * canvas. The area anchor is the absolute position according to
-     * the main TFT screen top left corner. There is no verification
-     * about the area to fit into the TFT screen. If the area is
-     * empty, then uses the TFT dimensions and places the area anchor
-     * at the Coordinates::origin.
-     *
-     * \see See init() method.
-     */
-    Canvas(TFT_eSPI &tft,
-           const GraphicalProperties &default_graphical_properties = GraphicalProperties::default_values,
-           const GraphicalProperties &focus_graphical_properties = GraphicalProperties::default_values,
-           const Area &area = Area::reference_value);
-
-    /**
-     * Initialize the canvas widget (rectangular area) associated to
-     * the given TFT.
-     *
-     * \param tft The TFT screen where this canvas and its descendants
-     * will be drawn.
-     *
-     * \param default_graphical_properties The graphical properties to
-     * use to draw this canvas when it hasn't got the focus.
-     *
-     * \param focus_graphical_properties The graphical properties to
-     * use to draw this canvas when it has got the focus. If it is set
-     * to the GraphicalProperties::default_values constant), then the
-     * value of the default_graphical_properties is used instead.
-     *
-     * \param area The area on the TFT screen to use for this
-     * canvas. The area anchor is the absolute position according to
-     * the main TFT screen top left corner. There is no verification
-     * about the area to fit into the TFT screen. If the area is
-     * empty, then uses the TFT dimensions and places the area anchor
-     * at the Coordinates::origin.
-     *
-     * If the widget was already initialized, then does nothing.
-     */
-    void init(TFT_eSPI &tft,
-              const GraphicalProperties &default_graphical_properties = GraphicalProperties::default_values,
-              const GraphicalProperties &focus_graphical_properties = GraphicalProperties::default_values,
-              const Area &area = Area::empty);
-
-    /**
-     * Return the widget type.
-     *
-     * \return This method returns the CANVAS widget type.
-     */
-    inline virtual Type getType() const {
-      return CANVAS;
-    }
-
-    /**
-     * Return a pointer to the widget having the focus (if any).
-     *
-     * \return This method returns the address of the widget having
-     * the focus or NULL if not widget has it.
-     */
-    inline const Widget *getFocusedWidget() const {
-      _ensure_initialized();
-      return _focus_widget;
-    }
-
-  };
-
-}
-
 #endif
-// Local Variables:
-// mode: c++
-// End:

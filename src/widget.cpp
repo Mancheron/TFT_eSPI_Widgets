@@ -82,6 +82,7 @@
  ******************************************************************************/
 
 #include "widget.h"
+#include "size_format.h"
 
 using namespace TFT_eSPI_Widgets;
 
@@ -102,6 +103,7 @@ const char *Widget::getTypeString(Type t) {
     TYPE2CSTR_CASE(SPLITTER_CHILD);
     TYPE2CSTR_CASE(CUSTOM);
   }
+  return "<no type>";
 }
 
 const char *Widget::getEventString(Event e) {
@@ -115,6 +117,7 @@ const char *Widget::getEventString(Event e) {
     TYPE2CSTR_CASE(TRIPLE_RIGHT_CLICK);
     TYPE2CSTR_CASE(LONG_RIGHT_PRESS);
   }
+  return "<no event>";
 }
 
 Widget::Widget():
@@ -277,15 +280,15 @@ void Widget::setPosition(uint8_t horizontal, uint8_t vertical, bool check_for_up
   } else {
     area = _parent->getInnerArea(true);
   }
-  if (horizontal != -1) {
-    horizontal = constrain(horizontal, 0, 100);
+  if (horizontal != (uint8_t) -1) {
+    horizontal = (horizontal > 100) ? 100 : horizontal;
     // We don't care about the current widget fits horizontally into
     // its parent/screen since the computation is the same in both
     // cases.
     _area.x = area.x + horizontal * (area.width - _area.width) / 100;
   }
-  if (vertical != -1) {
-    vertical = constrain(vertical, 0, 100);
+  if (vertical != (uint8_t) -1) {
+    vertical = (vertical > 100) ? 100 : vertical;
     // We don't care about the current widget fits vertically into its
     // parent/screen since the computation is the same in both cases.
     _area.y = area.y + vertical * (area.height - _area.height) / 100;
@@ -422,6 +425,7 @@ void Widget::_print(const String &prefix, Print &printer) const {
 void Widget::print(const String &prefix, Print &printer) const {
   printer.print(prefix);
   const char *hl = hasFocus() ? "*" : "";
-  printer.printf("%sWidget%s %lu [%s] ", hl, hl, id, getArea(true).toString().c_str());
+  printer.printf("%sWidget%s " SIZE_T_FORMAT_STRING " [%s] ",
+                 hl, hl, id, getArea(true).toString().c_str());
   _print(prefix, printer);
 }

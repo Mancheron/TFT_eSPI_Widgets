@@ -107,6 +107,8 @@ void IntegerEntryWidget::_handleEvent(Event event) {
   case LONG_RIGHT_PRESS:
     incrValue();
     break;
+  default:
+    (void) 0; // Event not handled
   }
   touch();
 }

@@ -153,9 +153,6 @@ namespace TFT_eSPI_Widgets {
      * \param check_for_update This is the check_for_update parameter
      * passed to the fit() method. This parameter is not used for this
      * widget.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     inline virtual void _fit(bool recurse, bool check_for_update) {
       updateMessage();
@@ -171,17 +168,11 @@ namespace TFT_eSPI_Widgets {
      * \param check_for_update This is the check_for_update parameter
      * passed to the fit() method. This parameter is not used for this
      * widget.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     virtual void _shrink(bool recurse, bool check_for_update);
 
     /**
      * The specific drawing code for message widgets.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     virtual void _draw();
 
@@ -191,9 +182,6 @@ namespace TFT_eSPI_Widgets {
      *
      * \param recurse This is the recurse value passed to the loop()
      * method. This parameter is not used for this widget.
-     *
-     * \return Returns nothing but doxygen is buggy with inline
-     * virtual void signature.
      */
     virtual void _loop(bool recurse);
 

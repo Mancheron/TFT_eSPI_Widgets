@@ -163,6 +163,7 @@ void MessageWidget::updateMessage() {
       break;
     case ' ':
       last_space = i;
+      /* Intentional fallthrough */
     default:
       ++cur_line_width;
     }

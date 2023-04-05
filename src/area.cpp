@@ -88,13 +88,13 @@ using namespace TFT_eSPI_Widgets;
 const Area Area::reference_value;
 
 Area::Area(uint16_t w, uint16_t h, int32_t x, int32_t y):
-  Dimensions(w, h),
-  Coordinates(x, y)
+  Coordinates(x, y),
+  Dimensions(w, h)
 {}
 
 Area::Area(const Dimensions &dim, const Coordinates &top_left):
-  Dimensions(dim),
-  Coordinates(top_left)
+  Coordinates(top_left),
+  Dimensions(dim)
 {}
 
 bool Area::overlap(const Area &area) const {
