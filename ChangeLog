@@ -1,5 +1,12 @@
 2026-04-10  DoccY <alban.mancheron@lirmm.fr>
 
+	* Doxyfile, LICENSE-CeCILL-C-en.md, LICENSE-CeCILL-C-fr.md,
+	library.json, library.properties:
+	Update doxygen auto documentation and increase micro version number.
+	
+	
+2026-04-10  DoccY <alban.mancheron@lirmm.fr>
+
 	* src/image_widget.cpp:
 	Fix compile error due to the external PNGdec library update (between v1.1.3 and v1.1.4).
 	

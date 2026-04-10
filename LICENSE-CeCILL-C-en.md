@@ -68,7 +68,7 @@ of the economic rights decides to submit the use thereof to its
 provisions.
 
 
-## Article 1 - DEFINITIONS {#CeCILL-C-en-1}
+## Article 1 - DEFINITIONS
 
 For the purpose of this Agreement, when the following expressions
 commence with a capital letter, they shall have the following meaning:
@@ -123,17 +123,17 @@ modified or not, and of a Related Module.
 These expressions may be used both in singular and plural form.
 
 
-## Article 2 - PURPOSE {#CeCILL-C-en-2}
+## Article 2 - PURPOSE
 
 The purpose of the Agreement is the grant by the Licensor to the
 Licensee of a non-exclusive, transferable and worldwide license for
-the Software as set forth in [Article 5](#CeCILL-C-en-5) hereinafter
-for the whole term of the protection granted by the rights over said
-Software.
+the Software as set forth in [Article
+5](#article-5---scope-of-rights-granted) hereinafter for the whole
+term of the protection granted by the rights over said Software.
 
-## Article 3 - ACCEPTANCE {#CeCILL-C-en-3}
+## Article 3 - ACCEPTANCE
 
-### 3.1 {#CeCILL-C-en-3-1}
+### 3.1
 
 The Licensee shall be deemed as having accepted the terms and
 conditions of this Agreement upon the occurrence of the first of the
@@ -146,31 +146,31 @@ following events:
      hereunder.
 
 
-### 3.2 {#CeCILL-C-en-3.2}
+### 3.2
 
 One copy of the Agreement, containing a notice relating to the
 characteristics of the Software, to the limited warranty, and to the
 fact that its use is restricted to experienced users has been provided
 to the Licensee prior to its acceptance as set forth in [Article
-3.1](#CeCILL-C-en-3-1) hereinabove, and the Licensee hereby
-acknowledges that it has read and understood it.
+3.1](#31) hereinabove, and the Licensee hereby acknowledges that it
+has read and understood it.
 
 
-## Article 4 - EFFECTIVE DATE AND TERM {#CeCILL-C-en-4}
+## Article 4 - EFFECTIVE DATE AND TERM
 
-### 4.1 EFFECTIVE DATE {#CeCILL-C-en-4-1}
+### 4.1 EFFECTIVE DATE
 
 The Agreement shall become effective on the date when it is accepted
-by the Licensee as set forth in [Article 3.1](#CeCILL-C-en-3-1).
+by the Licensee as set forth in [Article 3.1](#31).
 
 
-### 4.2 TERM {#CeCILL-C-en-4-2}
+### 4.2 TERM
 
 The Agreement shall remain in force for the entire legal term of
 protection of the economic rights over the Software.
 
 
-## Article 5 - SCOPE OF RIGHTS GRANTED {#CeCILL-C-en-5}
+## Article 5 - SCOPE OF RIGHTS GRANTED
 
 The Licensor hereby grants to the Licensee, who accepts, the following
 rights over the Software for any or all use, and for the term of the
@@ -186,7 +186,7 @@ undertakes to have the transferees subscribe to the obligations set
 forth in this paragraph.
 
 
-### 5.1 RIGHT OF USE {#CeCILL-C-en-5-1}
+### 5.1 RIGHT OF USE
 
 The Licensee is authorized to use the Software, without any limitation
 as to its fields of application, with it being hereinafter specified
@@ -205,7 +205,7 @@ that this comprises:
    or storage operation as regards the Software, that it is entitled
    to carry out hereunder.
 
-### 5.2 RIGHT OF MODIFICATION {#CeCILL-C-en-5-2}
+### 5.2 RIGHT OF MODIFICATION
 
 The right of modification includes the right to translate, adapt,
 arrange, or make any or all modifications to the Software, and the
@@ -218,7 +218,7 @@ author of said modification and indicates the date of the creation
 thereof.
 
 
-### 5.3 RIGHT OF DISTRIBUTION {#CeCILL-C-en-5-3}
+### 5.3 RIGHT OF DISTRIBUTION
 
 In particular, the right of distribution includes the right to
 publish, transmit and communicate the Software to the general public
@@ -230,7 +230,7 @@ to third parties according to the terms and conditions set forth
 hereinafter.
 
 
-### 5.3.1 DISTRIBUTION OF SOFTWARE WITHOUT MODIFICATION {#CeCILL-C-en-5-3-1}
+### 5.3.1 DISTRIBUTION OF SOFTWARE WITHOUT MODIFICATION
 
 The Licensee is authorized to distribute true copies of the Software
 in Source Code or Object Code form, provided that said distribution
@@ -240,8 +240,8 @@ by:
 1. a copy of the Agreement,
 
 2. a notice relating to the limitation of both the Licensor's warranty
-   and liability as set forth in Articles [8](#CeCILL-C-en-8) and
-   [9](#CeCILL-C-en-9),
+   and liability as set forth in Articles [8](#article-8---liability)
+   and [9](#article-9---warranty),
 
 and that, in the event that only the Object Code of the Software is
 redistributed, the Licensee allows effective access to the full Source
@@ -251,7 +251,7 @@ cost of acquiring the Source Code shall not exceed the cost of
 transferring the data.
 
 
-### 5.3.2 DISTRIBUTION OF MODIFIED SOFTWARE {#CeCILL-C-en-5-3-2}
+### 5.3.2 DISTRIBUTION OF MODIFIED SOFTWARE
 
 When the Licensee makes an Integrated Contribution to the Software,
 the terms and conditions for the distribution of the resulting
@@ -266,24 +266,24 @@ by:
 1. a copy of the Agreement,
 
 2. a notice relating to the limitation of both the Licensor's warranty
-   and liability as set forth in Articles [8](#CeCILL-C-en-8) and
-   [9](#CeCILL-C-en-9), and that, in the event that only the object
-   code of the Modified Software is redistributed, the Licensee allows
-   effective access to the full source code of the Modified Software
-   at a minimum during the entire period of its distribution of the
-   Modified Software, it being understood that the additional cost of
-   acquiring the source code shall not exceed the cost of transferring
-   the data.
+   and liability as set forth in Articles [8](#article-8---liability)
+   and [9](#article-9---warranty), and that, in the event that only
+   the object code of the Modified Software is redistributed, the
+   Licensee allows effective access to the full source code of the
+   Modified Software at a minimum during the entire period of its
+   distribution of the Modified Software, it being understood that the
+   additional cost of acquiring the source code shall not exceed the
+   cost of transferring the data.
 
-### 5.3.3 DISTRIBUTION OF DERIVATIVE SOFTWARE {#CeCILL-C-en-5-3-3}
+### 5.3.3 DISTRIBUTION OF DERIVATIVE SOFTWARE
 
 When the Licensee creates Derivative Software, this Derivative
 Software may be distributed under a license agreement other than this
 Agreement, subject to compliance with the requirement to include a
 notice concerning the rights over the Software as defined in [Article
-6.4](#CeCILL-C-en-6-4). In the event the creation of the Derivative
-Software required modification of the Source Code, the Licensee
-undertakes that:
+6.4](#64-notice-of-rights). In the event the creation of the
+Derivative Software required modification of the Source Code, the
+Licensee undertakes that:
 
 1. the resulting Modified Software will be governed by this Agreement,
 
@@ -299,18 +299,18 @@ undertakes that:
    exceed the cost of transferring the data.
 
 
-### 5.3.4 COMPATIBILITY WITH THE CeCILL LICENSE {#CeCILL-C-en-5-3-4}
+### 5.3.4 COMPATIBILITY WITH THE CeCILL LICENSE
 
 When a Modified Software contains an Integrated Contribution subject
 to the CeCILL license agreement, or when a Derivative Software
 contains a Related Module subject to the CeCILL license agreement, the
 provisions set forth in the third item of [Article
-6.4](#CeCILL-C-en-6-4) are optional.
+6.4](#64-notice-of-rights) are optional.
 
 
-## Article 6 - INTELLECTUAL PROPERTY {#CeCILL-C-en-6}
+## Article 6 - INTELLECTUAL PROPERTY
 
-### 6.1 OVER THE INITIAL SOFTWARE {#CeCILL-C-en-6-1}
+### 6.1 OVER THE INITIAL SOFTWARE
 
 The Holder owns the economic rights over the Initial Software. Any or
 all use of the Initial Software is subject to compliance with the
@@ -318,27 +318,26 @@ terms and conditions under which the Holder has elected to distribute
 its work and no one shall be entitled to modify the terms and
 conditions for the distribution of said Initial Software.  The Holder
 undertakes that the Initial Software will remain ruled at least by
-this Agreement, for the duration set forth in [Article
-4.2](#CeCILL-C-en-4-2).
+this Agreement, for the duration set forth in [Article 4.2](#42-term).
 
 
-### 6.2 OVER THE INTEGRATED CONTRIBUTIONS {#CeCILL-C-en-6-2}
+### 6.2 OVER THE INTEGRATED CONTRIBUTIONS
 
 The Licensee who develops an Integrated Contribution is the owner of
 the intellectual property rights over this Contribution as defined by
 applicable law.
 
 
-### 6.3 OVER THE RELATED MODULES {#CeCILL-C-en-6-3}
+### 6.3 OVER THE RELATED MODULES
 
 The Licensee who develops a Related Module is the owner of the
 intellectual property rights over this Related Module as defined by
 applicable law and is free to choose the type of agreement that shall
 govern its distribution under the conditions defined in [Article
-5.3.3](#CeCILL-C-en-5-3-3).
+5.3.3](#533-distribution-of-derivative-software).
 
 
-### 6.4 NOTICE OF RIGHTS {#CeCILL-C-en-6-4}
+### 6.4 NOTICE OF RIGHTS
 
 The Licensee expressly undertakes:
 
@@ -360,9 +359,9 @@ all measures required to ensure respect of said intellectual property
 rights of the Holder and/or Contributors.
 
 
-## Article 7 - RELATED SERVICES {#CeCILL-C-en-7}
+## Article 7 - RELATED SERVICES
 
-### 7.1 {#CeCILL-C-en-7-1}
+### 7.1
 
 Under no circumstances shall the Agreement oblige the Licensor to
 provide technical assistance or maintenance services for the Software.
@@ -374,7 +373,7 @@ Licensor offering said maintenance and/or technical assistance
 services shall incur liability therefor.
 
 
-### 7.2 {#CeCILL-C-en-7-2}
+### 7.2
 
 Similarly, any Licensor is entitled to offer to its licensees, under
 its sole responsibility, a warranty, that shall only be binding upon
@@ -385,17 +384,17 @@ shall be subject of a separate instrument executed between the
 Licensor and the Licensee.
 
 
-## Article 8 - LIABILITY {#CeCILL-C-en-8}
+## Article 8 - LIABILITY
 
-### 8.1 {#CeCILL-C-en-8-1}
+### 8.1
 
-Subject to the provisions of [Article 8.2](#CeCILL-C-en-8-2), the
-Licensee shall be entitled to claim compensation for any direct loss
-it may have suffered from the Software as a result of a fault on the
-part of the relevant Licensor, subject to providing evidence thereof.
+Subject to the provisions of [Article 8.2](#82), the Licensee shall be
+entitled to claim compensation for any direct loss it may have
+suffered from the Software as a result of a fault on the part of the
+relevant Licensor, subject to providing evidence thereof.
 
 
-### 8.2 {#CeCILL-C-en-8-2}
+### 8.2
 
 The Licensor's liability is limited to the commitments made under this
 Agreement and shall not be incurred as a result of in particular:
@@ -416,9 +415,9 @@ Agreement and shall not be incurred as a result of in particular:
     Licensor.
 
 
-## Article 9 - WARRANTY {#CeCILL-C-en-9}
+## Article 9 - WARRANTY
 
-### 9.1 {#CeCILL-C-en-9-1}
+### 9.1
 
 The Licensee acknowledges that the scientific and technical
 state-of-the-art when the Software was distributed did not enable all
@@ -434,20 +433,21 @@ order, and for ensuring that it shall not cause damage to either
 persons or properties.
 
 
-### 9.2 {#CeCILL-C-en-9-2}
+### 9.2
 
 The Licensor hereby represents, in good faith, that it is entitled to
 grant all the rights over the Software (including in particular the
-rights set forth in [Article 5](#CeCILL-C-en-5)).
+rights set forth in [Article
+5](#article-5---scope-of-rights-granted)).
 
 
-### 9.3 {#CeCILL-C-en-9-3}
+### 9.3
 
 The Licensee acknowledges that the Software is supplied "as is" by the
 Licensor without any other express or tacit warranty, other than that
-provided for in [Article 9.2](#CeCILL-C-en-9-2) and, in particular,
-without any warranty as to its commercial value, its secured, safe,
-innovative or relevant nature.
+provided for in [Article 9.2](#92) and, in particular, without any
+warranty as to its commercial value, its secured, safe, innovative or
+relevant nature.
 
 Specifically, the Licensor does not warrant that the Software is free
 from any error, that it will operate without interruption, that it
@@ -455,7 +455,7 @@ will be compatible with the Licensee's own equipment and software
 configuration, nor that it will meet the Licensee's requirements.
 
 
-### 9.4 {#CeCILL-C-en-9-4}
+### 9.4
 
 The Licensor does not either expressly or tacitly warrant that the
 Software does not infringe any third party intellectual property right
@@ -474,9 +474,9 @@ as regards the existence of prior rights over the name of the Software
 or as regards the existence of a trademark.
 
 
-## Article 10 - TERMINATION {#CeCILL-C-en-10}
+## Article 10 - TERMINATION
 
-### 10.1 {#CeCILL-C-en-10-1}
+### 10.1
 
 In the event of a breach by the Licensee of its obligations hereunder,
 the Licensor may automatically terminate this Agreement thirty (30)
@@ -484,7 +484,7 @@ days after notice has been sent to the Licensee and has remained
 ineffective.
 
 
-### 10.2 {#CeCILL-C-en-10-2}
+### 10.2
 
 A Licensee whose Agreement is terminated shall no longer be authorized
 to use, modify or distribute the Software. However, any licenses that
@@ -493,9 +493,9 @@ valid subject to their having been granted in compliance with the
 terms and conditions hereof.
 
 
-## Article 11 - MISCELLANEOUS {#CeCILL-C-en-11}
+## Article 11 - MISCELLANEOUS
 
-### 11.1 EXCUSABLE EVENTS {#CeCILL-C-en-11-1}
+### 11.1 EXCUSABLE EVENTS
 
 Neither Party shall be liable for any or all delay, or failure to
 perform the Agreement, that may be attributable to an event of force
@@ -506,7 +506,7 @@ government authorities,natural disasters, water damage, earthquakes,
 fire, explosions, strikes and labor unrest, war, etc.
 
 
-### 11.2 {#CeCILL-C-en-11-2}
+### 11.2
 
 Any failure by either Party, on one or more occasions, to invoke one
 or more of the provisions hereof, shall under no circumstances be
@@ -514,7 +514,7 @@ interpreted as being a waiver by the interested Party of its right to
 invoke said provision(s) subsequently.
 
 
-### 11.3 {#CeCILL-C-en-11-3}
+### 11.3
 
 The Agreement cancels and replaces any or all previous agreements,
 whether written or oral, between the Parties and having the same
@@ -525,7 +525,7 @@ unless it is made in writing and signed by their duly authorized
 representatives.
 
 
-### 11.4 {#CeCILL-C-en-11-4}
+### 11.4
 
 In the event that one or more of the provisions hereof were to
 conflict with a current or future applicable act or legislative text,
@@ -536,21 +536,21 @@ invalidity of a provision of the Agreement, for any reason whatsoever,
 shall not cause the Agreement as a whole to be invalid.
 
 
-### 11.5 LANGUAGE {#CeCILL-C-en-11-5}
+### 11.5 LANGUAGE
 
 The Agreement is drafted in both French and English and both versions
 are deemed authentic.
 
 
-## Article 12 - NEW VERSIONS OF THE AGREEMENT {#CeCILL-C-en-12}
+## Article 12 - NEW VERSIONS OF THE AGREEMENT
 
-### 12.1 {#CeCILL-C-en-12-1}
+### 12.1
 
 Any person is authorized to duplicate and distribute copies of this
 Agreement.
 
 
-### 12.2 {#CeCILL-C-en-12-2}
+### 12.2
 
 So as to ensure coherence, the wording of this Agreement is protected
 and may only be modified by the authors of the License, who reserve
@@ -559,23 +559,23 @@ Agreement, each with a separate number. These subsequent versions may
 address new issues encountered by Free Software.
 
 
-### 12.3 {#CeCILL-C-en-12-3}
+### 12.3
 
 Any Software distributed under a given version of the Agreement may
 only be subsequently distributed under the same version of the
 Agreement or a subsequent version.
 
 
-## Article 13 - GOVERNING LAW AND JURISDICTION {#CeCILL-C-en-13}
+## Article 13 - GOVERNING LAW AND JURISDICTION
 
-### 13.1 {#CeCILL-C-en-13-1}
+### 13.1
 
 The Agreement is governed by French law.  The Parties agree to
 endeavor to seek an amicable solution to any disagreements or disputes
 that may arise during the performance of the Agreement.
 
 
-### 13.2 {#CeCILL-C-en-13-2}
+### 13.2
 
 Failing an amicable solution within two (2) months as from their
 occurrence, and unless emergency proceedings are necessary, the
