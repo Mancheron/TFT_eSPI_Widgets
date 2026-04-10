@@ -1,5 +1,11 @@
 2026-04-10  DoccY <alban.mancheron@lirmm.fr>
 
+	* .gitlab-ci.yml:
+	Fix CI/CD pipeline.
+	
+	
+2026-04-10  DoccY <alban.mancheron@lirmm.fr>
+
 	* Doxyfile, LICENSE-CeCILL-C-en.md, LICENSE-CeCILL-C-fr.md,
 	library.json, library.properties:
 	Update doxygen auto documentation and increase micro version number.
