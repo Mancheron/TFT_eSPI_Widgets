@@ -164,13 +164,22 @@ struct _png_user_data {
   size_t buffer_size;
 };
 
-static void _png_draw_cb(PNGDRAW *png_draw) {
-  if (!png_draw) return;
+template<typename T>
+T _png_draw_cb(PNGDRAW *png_draw);
+
+template<>
+int _png_draw_cb(PNGDRAW *png_draw) {
+  if (!png_draw) return 0;
   _png_user_data &data = *static_cast<_png_user_data *>(png_draw->pUser);
   _png_handler.getLineAsRGB565(png_draw, data.buffer, PNG_RGB565_BIG_ENDIAN, 0xffffffff);
   data.tft.pushImage(data.pos.x, data.pos.y + png_draw->y, png_draw->iWidth, 1, data.buffer);
+  return 1;
 }
 
+template<>
+void _png_draw_cb(PNGDRAW *png_draw) {
+  _png_draw_cb<int>(png_draw);
+}
 // End of callback functions.
 
 ImageWidget::ImageWidget(Widget &parent,
